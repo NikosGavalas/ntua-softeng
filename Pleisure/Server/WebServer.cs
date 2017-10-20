@@ -27,6 +27,7 @@ namespace Pleisure
 		public void Start()
 		{
 			running = true;
+			server.Start();
 			ServerLoop();
 		}
 
@@ -42,7 +43,7 @@ namespace Pleisure
 			{
 				try
 				{
-					HttpListenerContext connection = server.GetContext();
+					HttpListenerContext connection = await server.GetContextAsync();
 					Request(connection);
 				}
 				catch (Exception ex)
@@ -60,6 +61,8 @@ namespace Pleisure
 			string requestPath = request.RawUrl.Split('?')[0];
 			Dictionary<string, string> getParams = HttpGetParams(request.RawUrl);
 			Dictionary<string, string> postParams = await HttpPostParams(request);
+
+			Request req = new Request(request, response, getParams, postParams);
 		}
 
 		public static Dictionary<string, string> HttpGetParams(string rawUrl)
