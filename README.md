@@ -1,7 +1,9 @@
 # Pleisure
 
 ### Links
-- [Hosting](https://progtech.gmantaos.com)
+- [Documentation](https://git.gmantaos.com/ProgTech/Pleisure/wiki)
+- [Project description](https://courses.softlab.ntua.gr/softeng/2017b/Project/project.pdf)
+- [Hosting](https://progtech.gmantaos.com) (soon)
 - [Slack](https://progtechteam.slack.com)
 - [Watermarking library](https://git.gmantaos.com/ProgTech/Watermark)
 
