@@ -38,5 +38,12 @@ namespace Pleisure
 			response.ContentType = Utils.GetContentType(type);
 			return this;
 		}
+
+		public async Task Close()
+		{
+			await responseStream.FlushAsync();
+			responseStream.Close();
+			responseStream.Dispose();
+		}
 	}
 }
