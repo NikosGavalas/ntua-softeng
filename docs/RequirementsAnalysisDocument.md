@@ -1,6 +1,6 @@
 # Requirements Analysis
 ## Software Description
-targets-aims-purposes, problems addressed, general description. To what kind of people the software is addressed.
+targets-aims-purposes, problems addressed, general description. To what kind of people the software is addressed (according to the prof we'll need to explain how the software will be friendly to inexperienced users - also how we will make sure that the service/ativities providers will not be psychos/pedos).
 ## Functional Requirements
 Use cases, functions, actions and operations that the software supports
 ### User Groups
