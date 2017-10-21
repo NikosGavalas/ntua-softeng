@@ -9,7 +9,7 @@ describing the UI
 ### OOP Models
 also Interfacing between components etc
 ### Design Trade-offs
-if existent
+for example we assume that users have cookies available (to keep the sessions alive) 
 ## System Requirements
 ### Environment
 also Dependencies...
