@@ -9,7 +9,7 @@ Authentication, Authorization, Administrative Functions.
 the first actions of a user, to begin using the software
 ### Business Logic
 Data import/export support, Reporting Requirements (Logging etc)...
-### Limitations and Admissions
+### Limitations and Assumptions
 Paradoxes sta ellhnika. All decisions that are made inb4 and things taken for granted.
 ### Monetization
 Pricing etc...how the software will make money
