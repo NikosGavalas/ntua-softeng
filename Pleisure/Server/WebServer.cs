@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Net;
 
 using Newtonsoft.Json.Linq;
@@ -15,6 +14,7 @@ namespace Pleisure.Server
 	public class WebServer
 	{
 		HttpListener server;
+		SessionManager sessionManager;
 
 		volatile bool running;
 
@@ -35,6 +35,8 @@ namespace Pleisure.Server
 			Log(LogLevels.Info, "Web Server started");
 
 			running = true;
+
+			sessionManager = new SessionManager(300);
 			server.Start();
 			ServerLoop();
 		}
@@ -66,63 +68,29 @@ namespace Pleisure.Server
 			HttpListenerRequest request = connection.Request;
 			HttpListenerResponse response = connection.Response;
 
-			string requestPath = request.RawUrl.Split('?')[0];
-			Dictionary<string, string> getParams = HttpGetParams(request.RawUrl);
-			Dictionary<string, string> postParams = await HttpPostParams(request);
-
-			Request req = new Request(request, response, getParams, postParams);
+			Request req = new Request(request, response);
+			Session session = GetOrSetSession(request, response);
+			await req.Close();
 		}
 
-		public static Dictionary<string, string> HttpGetParams(string rawUrl)
+		Session GetOrSetSession(HttpListenerRequest request, HttpListenerResponse response)
 		{
-			Dictionary<string, string> GET = new Dictionary<string, string>();
+			Session session = null;
+			Cookie sessCookie = request.Cookies["SESSID"];
 
-			string[] urlParts = rawUrl.Split('?');
-
-			if (urlParts.Length < 2 || urlParts[1] == "")
-				return GET;
-
-			NameValueCollection vals = HttpUtility.ParseQueryString(urlParts[1]);
-
-			foreach (string key in vals.AllKeys)
+			if (sessCookie != null)
 			{
-				GET.Add(key, vals.Get(key));
+				session = sessionManager.GetSessionWithId(sessCookie.Value);
 			}
 
-			return GET;
-		}
-
-		/// <summary>
-		/// Parses the body of the request for POST parameters. Assumes that the parameters will either be URL-encoded or in JSON format.
-		/// </summary>
-		/// <param name="request"></param>
-		/// <returns></returns>
-		public static async Task<Dictionary<string, string>> HttpPostParams(HttpListenerRequest request)
-		{
-			string postData;
-			using (StreamReader requestStream = new StreamReader(request.InputStream, Encoding.Default))
+			if (session == null)
 			{
-				postData = await requestStream.ReadToEndAsync();
+				session = sessionManager.CreateSession(request.RemoteEndPoint);
+				Log(LogLevels.Debug, "New session: " + session.SessionID);
 			}
 
-			JObject PostObj;
-			try
-			{
-				PostObj = JObject.Parse(postData);
-			}
-			catch
-			{
-				return HttpGetParams("x?" + postData);
-			}
-
-			Dictionary<string, string> POST = new Dictionary<string, string>();
-
-			foreach (KeyValuePair<string, JToken> Pair in PostObj)
-			{
-				POST.Add(Pair.Key, Pair.Value.ToString());
-			}
-
-			return POST;
+			response.SetCookie(session.GetCookie());
+			return session;
 		}
 
 		void Log(LogLevels level, string message)

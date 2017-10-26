@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Pleisure.Server
 {
@@ -54,6 +56,25 @@ namespace Pleisure.Server
 				default:
 					return "";
 			}
+		}
+
+		public static Dictionary<string, string> GetUrlParams(string rawUrl)
+		{
+			Dictionary<string, string> GET = new Dictionary<string, string>();
+
+			string[] urlParts = rawUrl.Split('?');
+
+			if (urlParts.Length < 2 || urlParts[1] == "")
+				return GET;
+
+			NameValueCollection vals = HttpUtility.ParseQueryString(urlParts[1]);
+
+			foreach (string key in vals.AllKeys)
+			{
+				GET.Add(key, vals.Get(key));
+			}
+
+			return GET;
 		}
 	}
 }
