@@ -20,16 +20,20 @@ namespace Pleisure.Server
 
 		public event Action<string> OnLog;
 		public event Action<Exception> OnException;
-		public LogLevels LogLevel { get; private set; }
+		public LogLevels LogLevel;
 
 		public WebServer(string host, int port)
 		{
 			server = new HttpListener();
 			server.Prefixes.Add(string.Format("http://{0}:{1}/", host, port));
+
+			LogLevel = LogLevels.Warning | LogLevels.Error;
 		}
 
 		public void Start()
 		{
+			Log(LogLevels.Info, "Web Server started");
+
 			running = true;
 			server.Start();
 			ServerLoop();
@@ -119,6 +123,19 @@ namespace Pleisure.Server
 			}
 
 			return POST;
+		}
+
+		void Log(LogLevels level, string message)
+		{
+			if (LogLevel.HasFlag(level))
+			{
+				string logLine = string.Format("[{0}]({1})\t{2}",
+					Utils.GetLogLevelTag(level),
+					DateTime.Now.ToString("yyyy/mm/dd HH:mm:ss"),
+					message);
+
+				OnLog?.Invoke(logLine);
+			}
 		}
 	}
 }

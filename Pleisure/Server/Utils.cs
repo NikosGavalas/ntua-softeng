@@ -34,5 +34,26 @@ namespace Pleisure.Server
 					goto case ContentType.Plain;
 			}
 		}
+
+		public static string GetLogLevelTag(LogLevels level)
+		{
+			switch (level)
+			{
+				case LogLevels.Debug:
+					return "DEBUG";
+
+				case LogLevels.Error:
+					return "ERROR";
+
+				case LogLevels.Info:
+					return "INFO";
+
+				case LogLevels.Warning:
+					return "WARNING";
+
+				default:
+					return "";
+			}
+		}
 	}
 }

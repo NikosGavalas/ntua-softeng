@@ -20,10 +20,11 @@ namespace Pleisure
 		static void Main(string[] args)
 		{
 			server = new WebServer(HOST, PORT);
+			server.LogLevel = server.LogLevel | LogLevels.Debug | LogLevels.Info;
+			server.OnLog += (msg) => Console.WriteLine(msg);
 			server.Start();
 
 
-			Console.WriteLine("Web Server started on port: " + PORT);
 			Console.WriteLine("Press CTRL-C to shut down.");
 
 			/*
