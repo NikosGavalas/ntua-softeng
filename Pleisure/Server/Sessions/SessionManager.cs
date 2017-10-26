@@ -32,6 +32,7 @@ namespace Pleisure.Server
 		{
 			Session session = null;
 			sessions.TryGetValue(sessionId, out session);
+			session?.Update();
 			return session;
 		}
 

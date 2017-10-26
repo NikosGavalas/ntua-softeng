@@ -89,7 +89,9 @@ namespace Pleisure.Server
 				Log(LogLevels.Debug, "New session: " + session.SessionID);
 			}
 
-			response.SetCookie(session.GetCookie());
+			sessCookie = session.GetCookie();
+			sessCookie.Expires = DateTime.Now + TimeSpan.FromSeconds(300);
+			response.SetCookie(sessCookie);
 			return session;
 		}
 

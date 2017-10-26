@@ -28,9 +28,14 @@ namespace Pleisure.Server
 			return timer.Elapsed.TotalSeconds;
 		}
 
-		public Cookie GetCookie()
+		internal Cookie GetCookie()
 		{
 			return new Cookie("SESSID", SessionID);
+		}
+
+		internal void Update()
+		{
+			timer.Restart();
 		}
 	}
 }
