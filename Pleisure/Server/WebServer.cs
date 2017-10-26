@@ -10,7 +10,7 @@ using System.Net;
 
 using Newtonsoft.Json.Linq;
 
-namespace Pleisure
+namespace Pleisure.Server
 {
 	public class WebServer
 	{
@@ -18,10 +18,14 @@ namespace Pleisure
 
 		volatile bool running;
 
-		public WebServer(int port)
+		public event Action<string> OnLog;
+		public event Action<Exception> OnException;
+		public LogLevels LogLevel { get; private set; }
+
+		public WebServer(string host, int port)
 		{
 			server = new HttpListener();
-			server.Prefixes.Add(string.Format("http://*:{0}/", port));
+			server.Prefixes.Add(string.Format("http://{0}:{1}/", host, port));
 		}
 
 		public void Start()
@@ -48,7 +52,7 @@ namespace Pleisure
 				}
 				catch (Exception ex)
 				{
-					Console.WriteLine(ex.ToString());
+					OnException?.Invoke(ex);
 				}
 			}
 		}

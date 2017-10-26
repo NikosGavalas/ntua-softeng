@@ -4,24 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
+using Pleisure.Server;
+
 using UnixSignalWaiter;
 
 namespace Pleisure
 {
 	class Program
 	{
+		const string HOST = "*";
 		const int PORT = 88;
 
 		static WebServer server;
 
 		static void Main(string[] args)
 		{
-			server = new WebServer(PORT);
+			server = new WebServer(HOST, PORT);
 			server.Start();
 
 
 			Console.WriteLine("Web Server started on port: " + PORT);
 			Console.WriteLine("Press CTRL-C to shut down.");
+
 			/*
              * Main thread now awaits SIGTERM
              */
