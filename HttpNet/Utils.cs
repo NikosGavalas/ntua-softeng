@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Pleisure.Server
+namespace HttpNet
 {
 	public static class Utils
 	{

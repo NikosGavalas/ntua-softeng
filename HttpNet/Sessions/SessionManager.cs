@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Net;
 
-namespace Pleisure.Server
+namespace HttpNet
 {
 	public class SessionManager
 	{

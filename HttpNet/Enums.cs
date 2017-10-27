@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pleisure.Server
+namespace HttpNet
 {
 	public enum ContentType
 	{

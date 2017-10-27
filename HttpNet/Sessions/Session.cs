@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 
-namespace Pleisure.Server
+namespace HttpNet
 {
 	public class Session
 	{

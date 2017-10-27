@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-using Pleisure.Server;
+using HttpNet;
 
 using UnixSignalWaiter;
 
@@ -13,7 +13,7 @@ namespace Pleisure
 	class Program
 	{
 		const string HOST = "*";
-		const int PORT = 88;
+		const int PORT = 80;
 
 		static WebServer server;
 

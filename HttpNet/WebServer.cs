@@ -7,9 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 
-using Newtonsoft.Json.Linq;
-
-namespace Pleisure.Server
+namespace HttpNet
 {
 	public class WebServer
 	{
