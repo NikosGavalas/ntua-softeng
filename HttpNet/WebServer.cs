@@ -18,10 +18,7 @@ namespace HttpNet
 		SessionManager sessionManager;
 
 		volatile bool running;
-
-		/// <summary>
-		/// Will fire 
-		/// </summary>
+		
 		public event EventHandler<LogEventArgs> OnLog;
 		public event Action<Exception> OnException;
 		public LogLevels LogLevel;
@@ -62,6 +59,7 @@ namespace HttpNet
 				try
 				{
 					HttpListenerContext connection = await server.GetContextAsync();
+					Session session = GetOrSetSession(connection.Request, connection.Response);
 					Request(connection);
 				}
 				catch (Exception ex)
@@ -77,7 +75,6 @@ namespace HttpNet
 			HttpListenerResponse response = connection.Response;
 
 			Request req = new Request(request, response);
-			Session session = GetOrSetSession(request, response);
 			await req.Close();
 		}
 

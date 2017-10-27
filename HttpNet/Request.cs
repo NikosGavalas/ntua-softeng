@@ -63,6 +63,10 @@ namespace HttpNet
 			return this;
 		}
 
+		/// <summary>
+		/// Flush and close the response stream.
+		/// </summary>
+		/// <returns></returns>
 		public async Task Close()
 		{
 			await responseStream.FlushAsync();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 using HttpNet;
 
@@ -19,7 +20,7 @@ namespace Pleisure
 
 		static void Main(string[] args)
 		{
-			server = new WebServer(HOST, PORT);
+			server = new WebServer(HOST, PORT, sessionLifetime: 300);
 			server.LogLevel = server.LogLevel | LogLevels.Debug | LogLevels.Info;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
 			server.Start();
