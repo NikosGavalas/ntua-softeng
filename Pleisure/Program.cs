@@ -21,7 +21,7 @@ namespace Pleisure
 		{
 			server = new WebServer(HOST, PORT);
 			server.LogLevel = server.LogLevel | LogLevels.Debug | LogLevels.Info;
-			server.OnLog += (msg) => Console.WriteLine(msg);
+			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
 			server.Start();
 
 

@@ -8,8 +8,16 @@ using System.Web;
 
 namespace HttpNet
 {
+	/// <summary>
+	/// Collection of utility methods relevant to the web server
+	/// </summary>
 	public static class Utils
 	{
+		/// <summary>
+		/// Translates the value of the ContentType enum to its official value.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		public static string GetContentType(ContentType type)
 		{
 			switch (type)
@@ -37,7 +45,7 @@ namespace HttpNet
 			}
 		}
 
-		public static string GetLogLevelTag(LogLevels level)
+		internal static string GetLogLevelTag(LogLevels level)
 		{
 			switch (level)
 			{

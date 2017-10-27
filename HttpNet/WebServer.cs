@@ -9,6 +9,9 @@ using System.Net;
 
 namespace HttpNet
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class WebServer
 	{
 		HttpListener server;
@@ -16,12 +19,19 @@ namespace HttpNet
 
 		volatile bool running;
 
-		public event Action<string> OnLog;
+		/// <summary>
+		/// Will fire 
+		/// </summary>
+		public event EventHandler<LogEventArgs> OnLog;
 		public event Action<Exception> OnException;
 		public LogLevels LogLevel;
 
-		public WebServer(string host, int port)
+		int sessionLifetime;
+
+		public WebServer(string host, int port, int sessionLifetime = 300)
 		{
+			this.sessionLifetime = sessionLifetime;
+
 			server = new HttpListener();
 			server.Prefixes.Add(string.Format("http://{0}:{1}/", host, port));
 
@@ -30,11 +40,11 @@ namespace HttpNet
 
 		public void Start()
 		{
-			Log(LogLevels.Info, "Web Server started");
+			Log(LogLevels.Info, "Web Server started on: " + server.Prefixes.First());
 
 			running = true;
 
-			sessionManager = new SessionManager(300);
+			sessionManager = new SessionManager(sessionLifetime);
 			server.Start();
 			ServerLoop();
 		}
@@ -88,7 +98,7 @@ namespace HttpNet
 			}
 
 			sessCookie = session.GetCookie();
-			sessCookie.Expires = DateTime.Now + TimeSpan.FromSeconds(300);
+			sessCookie.Expires = DateTime.Now + TimeSpan.FromSeconds(sessionLifetime);
 			response.SetCookie(sessCookie);
 			return session;
 		}
@@ -97,12 +107,7 @@ namespace HttpNet
 		{
 			if (LogLevel.HasFlag(level))
 			{
-				string logLine = string.Format("[{0}]({1})\t{2}",
-					Utils.GetLogLevelTag(level),
-					DateTime.Now.ToString("yyyy/mm/dd HH:mm:ss"),
-					message);
-
-				OnLog?.Invoke(logLine);
+				OnLog?.Invoke(this, new LogEventArgs(level, message));
 			}
 		}
 	}

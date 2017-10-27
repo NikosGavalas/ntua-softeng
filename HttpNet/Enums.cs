@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace HttpNet
 {
+	/// <summary>
+	/// Common values for the Content-Type HTTP header.
+	/// </summary>
 	public enum ContentType
 	{
 		Javascript,
@@ -16,6 +19,9 @@ namespace HttpNet
 		Plain
 	}
 
+	/// <summary>
+	/// Flags to choose which messages should get logged.
+	/// </summary>
 	[Flags]
 	public enum LogLevels
 	{
