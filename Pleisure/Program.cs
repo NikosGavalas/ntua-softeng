@@ -29,6 +29,8 @@ namespace Pleisure
 			StaticResourceProvider css = new StaticResourceProvider(GetPath("app/css"), "/css", ContentType.Css);
 			server.AddResource("/css/*.css", css.OnRequest);
 
+			StaticResourceProvider js = new StaticResourceProvider(GetPath("app/js"), "/js", ContentType.Javascript);
+			server.AddResource("/js/*.js", js.OnRequest);
 
 
 			server.Start();
