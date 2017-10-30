@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Reflection;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,6 +98,35 @@ namespace HttpNet
 		public static string WildcardRegex(string pattern)
 		{
 			return "^" + Regex.Escape(pattern).Replace("\\?", ".").Replace("\\*", ".*") + "$";
+		}
+
+		public static object GetHtmlVariable(object obj, string name)
+		{
+			PropertyInfo[] properties = obj.GetType().GetProperties();
+
+			foreach (PropertyInfo prop in properties)
+			{
+				HtmlVariable val = prop.GetCustomAttribute<HtmlVariable>();
+
+				if (val != null && val.Name == name)
+				{
+					return prop.GetValue(obj);
+				}
+			}
+
+			FieldInfo[] fields = obj.GetType().GetFields();
+
+			foreach (FieldInfo field in fields)
+			{
+				HtmlVariable val = field.GetCustomAttribute<HtmlVariable>();
+
+				if (val != null && val.Name == name)
+				{
+					return field.GetValue(obj);
+				}
+			}
+
+			return null;
 		}
 	}
 }

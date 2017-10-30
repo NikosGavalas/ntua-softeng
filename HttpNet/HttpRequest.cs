@@ -38,7 +38,7 @@ namespace HttpNet
 		{
 			get { return request.Cookies; }
 		}
-
+		
 		string _requestBody = null;
 
 		HttpListenerRequest request;
@@ -87,24 +87,45 @@ namespace HttpNet
 		}
 
 		/// <summary>
-		/// Write data asynchronously on the response stream
+		/// Write data asynchronously on the response stream.
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="encoding">The encoding of the text</param>
+		/// <returns></returns>
+		public Task Write(string data, Encoding encoding)
+		{
+			StreamWriter responseStream = new StreamWriter(response.OutputStream, encoding);
+			return responseStream.WriteAsync(data);
+		}
+
+		/// <summary>
+		/// Write data asynchronously on the response stream.
 		/// </summary>
 		/// <param name="data"></param>
 		/// <returns></returns>
 		public Task Write(string data)
 		{
-			StreamWriter responseStream = new StreamWriter(response.OutputStream, Encoding.Default);
-			return responseStream.WriteAsync(data);
+			return Write(data, Encoding.Default);
 		}
 
 		/// <summary>
-		/// 
+		/// Write data asynchronously on the response stream.
 		/// </summary>
 		/// <param name="data"></param>
 		/// <returns></returns>
 		public Task Write(byte[] data)
 		{
 			return response.OutputStream.WriteAsync(data, 0, data.Length);
+		}
+
+		public Task Write(char character)
+		{
+			return Write(character, Encoding.Default);
+		}
+
+		public Task Write(char character, Encoding encoding)
+		{
+			return Write(character.ToString(), encoding);
 		}
 
 		/// <summary>

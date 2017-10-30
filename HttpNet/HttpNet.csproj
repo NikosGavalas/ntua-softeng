@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Serialization\HtmlVariable.cs" />
     <Compile Include="SessionBehavior.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Events\LogEventArgs.cs" />
