@@ -99,34 +99,5 @@ namespace HttpNet
 		{
 			return "^" + Regex.Escape(pattern).Replace("\\?", ".").Replace("\\*", ".*") + "$";
 		}
-
-		public static object GetHtmlVariable(object obj, string name)
-		{
-			PropertyInfo[] properties = obj.GetType().GetProperties();
-
-			foreach (PropertyInfo prop in properties)
-			{
-				HtmlVariable val = prop.GetCustomAttribute<HtmlVariable>();
-
-				if (val != null && val.Name == name)
-				{
-					return prop.GetValue(obj);
-				}
-			}
-
-			FieldInfo[] fields = obj.GetType().GetFields();
-
-			foreach (FieldInfo field in fields)
-			{
-				HtmlVariable val = field.GetCustomAttribute<HtmlVariable>();
-
-				if (val != null && val.Name == name)
-				{
-					return field.GetValue(obj);
-				}
-			}
-
-			return null;
-		}
 	}
 }

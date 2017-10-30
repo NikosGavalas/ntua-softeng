@@ -100,6 +100,8 @@ namespace HttpNet
 
 				HandleServiceRequest(session, request, service.Key, service.Value);
 				requestHandled = true;
+
+				Log(LogLevels.Debug, request.Path + " handled by service at " + service.Key);
 			}
 
 			foreach (KeyValuePair<string, Func<HttpRequest, Task>> resource in ResourcesForUrl(request.Path))
@@ -107,6 +109,8 @@ namespace HttpNet
 				// Any resource handlers
 				resource.Value?.Invoke(request);
 				requestHandled = true;
+
+				Log(LogLevels.Debug, request.Path + " handled by resource at " + resource.Key);
 			}
 
 			if (!requestHandled)
