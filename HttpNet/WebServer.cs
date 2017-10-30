@@ -88,6 +88,8 @@ namespace HttpNet
 			HttpRequest request = new HttpRequest(connection.Request, connection.Response);
 
 			Log(LogLevels.Debug, "Request: " + request.Path);
+
+			bool requestHandled = false;
 			
 			// TODO: Multiple handlers handling the same request?
 			// perhaps the best-matching path should handle it
@@ -97,12 +99,20 @@ namespace HttpNet
 				Session session = GetOrSetSession(connection.Request, connection.Response);
 
 				HandleServiceRequest(session, request, service.Key, service.Value);
+				requestHandled = true;
 			}
 
 			foreach (KeyValuePair<string, Func<HttpRequest, Task>> resource in ResourcesForUrl(request.Path))
 			{
 				// Any resource handlers
 				resource.Value?.Invoke(request);
+				requestHandled = true;
+			}
+
+			if (!requestHandled)
+			{
+				request.SetStatusCode(HttpStatusCode.ServiceUnavailable);
+				request.Close();
 			}
 		}
 

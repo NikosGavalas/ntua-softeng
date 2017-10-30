@@ -85,6 +85,16 @@ namespace HttpNet
 		}
 
 		/// <summary>
+		/// Write data asynchronously on the response stream
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public Task Write(string data)
+		{
+			return responseStream.WriteAsync(data);
+		}
+
+		/// <summary>
 		/// Flush and close the response stream.
 		/// </summary>
 		/// <returns></returns>

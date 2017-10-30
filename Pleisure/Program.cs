@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Reflection;
+using System.IO;
 
 using HttpNet;
 
@@ -23,10 +25,13 @@ namespace Pleisure
 			server = new WebServer(HOST, PORT, sessionLifetime: 300);
 			server.LogLevel = server.LogLevel | LogLevels.Debug | LogLevels.Info;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
+
+			StaticResourceProvider css = new StaticResourceProvider(GetPath("app/css"), "/css", ContentType.Css);
+			server.AddResource("/css/*.css", css.OnRequest);
+
+
+
 			server.Start();
-
-			
-
 			Console.WriteLine("Press CTRL-C to shut down.");
 
 			/*
@@ -58,6 +63,16 @@ namespace Pleisure
 			Console.WriteLine("Shutting down...");
 			server.Stop();
 			Environment.Exit(0);
+		}
+
+		public static string GetPath()
+		{
+			return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+		}
+
+		public static string GetPath(string relative)
+		{
+			return Path.Combine(GetPath(), relative);
 		}
 	}
 }
