@@ -44,14 +44,10 @@ namespace HttpNet
 		HttpListenerRequest request;
 		HttpListenerResponse response;
 
-		StreamWriter responseStream;
-
 		internal HttpRequest(HttpListenerRequest request, HttpListenerResponse response)
 		{
 			this.request = request;
 			this.response = response;
-
-			responseStream = new StreamWriter(response.OutputStream, Encoding.Default);
 		}
 
 		public async Task<string> RequestBody()
@@ -84,6 +80,12 @@ namespace HttpNet
 			return this;
 		}
 
+		public HttpRequest SetContentTypeByExtension(ContentType type, string extension)
+		{
+			response.ContentType = Utils.GetContentType(type) + extension;
+			return this;
+		}
+
 		/// <summary>
 		/// Write data asynchronously on the response stream
 		/// </summary>
@@ -91,7 +93,18 @@ namespace HttpNet
 		/// <returns></returns>
 		public Task Write(string data)
 		{
+			StreamWriter responseStream = new StreamWriter(response.OutputStream, Encoding.Default);
 			return responseStream.WriteAsync(data);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public Task Write(byte[] data)
+		{
+			return response.OutputStream.WriteAsync(data, 0, data.Length);
 		}
 
 		/// <summary>
@@ -100,9 +113,9 @@ namespace HttpNet
 		/// <returns></returns>
 		public async Task Close()
 		{
-			await responseStream.FlushAsync();
-			responseStream.Close();
-			responseStream.Dispose();
+			await response.OutputStream.FlushAsync();
+			response.OutputStream.Close();
+			response.OutputStream.Dispose();
 		}
 	}
 }

@@ -16,7 +16,8 @@ namespace HttpNet
 		Json,
 		Zip,
 		Css,
-		Plain
+		Plain,
+		Image
 	}
 
 	/// <summary>

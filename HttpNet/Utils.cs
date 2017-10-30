@@ -41,6 +41,9 @@ namespace HttpNet
 				case ContentType.Zip:
 					return "application/zip";
 
+				case ContentType.Image:
+					return "image/";
+
 				default:
 					goto case ContentType.Plain;
 			}

@@ -32,6 +32,8 @@ namespace Pleisure
 			StaticResourceProvider js = new StaticResourceProvider(GetPath("app/js"), "/js", ContentType.Javascript);
 			server.AddResource("/js/*.js", js.OnRequest);
 
+			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
+			server.AddResource("/img/*.png", png.OnRequest);
 
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
