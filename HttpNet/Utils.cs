@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Text.RegularExpressions;
 
 namespace HttpNet
 {
@@ -83,6 +84,16 @@ namespace HttpNet
 			}
 
 			return GET;
+		}
+
+		/// <summary>
+		/// Replace url-friendly wildcard patterns with the regex equivalent
+		/// </summary>
+		/// <param name="pattern"></param>
+		/// <returns></returns>
+		public static string WildcardRegex(string pattern)
+		{
+			return "^" + Regex.Escape(pattern).Replace("\\?", ".").Replace("\\*", ".*") + "$";
 		}
 	}
 }

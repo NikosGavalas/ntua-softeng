@@ -7,21 +7,36 @@ using System.Net;
 
 namespace HttpNet
 {
-	public class Request
+	public class HttpRequest
 	{
+		/// <summary>
+		/// The requested resource of the request
+		/// </summary>
 		public string Path
 		{
 			get { return request?.RawUrl.Split('?')[0]; }
 		}
 
+		/// <summary>
+		/// The GET parameters sent with the request
+		/// </summary>
 		public Dictionary<string, string> GET
 		{
 			get { return Utils.GetUrlParams(request.RawUrl); } 
 		}
 
+		/// <summary>
+		/// The url-encoded POST parameters in the body of the request.
+		/// <para>WARNING: await reading the RequestBody() first!!!</para>
+		/// </summary>
 		public Dictionary<string, string> POST
 		{
 			get { return Utils.GetUrlParams("x?" + RequestBody().Result); }
+		}
+
+		public CookieCollection Cookies
+		{
+			get { return request.Cookies; }
 		}
 
 		string _requestBody = null;
@@ -31,7 +46,7 @@ namespace HttpNet
 
 		StreamWriter responseStream;
 
-		public Request(HttpListenerRequest request, HttpListenerResponse response)
+		internal HttpRequest(HttpListenerRequest request, HttpListenerResponse response)
 		{
 			this.request = request;
 			this.response = response;
@@ -51,13 +66,19 @@ namespace HttpNet
 			return _requestBody;
 		}
 
-		public Request SetStatusCode(HttpStatusCode code)
+		public HttpRequest AddCookie(Cookie cookie)
+		{
+			Cookies.Add(cookie);
+			return this;
+		}
+
+		public HttpRequest SetStatusCode(HttpStatusCode code)
 		{
 			response.StatusCode = (int)code;
 			return this;
 		}
 
-		public Request SetContentType(ContentType type)
+		public HttpRequest SetContentType(ContentType type)
 		{
 			response.ContentType = Utils.GetContentType(type);
 			return this;

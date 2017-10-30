@@ -12,6 +12,9 @@ namespace HttpNet
 		public readonly string Message;
 		public readonly DateTime Timestamp;
 
+		/// <summary>
+		/// The entire printable log line that also contains a tag of the logging level and the timestamp.
+		/// </summary>
 		public string Line
 		{
 			get

@@ -25,6 +25,7 @@ namespace Pleisure
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
 			server.Start();
 
+			
 
 			Console.WriteLine("Press CTRL-C to shut down.");
 

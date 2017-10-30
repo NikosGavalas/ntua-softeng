@@ -42,11 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behavior\SessionBehavior.cs" />
+    <Compile Include="SessionBehavior.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Events\LogEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Request.cs" />
+    <Compile Include="HttpRequest.cs" />
     <Compile Include="Sessions\Session.cs" />
     <Compile Include="Sessions\SessionManager.cs" />
     <Compile Include="Utils.cs" />

@@ -8,10 +8,11 @@ using System.Net;
 
 namespace HttpNet
 {
-	public class Session
+	internal class Session
 	{
 		public readonly string SessionID;
 		public readonly IPEndPoint RemoteEndPoint;
+		public SessionBehavior Behavior = null;
 
 		Stopwatch timer;
 

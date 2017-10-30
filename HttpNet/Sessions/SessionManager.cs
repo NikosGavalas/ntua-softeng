@@ -8,7 +8,7 @@ using System.Net;
 
 namespace HttpNet
 {
-	public class SessionManager
+	internal class SessionManager
 	{
 		int sessionLifeTimeSeconds;
 
@@ -22,13 +22,13 @@ namespace HttpNet
 			}
 		}
 
-		public SessionManager(int sessionLifeTimeSeconds)
+		internal SessionManager(int sessionLifeTimeSeconds)
 		{
 			this.sessionLifeTimeSeconds = sessionLifeTimeSeconds;
 			_sessions = new Dictionary<string, Session>();
 		}
 
-		public Session GetSessionWithId(string sessionId)
+		internal Session GetSessionWithId(string sessionId)
 		{
 			Session session = null;
 			sessions.TryGetValue(sessionId, out session);
@@ -36,7 +36,7 @@ namespace HttpNet
 			return session;
 		}
 
-		public Session CreateSession(IPEndPoint remoteEndPoint)
+		internal Session CreateSession(IPEndPoint remoteEndPoint)
 		{
 			string sessionId = GenerateSessionId(remoteEndPoint);
 			Session session = new Session(sessionId, remoteEndPoint);
