@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Text.RegularExpressions;
+using System.Reflection;
+using System.IO;
+
+using HttpNet;
 
 using UnixSignalWaiter;
 
@@ -10,18 +15,27 @@ namespace Pleisure
 {
 	class Program
 	{
-		const int PORT = 88;
+		const string HOST = "*";
+		const int PORT = 80;
 
 		static WebServer server;
 
 		static void Main(string[] args)
 		{
-			server = new WebServer(PORT);
+			server = new WebServer(HOST, PORT, sessionLifetime: 300);
+			server.LogLevel = server.LogLevel | LogLevels.Debug | LogLevels.Info;
+			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
+
+			StaticResourceProvider css = new StaticResourceProvider(GetPath("app/css"), "/css", ContentType.Css);
+			server.AddResource("/css/*.css", css.OnRequest);
+
+			StaticResourceProvider js = new StaticResourceProvider(GetPath("app/js"), "/js", ContentType.Javascript);
+			server.AddResource("/js/*.js", js.OnRequest);
+
+
 			server.Start();
-
-
-			Console.WriteLine("Web Server started on port: " + PORT);
 			Console.WriteLine("Press CTRL-C to shut down.");
+
 			/*
              * Main thread now awaits SIGTERM
              */
@@ -51,6 +65,16 @@ namespace Pleisure
 			Console.WriteLine("Shutting down...");
 			server.Stop();
 			Environment.Exit(0);
+		}
+
+		public static string GetPath()
+		{
+			return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+		}
+
+		public static string GetPath(string relative)
+		{
+			return Path.Combine(GetPath(), relative);
 		}
 	}
 }
