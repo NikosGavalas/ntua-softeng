@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 
@@ -20,6 +21,11 @@ namespace Pleisure
 
 		static WebServer server;
 
+		static async Task<int> Foo()
+		{
+			return 2;
+		}
+
 		static void Main(string[] args)
 		{
 			server = new WebServer(HOST, PORT, sessionLifetime: 300);
@@ -35,8 +41,9 @@ namespace Pleisure
 			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
 			server.AddResource("/img/*.png", png.OnRequest);
 
-
-			
+			Task<int> x = Foo();
+			Task<object> t = (Task<object>)x;
+			Console.WriteLine(t.Result);
 
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");

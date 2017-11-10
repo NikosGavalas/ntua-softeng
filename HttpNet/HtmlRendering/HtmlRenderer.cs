@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
@@ -16,7 +16,7 @@ namespace HttpNet
 			this.htmlDocument = htmlDocument.ToCharArray();
 		}
 
-		public string Render(object obj)
+		public async Task<string> Render(object obj)
 		{
 			StringBuilder rendered = new StringBuilder();
 
@@ -85,6 +85,8 @@ namespace HttpNet
 						{
 							i += 3;
 							string varName = parseVariableName();
+							bool negate = varName.StartsWith("!");
+							varName = varName.TrimStart('!');
 							object varValue = GetHtmlVariable(obj, varName);
 
 							if (varValue == null)
@@ -92,7 +94,7 @@ namespace HttpNet
 								throw new MissingFieldException("Missing boolean field: " + varName);
 							}
 
-							if ((bool)varValue)
+							if ((bool)varValue ^ negate)
 							{
 								state = State.TrueIf;
 							}
@@ -114,6 +116,10 @@ namespace HttpNet
 							}
 							else
 							{
+								if (varValue is Task<string>)
+								{
+
+								}
 								rendered.Append(varValue.ToString());
 							}
 						}
@@ -152,7 +158,7 @@ namespace HttpNet
 			return rendered.ToString();
 		}
 
-		static object GetHtmlVariable(object obj, string name)
+		static async Task<object> GetHtmlVariable(object obj, string name)
 		{
 			PropertyInfo[] properties = obj.GetType().GetProperties();
 
@@ -162,7 +168,7 @@ namespace HttpNet
 
 				if (val != null && val.Name == name)
 				{
-					return prop.GetValue(obj);
+					return await GetAsync(prop.GetValue(obj));
 				}
 			}
 
@@ -174,11 +180,24 @@ namespace HttpNet
 
 				if (val != null && val.Name == name)
 				{
-					return field.GetValue(obj);
+					return await GetAsync(field.GetValue(obj));
 				}
 			}
 
 			return null;
+		}
+
+		static async Task<object> GetAsync(object obj)
+		{
+			if (obj.GetType().IsGenericType
+				&& obj.GetType().GetGenericTypeDefinition() == typeof(Task<>))
+			{
+				return await (Task<object>)obj;
+			}
+			else
+			{
+				return obj;
+			}
 		}
 
 		enum State

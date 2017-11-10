@@ -131,7 +131,7 @@ namespace HttpNet
 
 			if (session.Behavior != null)
 			{
-				await session.Behavior.OnRequest(servicePath, request);
+				await session.Behavior?.OnRequest(servicePath, request);
 			}
 		}
 
