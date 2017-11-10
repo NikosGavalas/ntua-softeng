@@ -23,21 +23,128 @@ namespace HttpNet
 			State state = State.Writing;
 			int i = 0;
 
-			while (i < htmlDocument.Length - 1)
+			Func<bool> isOpenTag = () =>
+			{
+				return i < htmlDocument.Length - 1
+					&& htmlDocument[i] == '@'
+					&& htmlDocument[i + 1] == '{';
+			};
+
+			Func<bool> isIfTag = () =>
+			{
+				return i < htmlDocument.Length - 3
+					&& htmlDocument[i] == '@'
+					&& htmlDocument[i + 1] == 'i'
+					&& htmlDocument[i + 2] == 'f'
+					&& htmlDocument[i + 3] == '{';
+			};
+
+			Func<bool> isElseTag = () =>
+			{
+				return i < htmlDocument.Length - 6
+					&& htmlDocument[i] == '@'
+					&& htmlDocument[i + 1] == 'e' && htmlDocument[i + 2] == 'l'
+					&& htmlDocument[i + 3] == 's' && htmlDocument[i + 4] == 'e'
+					&& htmlDocument[i + 5] == '{';
+			};
+
+			Func<bool> isEndifTag = () =>
+			{
+				return i < htmlDocument.Length - 6
+					&& htmlDocument[i] == '@'
+					&& htmlDocument[i + 1] == 'e' && htmlDocument[i + 2] == 'n'
+					&& htmlDocument[i + 3] == 'd' && htmlDocument[i + 4] == 'i'
+					&& htmlDocument[i + 5] == 'f' && htmlDocument[i + 6] == '{';
+			};
+
+			Func<string> parseVariableName = () =>
+			{
+				// Get over the opening tag
+				while (htmlDocument[i] == '@' || htmlDocument[i] == '{')
+					i++;
+
+				StringBuilder var = new StringBuilder();
+				while (htmlDocument[i] != '}')
+				{
+					var.Append(htmlDocument[i]);
+					i++;
+				}
+
+				// Get over the closing tag
+				i++;
+
+				return var.ToString();
+			};
+
+			while (i < htmlDocument.Length)
 			{
 				switch (state)
 				{
 					case State.Writing:
-						rendered.Append(htmlDocument[i]);
+						if (isIfTag())
+						{
+							i += 3;
+							string varName = parseVariableName();
+							object varValue = GetHtmlVariable(obj, varName);
+
+							if (varValue == null)
+							{
+								throw new MissingFieldException("Missing boolean field: " + varName);
+							}
+
+							if ((bool)varValue)
+							{
+								state = State.TrueIf;
+							}
+							else
+							{
+								state = State.FalseIf;
+								break;
+							}
+						}
+						if (isOpenTag())
+						{
+							string varName = parseVariableName();
+							object varValue = GetHtmlVariable(obj, varName);
+
+							if (varValue == null)
+							{
+								// Log warning?
+								rendered.Append("@{" + varName + "}");
+							}
+							else
+							{
+								rendered.Append(varValue.ToString());
+							}
+						}
+						rendered.Append(htmlDocument[i++]);
 						break;
 
 					case State.TrueIf:
-						break;
+						if (isEndifTag())
+						{
+							goto case State.EndIf;
+						}
+						else
+						{
+							goto case State.Writing;
+						}
 
 					case State.FalseIf:
+						if (isEndifTag())
+						{
+							goto case State.EndIf;
+						}
+						i++;
 						break;
 
 					case State.EndIf:
+						if (isEndifTag())
+						{
+							i += 8;
+							state = State.Writing;
+						}
+						i++;
 						break;
 				}
 			}
@@ -80,6 +187,15 @@ namespace HttpNet
 			TrueIf,
 			FalseIf,
 			EndIf
+		}
+
+		enum FlowTag
+		{
+			None,
+			If,
+			Elseif,
+			Else,
+			Endif
 		}
 	}
 }

@@ -157,7 +157,7 @@ namespace HttpNet
 			return session;
 		}
 
-		void Log(LogLevels level, string message)
+		internal void Log(LogLevels level, string message)
 		{
 			if (LogLevel.HasFlag(level))
 			{
@@ -190,7 +190,5 @@ namespace HttpNet
 			Match match = Regex.Match(path, pattern);
 			return match.Success;
 		}
-
-
 	}
 }
