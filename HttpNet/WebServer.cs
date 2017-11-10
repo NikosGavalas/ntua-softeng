@@ -29,7 +29,7 @@ namespace HttpNet
 		public WebServer(string host, int port, int sessionLifetime = 300)
 		{
 			this.sessionLifetime = sessionLifetime;
-
+			
 			server = new HttpListener();
 			server.Prefixes.Add(string.Format("http://{0}:{1}/", host, port));
 
