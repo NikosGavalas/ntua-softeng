@@ -74,7 +74,7 @@ The User Interface is the simplest possible, so that even inexperienced users ca
 The software can be deployed on any platform that can run .NET >= 4.6 or Mono >= 5.4 and a MySQL database.
 
 ### Deployment
-The installation procedure (both building and deployment) is automated.
+The installation procedure (both building and deployment) is automated with the use of a script.
 
 ### Responsiveness
 The UI is responsive, meaning it offers optimal viewing experience across a wide range of devices (Desktop, Tablet, Mobile).
