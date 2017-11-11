@@ -41,6 +41,10 @@ namespace Pleisure
 			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
 			server.Add("/img/*.png", png.OnRequest);
 
+
+			Api api = new Api(server.AddRouter("/api"));
+			
+
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
 

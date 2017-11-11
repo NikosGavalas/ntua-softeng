@@ -53,7 +53,7 @@ namespace HttpNet
 			{
 				if (router.MatchesPath(request.Path))
 				{
-					server.Log(LogLevels.Debug, string.Format("Forwarding path {0} to router at {1}", request.Path, path));
+					server.Log(LogLevels.Debug, string.Format("Forwarding path {0} to router at {1}", request.Path, router.path));
 
 					await router.Handle(request, session);
 					return;
@@ -84,7 +84,9 @@ namespace HttpNet
 
 		public Router CreateRouter(string path)
 		{
-			return new Router(server, path);
+			Router router = new Router(server, path);
+			routers.Add(router);
+			return router;
 		}
 
 		public bool MatchesPath(string path)
