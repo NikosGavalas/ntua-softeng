@@ -16,7 +16,7 @@ namespace Pleisure
 		public UserRole Role { get; private set; }
 		public int Credits { get; private set; }
 
-		public async Task<User> WithId(int userId)
+		public static async Task<User> WithId(int userId)
 		{
 			HaathMySql conn = Program.Mysql();
 

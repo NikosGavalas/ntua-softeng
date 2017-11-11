@@ -11,5 +11,10 @@ namespace Pleisure
 	public class UserSession : SessionBehavior
 	{
 		public int UserID = -1;
+
+		public bool LoggedIn
+		{
+			get { return UserID > -1; }
+		}
 	}
 }

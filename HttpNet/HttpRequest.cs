@@ -98,6 +98,12 @@ namespace HttpNet
 			return this;
 		}
 
+		public HttpRequest SetHeader(string name, string value)
+		{
+			response.AddHeader(name, value);
+			return this;
+		}
+
 		/// <summary>
 		/// Write data asynchronously on the response stream.
 		/// </summary>
@@ -148,6 +154,18 @@ namespace HttpNet
 			await response.OutputStream.FlushAsync();
 			response.OutputStream.Close();
 			response.OutputStream.Dispose();
+		}
+
+		/// <summary>
+		/// Shortcut to setting the Content-Type, the StatusCode to 200 and closing the stream.
+		/// </summary>
+		/// <param name="contentType"></param>
+		/// <returns></returns>
+		public async Task Success(ContentType contentType)
+		{
+			SetContentType(contentType);
+			SetStatusCode(HttpStatusCode.OK);
+			await Close();
 		}
 	}
 }

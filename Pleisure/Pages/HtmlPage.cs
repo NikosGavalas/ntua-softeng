@@ -11,6 +11,7 @@ namespace Pleisure
 {
 	public class HtmlPage
 	{
+		string html;
 		User user;
 
 		[HtmlVariable("is_parent")]
@@ -79,9 +80,16 @@ namespace Pleisure
 		[HtmlVariable("modal.add_event")]
 		public Task<string> ModalAddEvent { get { return GetHtml("modal/add_event"); } }
 
-		public HtmlPage(User user)
+		public HtmlPage(string html, User user)
 		{
+			this.html = html;
 			this.user = user;
+		}
+
+		public async Task<string> Render()
+		{
+			HtmlRenderer renderer = new HtmlRenderer(html);
+			return await renderer.Render(this);
 		}
 
 		async Task<string> GetHtml(string file)

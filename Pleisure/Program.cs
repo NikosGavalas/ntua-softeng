@@ -28,7 +28,12 @@ namespace Pleisure
 			server = new WebServer(HOST, PORT, sessionLifetime: 300);
 			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
+			
 
+
+			/*
+			 * Register content providers
+			 */
 			StaticResourceProvider css = new StaticResourceProvider(GetPath("app/css"), "/css", ContentType.Css);
 			server.Add("/css/*.css", css.OnRequest);
 
@@ -37,11 +42,24 @@ namespace Pleisure
 
 			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
 			server.Add("/img/*", png.OnRequest);
+			
 
-
+			/*
+			 * Register API
+			 */
 			Api api = new Api(server.AddRouter("/api"));
 
-			server.Add("/", Test);
+
+
+
+			HtmlProvider pages = new HtmlProvider();
+			server.Add<UserSession>("/", pages.Index);
+			server.Add<UserSession>("/events", pages.Events);
+			server.Add<UserSession>("/event/*", pages.Event);
+			server.Add<UserSession>("/profile", pages.Profile);
+
+
+
 
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
@@ -62,12 +80,6 @@ namespace Pleisure
 					Thread.Sleep(5000);
 				}
 			}
-		}
-
-		static async Task Test(HttpRequest req)
-		{
-			Console.WriteLine("a" + req.Session.SessionID);
-			await req.Close();
 		}
 
 		public static bool IsLinux()

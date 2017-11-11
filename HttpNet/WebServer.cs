@@ -103,6 +103,7 @@ namespace HttpNet
 					{
 						OnException?.Invoke(t.Exception);
 						Log(LogLevels.Error, t.Exception.ToString());
+						request.SetStatusCode(HttpStatusCode.InternalServerError);
 						request.Close();
 					}
 				});

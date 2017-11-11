@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace HttpNet
@@ -61,7 +61,8 @@ namespace HttpNet
 				}
 			}
 
-			//await request.Close();
+			request.SetStatusCode(HttpStatusCode.NotFound);
+			await request.Close();
 		}
 
 		public Router Add<Behavior>(string path, Func<HttpRequest, Task> handler)
