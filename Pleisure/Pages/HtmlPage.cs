@@ -9,9 +9,8 @@ using HttpNet;
 
 namespace Pleisure
 {
-	public abstract class HtmlPage
+	public class HtmlPage
 	{
-
 		[HtmlVariable("html.navbar")]
 		public Task<string> Navbar { get { return GetHtml("navbar"); } }
 
@@ -36,10 +35,7 @@ namespace Pleisure
 		[HtmlVariable("modal.add_event")]
 		public Task<string> ModalAddEvent { get { return GetHtml("modal/add_event"); } }
 
-		public HtmlPage()
-		{
 
-		}
 
 		async Task<string> GetHtml(string file)
 		{

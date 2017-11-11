@@ -15,23 +15,13 @@ namespace Pleisure
 
 		public Api(Router router)
 		{
-			router.Add("/users", Users);
-		}
-
-		public async Task Users(HttpRequest request)
-		{
-			request.SetContentType(ContentType.Html);
-			
-			await request.Write("<img src='/img/logo.png'>");
-
-			await request.Close();
+			router.Add("/kids", Kids);
 		}
 
 		public async Task Kids(HttpRequest request)
 		{
-			request.SetContentType(ContentType.Html);
+			request.SetContentType(ContentType.Json);
 
-			await request.Write(request.Session.SessionID);
 
 			await request.Close();
 		}

@@ -27,6 +27,11 @@ namespace HttpNet
 	public enum LogLevels
 	{
 		/// <summary>
+		/// Log everything
+		/// </summary>
+		All		= 0xFF,
+
+		/// <summary>
 		/// When an exception is raised
 		/// </summary>
 		Error	= 1 << 0,

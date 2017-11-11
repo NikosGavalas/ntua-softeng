@@ -24,7 +24,7 @@ namespace Pleisure
 		static void Main(string[] args)
 		{
 			server = new WebServer(HOST, PORT, sessionLifetime: 300);
-			server.LogLevel = server.LogLevel | LogLevels.Debug | LogLevels.Info;
+			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
 
 			StaticResourceProvider css = new StaticResourceProvider(GetPath("app/css"), "/css", ContentType.Css);
@@ -34,7 +34,7 @@ namespace Pleisure
 			server.Add("/js/*.js", js.OnRequest);
 
 			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
-			server.Add("/img/*.png", png.OnRequest);
+			server.Add("/img/*", png.OnRequest);
 
 
 			Api api = new Api(server.AddRouter("/api"));
