@@ -14,3 +14,4 @@
 |[Nik](https://git.gmantaos.com/nik)|Front-End|Reports|
 |[Markos](https://git.gmantaos.com/MarkosK)|Font-End|Reports|
 |[Kostas](https://git.gmantaos.com/Proteas94)|Module|QA|
+|[Antonis](https://git.gmantaos.com/UphillD)|Module||
