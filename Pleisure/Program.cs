@@ -33,17 +33,13 @@ namespace Pleisure
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
 
 			StaticResourceProvider css = new StaticResourceProvider(GetPath("app/css"), "/css", ContentType.Css);
-			server.AddResource("/css/*.css", css.OnRequest);
+			server.Add("/css/*.css", css.OnRequest);
 
 			StaticResourceProvider js = new StaticResourceProvider(GetPath("app/js"), "/js", ContentType.Javascript);
-			server.AddResource("/js/*.js", js.OnRequest);
+			server.Add("/js/*.js", js.OnRequest);
 
 			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
-			server.AddResource("/img/*.png", png.OnRequest);
-
-			Task<int> x = Foo();
-			Task<object> t = (Task<object>)x;
-			Console.WriteLine(t.Result);
+			server.Add("/img/*.png", png.OnRequest);
 
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");

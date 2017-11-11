@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pleisure", "Pleisure\Pleisure.csproj", "{C04CF5A4-FA91-4AA4-9ED7-77A52EDB91A9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9C670EF3-9E7A-4FFC-AA8E-DEED24DC0CED} = {9C670EF3-9E7A-4FFC-AA8E-DEED24DC0CED}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpNet", "HttpNet\HttpNet.csproj", "{9C670EF3-9E7A-4FFC-AA8E-DEED24DC0CED}"
 EndProject

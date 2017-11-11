@@ -44,6 +44,9 @@
   <ItemGroup>
     <Compile Include="HtmlRendering\HtmlRenderer.cs" />
     <Compile Include="HtmlRendering\HtmlVariable.cs" />
+    <Compile Include="Routing\IRoutingNode.cs" />
+    <Compile Include="Routing\Route.cs" />
+    <Compile Include="Routing\Router.cs" />
     <Compile Include="SessionBehavior.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Events\LogEventArgs.cs" />

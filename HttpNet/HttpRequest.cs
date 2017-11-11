@@ -9,13 +9,22 @@ namespace HttpNet
 {
 	public class HttpRequest
 	{
+		Session _session;
+		public SessionBehavior Session
+		{
+			get { return _session.Behavior; }
+			internal set { _session.Behavior = value; }
+		}
+
 		/// <summary>
 		/// The requested resource of the request
 		/// </summary>
-		public string Path
+		public string AbsolutePath
 		{
 			get { return request?.RawUrl.Split('?')[0]; }
 		}
+
+		public string Path { get; internal set; }
 
 		/// <summary>
 		/// The GET parameters sent with the request
@@ -44,10 +53,13 @@ namespace HttpNet
 		HttpListenerRequest request;
 		HttpListenerResponse response;
 
-		internal HttpRequest(HttpListenerRequest request, HttpListenerResponse response)
+		internal HttpRequest(HttpListenerRequest request, HttpListenerResponse response, Session session)
 		{
 			this.request = request;
 			this.response = response;
+			_session = session;
+
+			Path = AbsolutePath;
 		}
 
 		public async Task<string> RequestBody()
