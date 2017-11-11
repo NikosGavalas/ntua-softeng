@@ -16,7 +16,8 @@ namespace HttpNet
 		Json,
 		Zip,
 		Css,
-		Plain
+		Plain,
+		Image
 	}
 
 	/// <summary>
@@ -25,6 +26,11 @@ namespace HttpNet
 	[Flags]
 	public enum LogLevels
 	{
+		/// <summary>
+		/// Log everything
+		/// </summary>
+		All		= 0xFF,
+
 		/// <summary>
 		/// When an exception is raised
 		/// </summary>

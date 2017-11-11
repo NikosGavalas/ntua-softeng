@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 
 using HttpNet;
 
 using UnixSignalWaiter;
+
+using HaathDB;
 
 namespace Pleisure
 {
@@ -23,14 +26,39 @@ namespace Pleisure
 		static void Main(string[] args)
 		{
 			server = new WebServer(HOST, PORT, sessionLifetime: 300);
-			server.LogLevel = server.LogLevel | LogLevels.Debug | LogLevels.Info;
+			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
+			
 
+
+			/*
+			 * Register content providers
+			 */
 			StaticResourceProvider css = new StaticResourceProvider(GetPath("app/css"), "/css", ContentType.Css);
-			server.AddResource("/css/*.css", css.OnRequest);
+			server.Add("/css/*.css", css.OnRequest);
 
 			StaticResourceProvider js = new StaticResourceProvider(GetPath("app/js"), "/js", ContentType.Javascript);
-			server.AddResource("/js/*.js", js.OnRequest);
+			server.Add("/js/*.js", js.OnRequest);
+
+			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
+			server.Add("/img/*", png.OnRequest);
+			
+
+			/*
+			 * Register API
+			 */
+			Api api = new Api(server.AddRouter("/api"));
+
+
+
+
+			HtmlProvider pages = new HtmlProvider();
+			server.Add<UserSession>("/", pages.Index);
+			server.Add<UserSession>("/events", pages.Events);
+			server.Add<UserSession>("/event/*", pages.Event);
+			server.Add<UserSession>("/profile", pages.Profile);
+
+
 
 
 			server.Start();
@@ -75,6 +103,11 @@ namespace Pleisure
 		public static string GetPath(string relative)
 		{
 			return Path.Combine(GetPath(), relative);
+		}
+
+		public static HaathMySql Mysql()
+		{
+			return new HaathMySql("127.0.0.1", "progtech", "@ntua123", "pleisure");
 		}
 	}
 }

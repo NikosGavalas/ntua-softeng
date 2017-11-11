@@ -23,31 +23,35 @@ namespace HttpNet
 
 		int sessionLifetime;
 
-		Dictionary<string, Type> services;
-		Dictionary<string, Func<HttpRequest, Task>> resources;
+		Router rootRouter;
 
 		public WebServer(string host, int port, int sessionLifetime = 300)
 		{
 			this.sessionLifetime = sessionLifetime;
-
+			
 			server = new HttpListener();
 			server.Prefixes.Add(string.Format("http://{0}:{1}/", host, port));
 
 			LogLevel = LogLevels.Warning | LogLevels.Error;
 
-			services = new Dictionary<string, Type>();
-			resources = new Dictionary<string, Func<HttpRequest, Task>>();
+			rootRouter = new Router(this, "");
 		}
 
-		public void AddService<Behavior>(string path) 
+		public WebServer Add<Behavior>(string path, Func<HttpRequest, Task> handler)
 			where Behavior : SessionBehavior, new()
 		{
-			services.Add(path, typeof(SessionBehavior));
+			rootRouter.Add<Behavior>(path, handler);
+			return this;
 		}
 
-		public void AddResource(string path, Func<HttpRequest, Task> handler)
+		public WebServer Add(string path, Func<HttpRequest, Task> handler)
 		{
-			resources.Add(path, handler);
+			return Add<SessionBehavior>(path, handler);
+		}
+
+		public Router AddRouter(string path)
+		{
+			return rootRouter.CreateRouter(path);
 		}
 
 		public void Start()
@@ -85,54 +89,32 @@ namespace HttpNet
 
 		void HandleRequest(HttpListenerContext connection)
 		{
-			HttpRequest request = new HttpRequest(connection.Request, connection.Response);
+			Log(LogLevels.Debug, "GET " + connection.Request.RawUrl);
 
-			Log(LogLevels.Debug, "Request: " + request.Path);
+			Session session = GetOrSetSession(connection.Request, connection.Response);
+			HttpRequest request = new HttpRequest(connection.Request, connection.Response, session);
 
-			bool requestHandled = false;
-			
-			// TODO: Multiple handlers handling the same request?
-			// perhaps the best-matching path should handle it
-			foreach (KeyValuePair<string, Type> service in ServicesForUrl(request.Path))
-			{
-				// Any session behavior services
-				Session session = GetOrSetSession(connection.Request, connection.Response);
 
-				HandleServiceRequest(session, request, service.Key, service.Value);
-				requestHandled = true;
-			}
-
-			foreach (KeyValuePair<string, Func<HttpRequest, Task>> resource in ResourcesForUrl(request.Path))
-			{
-				// Any resource handlers
-				resource.Value?.Invoke(request);
-				requestHandled = true;
-			}
-
-			if (!requestHandled)
-			{
-				request.SetStatusCode(HttpStatusCode.ServiceUnavailable);
-				request.Close();
-			}
-		}
-
-		async Task HandleServiceRequest(Session session, HttpRequest request, 
-			string servicePath, Type behaviorType)
-		{
-			if (session.Behavior == null && behaviorType == typeof(SessionBehavior))
-			{
-				session.Behavior = (SessionBehavior)Activator.CreateInstance(behaviorType);
-				await session.Behavior.OnCreate(session.SessionID, session.RemoteEndPoint);
-			}
-
-			if (session.Behavior != null)
-			{
-				await session.Behavior.OnRequest(servicePath, request);
-			}
+			rootRouter.Handle(request, session).ContinueWith(
+				t =>
+				{
+					// If the handling task died, don't forget to close the stream.
+					if (t.IsFaulted)
+					{
+						OnException?.Invoke(t.Exception);
+						Log(LogLevels.Error, t.Exception.ToString());
+						request.SetStatusCode(HttpStatusCode.InternalServerError);
+						request.Close();
+					}
+				});
 		}
 
 		Session GetOrSetSession(HttpListenerRequest request, HttpListenerResponse response)
 		{
+			/*
+			 * Debt: The browser doesn't send any cookies when requesting favicon.ico so we start a new session for each.
+			 */
+
 			Session session = null;
 			Cookie sessCookie = request.Cookies["SESSID"];
 
@@ -153,30 +135,11 @@ namespace HttpNet
 			return session;
 		}
 
-		void Log(LogLevels level, string message)
+		internal void Log(LogLevels level, string message)
 		{
 			if (LogLevel.HasFlag(level))
 			{
 				OnLog?.Invoke(this, new LogEventArgs(level, message));
-			}
-		}
-
-		IEnumerable<KeyValuePair<string, Type>> ServicesForUrl(string rawUrl)
-		{
-			string path = rawUrl.Split('?')[0];
-			foreach (KeyValuePair<string, Type> service in services)
-			{
-				if (Match(service.Key, path))
-					yield return service;
-			}
-		}
-
-		IEnumerable<KeyValuePair<string, Func<HttpRequest, Task>>> ResourcesForUrl(string path)
-		{
-			foreach (KeyValuePair<string, Func<HttpRequest, Task>> resource in resources)
-			{
-				if (Match(resource.Key, path))
-					yield return resource;
 			}
 		}
 
@@ -186,7 +149,5 @@ namespace HttpNet
 			Match match = Regex.Match(path, pattern);
 			return match.Success;
 		}
-
-
 	}
 }

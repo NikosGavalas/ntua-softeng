@@ -7,34 +7,31 @@ using System.Net;
 
 namespace HttpNet
 {
-	public abstract class SessionBehavior
+	public class SessionBehavior
 	{
 		/// <summary>
 		/// The unique session id associated with this session
 		/// </summary>
-		protected string sessionId;
+		public string SessionID { get; private set; }
 
 		/// <summary>
 		/// The endpoint of the client
 		/// </summary>
-		protected IPEndPoint remoteEndPoint;
+		public IPEndPoint RemoteEndPoint { get; private set; }
 
 		internal Task OnCreate(string sessionId, IPEndPoint remoteEndPoint)
 		{
-			this.sessionId = sessionId;
-			this.remoteEndPoint = remoteEndPoint;
+			SessionID = sessionId;
+			RemoteEndPoint = remoteEndPoint;
 			return OnCreate();
 		}
 		/// <summary>
 		/// Will fire when this session is created and all the protected fields have been set
 		/// </summary>
 		/// <returns></returns>
-		protected abstract Task OnCreate();
-
-		internal Task OnRequest(string servicePath, HttpRequest request)
+		protected virtual Task OnCreate()
 		{
-			return OnRequest(request);
+			return Task.CompletedTask;
 		}
-		protected abstract Task OnRequest(HttpRequest request);
 	}
 }

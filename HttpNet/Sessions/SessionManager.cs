@@ -39,6 +39,10 @@ namespace HttpNet
 		internal Session CreateSession(IPEndPoint remoteEndPoint)
 		{
 			string sessionId = GenerateSessionId(remoteEndPoint);
+
+			if (sessions.ContainsKey(sessionId))
+				return GetSessionWithId(sessionId);
+
 			Session session = new Session(sessionId, remoteEndPoint);
 			sessions.Add(sessionId, session);
 			return session;

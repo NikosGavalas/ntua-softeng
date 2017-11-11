@@ -9,13 +9,22 @@ namespace HttpNet
 {
 	public class HttpRequest
 	{
+		Session _session;
+		public SessionBehavior Session
+		{
+			get { return _session.Behavior; }
+			internal set { _session.Behavior = value; }
+		}
+
 		/// <summary>
 		/// The requested resource of the request
 		/// </summary>
-		public string Path
+		public string AbsolutePath
 		{
 			get { return request?.RawUrl.Split('?')[0]; }
 		}
+
+		public string Path { get; internal set; }
 
 		/// <summary>
 		/// The GET parameters sent with the request
@@ -38,20 +47,19 @@ namespace HttpNet
 		{
 			get { return request.Cookies; }
 		}
-
+		
 		string _requestBody = null;
 
 		HttpListenerRequest request;
 		HttpListenerResponse response;
 
-		StreamWriter responseStream;
-
-		internal HttpRequest(HttpListenerRequest request, HttpListenerResponse response)
+		internal HttpRequest(HttpListenerRequest request, HttpListenerResponse response, Session session)
 		{
 			this.request = request;
 			this.response = response;
+			_session = session;
 
-			responseStream = new StreamWriter(response.OutputStream, Encoding.Default);
+			Path = AbsolutePath;
 		}
 
 		public async Task<string> RequestBody()
@@ -84,14 +92,57 @@ namespace HttpNet
 			return this;
 		}
 
+		public HttpRequest SetContentTypeByExtension(ContentType type, string extension)
+		{
+			response.ContentType = Utils.GetContentType(type) + extension;
+			return this;
+		}
+
+		public HttpRequest SetHeader(string name, string value)
+		{
+			response.AddHeader(name, value);
+			return this;
+		}
+
 		/// <summary>
-		/// Write data asynchronously on the response stream
+		/// Write data asynchronously on the response stream.
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="encoding">The encoding of the text</param>
+		/// <returns></returns>
+		public Task Write(string data, Encoding encoding)
+		{
+			return Write(encoding.GetBytes(data));
+		}
+
+		/// <summary>
+		/// Write data asynchronously on the response stream.
 		/// </summary>
 		/// <param name="data"></param>
 		/// <returns></returns>
 		public Task Write(string data)
 		{
-			return responseStream.WriteAsync(data);
+			return Write(data, Encoding.Default);
+		}
+
+		/// <summary>
+		/// Write data asynchronously on the response stream.
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public Task Write(byte[] data)
+		{
+			return response.OutputStream.WriteAsync(data, 0, data.Length);
+		}
+
+		public Task Write(char character)
+		{
+			return Write(character, Encoding.Default);
+		}
+
+		public Task Write(char character, Encoding encoding)
+		{
+			return Write(character.ToString(), encoding);
 		}
 
 		/// <summary>
@@ -100,9 +151,21 @@ namespace HttpNet
 		/// <returns></returns>
 		public async Task Close()
 		{
-			await responseStream.FlushAsync();
-			responseStream.Close();
-			responseStream.Dispose();
+			await response.OutputStream.FlushAsync();
+			response.OutputStream.Close();
+			response.OutputStream.Dispose();
+		}
+
+		/// <summary>
+		/// Shortcut to setting the Content-Type, the StatusCode to 200 and closing the stream.
+		/// </summary>
+		/// <param name="contentType"></param>
+		/// <returns></returns>
+		public async Task Success(ContentType contentType)
+		{
+			SetContentType(contentType);
+			SetStatusCode(HttpStatusCode.OK);
+			await Close();
 		}
 	}
 }

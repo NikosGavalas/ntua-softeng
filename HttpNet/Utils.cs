@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Reflection;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,9 @@ namespace HttpNet
 
 				case ContentType.Zip:
 					return "application/zip";
+
+				case ContentType.Image:
+					return "image/";
 
 				default:
 					goto case ContentType.Plain;

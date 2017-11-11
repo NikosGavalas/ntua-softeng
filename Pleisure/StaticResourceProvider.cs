@@ -26,7 +26,7 @@ namespace Pleisure
 		public async Task OnRequest(HttpRequest request)
 		{
 			HttpStatusCode status = await ServeFile(request);
-			request.SetStatusCode(status);
+			await request.SetStatusCode(status).Close();
 			await request.Close();
 		}
 
@@ -38,12 +38,11 @@ namespace Pleisure
 			}
 			
 			string requestedFile = request.Path.Remove(0, virtualRoot.Length).TrimStart('/');
-			StreamReader fileStream = null;
+			FileStream fileStream = null;
 			try
 			{
 				string filePath = Path.Combine(resourceRoot, requestedFile);
-				FileStream stream = File.OpenRead(filePath);
-				fileStream = new StreamReader(stream);
+				fileStream = File.OpenRead(filePath);
 			}
 			catch (Exception ex)
 			{
@@ -56,10 +55,23 @@ namespace Pleisure
 			}
 
 
-			string body = await fileStream.ReadToEndAsync();
-			await request.Write(body);
+			byte[] data = new byte[fileStream.Length];
+			await fileStream.ReadAsync(data, 0, (int)fileStream.Length);
+			await request.Write(data);
+			
 
-			request.SetContentType(contentType);
+			// Set the appropriate Content-Type
+			switch (contentType)
+			{
+				case ContentType.Image:
+					request.SetContentTypeByExtension(contentType, Path.GetExtension(requestedFile));
+					break;
+
+				default:
+					request.SetContentType(contentType);
+					break;
+			}
+
 			return HttpStatusCode.OK;
 		}
 	}
