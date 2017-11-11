@@ -29,7 +29,7 @@ namespace HttpNet
 		public WebServer(string host, int port, int sessionLifetime = 300)
 		{
 			this.sessionLifetime = sessionLifetime;
-
+			
 			server = new HttpListener();
 			server.Prefixes.Add(string.Format("http://{0}:{1}/", host, port));
 
@@ -100,6 +100,8 @@ namespace HttpNet
 
 				HandleServiceRequest(session, request, service.Key, service.Value);
 				requestHandled = true;
+
+				Log(LogLevels.Debug, request.Path + " handled by service at " + service.Key);
 			}
 
 			foreach (KeyValuePair<string, Func<HttpRequest, Task>> resource in ResourcesForUrl(request.Path))
@@ -107,6 +109,8 @@ namespace HttpNet
 				// Any resource handlers
 				resource.Value?.Invoke(request);
 				requestHandled = true;
+
+				Log(LogLevels.Debug, request.Path + " handled by resource at " + resource.Key);
 			}
 
 			if (!requestHandled)
@@ -127,7 +131,7 @@ namespace HttpNet
 
 			if (session.Behavior != null)
 			{
-				await session.Behavior.OnRequest(servicePath, request);
+				await session.Behavior?.OnRequest(servicePath, request);
 			}
 		}
 
@@ -153,7 +157,7 @@ namespace HttpNet
 			return session;
 		}
 
-		void Log(LogLevels level, string message)
+		internal void Log(LogLevels level, string message)
 		{
 			if (LogLevel.HasFlag(level))
 			{
@@ -186,7 +190,5 @@ namespace HttpNet
 			Match match = Regex.Match(path, pattern);
 			return match.Success;
 		}
-
-
 	}
 }

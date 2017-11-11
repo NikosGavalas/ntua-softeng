@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HtmlProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticResourceProvider.cs" />
@@ -68,6 +69,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\img\" />
     <Folder Include="app\js\" />
   </ItemGroup>
   <ItemGroup>
