@@ -1,7 +1,7 @@
 # 'Pleisure' Requirements Analysis Document
 ***
 ## Software Description
-Pleisure is a web platform which connects parents with activities providers for their children. It aims to offer parents the capability of finding high quality activities for their siblings via a simple and easy to use user interface, and at the same time, provide a handy environment for corresponding services and businesses for advertising and reaching out to more potential customers.
+Pleisure is a web platform which connects parents with activities providers for their children. It aims to offer parents the capability of finding high quality activities for their kids via a simple and easy to use user interface, and at the same time, provide a handy environment for corresponding services and businesses for advertising and reaching out to more potential customers.
 ***
 ## Functional Requirements
 ### User Groups and corresponding operations
@@ -14,18 +14,21 @@ The users of the platform can belong to one of the following groups:
 
 Guest users have access to all the content of the platform. They can view, without the need to login, all the events that are available, with priority to those hosted near them (if they choose to share their location). They can also apply filters, to limit the events displayed and adjust the search to their preferences.
 
-Parents are the users that are logged in as such. They can perform all the actions that an Guest user can, plus they have access to a personal profile page where they can add information and photos, and can also buy credits (see [Monetization](#monetization)). In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as age and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization .
+Parents are the users that are logged in as such. They can perform all the actions that an Guest user can, plus they have access to a personal profile page where they can add information and photos, and can also buy credits (see [Monetization](#monetization)). In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as age and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization.
 
 Organizers are the activity/events providers. They can perform all the actions that Guest users can too, and also create events. Their "profile page" is similar to this of the "parent" user, but instead of "add child" option, they have the "add event" option, where they can fill out a special form with details to publish the event. These details include the exact time and date of the event, info about it being reccuring or not, its pricing, address (geolocation), photos etc.
 
+Both of the two aforementioned users (Parent and Organizers) can use the "report" function to mark any inappropriate activity.
+
 Administrators are special users that can manage the registered users (Parents and Organizers). They can:
-- Ban users, if they notice any violation of the Terms of Usage.
+- Review the reports of the users
+- Ban users, if they notice any violation of the Terms of Usage
 - Restrict user functionality (such as event creation for an Organizer)
 - Reset passwords
 
 Authentication of the users (belonging to the groups Parents/Organizers/Administrators) is performed with the use of  passwords that are set on each respective signup.
 ### Entry Points
-All the users visiting the web platform, can immediately utilise the functionality of the service, by typing keywords in the main search bar. The search results are displayed on another page, to which the user is redirected after performing the search query.
+All the users visiting the web platform, can immediately utilise the functionality of the service by entering their address in the main textfield (or by allowing their browser to share their location so it can be automatically determined). The nearby events are then displayed on another page, to which the user is redirected after performing the query action.
 ### Monetization
 The platform uses an internal currency system. 
 
@@ -62,8 +65,8 @@ Users can instruct their browsers to refuse all cookies or to indicate when a co
 ## Non-functional Requirements
 ### Security
 The software implements all the security standards to prevent SQL injection attacks, XSS, and user accounts leak from the database.
-Sessions are over TLS so all communication with the server is encrypted. 
-
+Sessions are over TLS so all communication with the server is encrypted.
+The sensitive data of the users (such as information about the children of the "parent" users) are visible only to the user itself and the Administrator users.
 ### Usability
 The User Interface is the simplest possible, so that even inexperienced users can have full experience of the functionality of the service. It features easy navigation for all user groups.
 
