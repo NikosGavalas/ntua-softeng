@@ -93,8 +93,19 @@ namespace HttpNet
 
 			Session session = GetOrSetSession(connection.Request, connection.Response);
 			HttpRequest request = new HttpRequest(connection.Request, connection.Response, session);
-			
-			rootRouter.Handle(request, session).Wait();
+
+
+			rootRouter.Handle(request, session).ContinueWith(
+				t =>
+				{
+					// If the handling task died, don't forget to close the stream.
+					if (t.IsFaulted)
+					{
+						OnException?.Invoke(t.Exception);
+						Log(LogLevels.Error, t.Exception.ToString());
+						request.Close();
+					}
+				});
 		}
 
 		Session GetOrSetSession(HttpListenerRequest request, HttpListenerResponse response)
@@ -108,7 +119,6 @@ namespace HttpNet
 
 			if (sessCookie != null)
 			{
-				Console.WriteLine("Sess: " + sessCookie.Value);
 				session = sessionManager.GetSessionWithId(sessCookie.Value);
 			}
 

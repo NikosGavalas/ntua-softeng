@@ -27,7 +27,7 @@ namespace HttpNet
 		{
 			if (!MatchesPath(request.Path))
 			{
-				throw new ArgumentException(string.Format("Router {0} does not match path {1}.", path, request.Path));
+				throw new ArgumentException(string.Format("Router {0} does not match path {1}", path, request.Path));
 			}
 
 			request.Path = request.Path.Substring(path.Length);
@@ -36,13 +36,14 @@ namespace HttpNet
 			{
 				if (route.MatchesPath(request.Path))
 				{
-					if (session.Behavior == null && route.SessionBehavior == typeof(SessionBehavior))
+					if (session.Behavior == null 
+						&& (route.SessionBehavior == typeof(SessionBehavior) || route.SessionBehavior.IsSubclassOf(typeof(SessionBehavior))))
 					{
 						session.Behavior = (SessionBehavior)Activator.CreateInstance(route.SessionBehavior);
 						await session.Behavior.OnCreate(session.SessionID, session.RemoteEndPoint);
 					}
 
-					server.Log(LogLevels.Debug, string.Format("Handling path {0} at route {1}.", request.Path, route.RelativePath));
+					server.Log(LogLevels.Debug, string.Format("Handling path {0} at route {1}", request.Path, route.RelativePath));
 
 					await route.Handler(request);
 					return;

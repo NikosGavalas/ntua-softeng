@@ -12,6 +12,8 @@ using HttpNet;
 
 using UnixSignalWaiter;
 
+using HaathDB;
+
 namespace Pleisure
 {
 	class Program
@@ -38,7 +40,8 @@ namespace Pleisure
 
 
 			Api api = new Api(server.AddRouter("/api"));
-			
+
+			server.Add("/", Test);
 
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
@@ -59,6 +62,12 @@ namespace Pleisure
 					Thread.Sleep(5000);
 				}
 			}
+		}
+
+		static async Task Test(HttpRequest req)
+		{
+			Console.WriteLine("a" + req.Session.SessionID);
+			await req.Close();
 		}
 
 		public static bool IsLinux()
@@ -82,6 +91,11 @@ namespace Pleisure
 		public static string GetPath(string relative)
 		{
 			return Path.Combine(GetPath(), relative);
+		}
+
+		public static HaathMySql Mysql()
+		{
+			return new HaathMySql("127.0.0.1", "progtech", "@ntua123", "pleisure");
 		}
 	}
 }

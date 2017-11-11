@@ -11,6 +11,50 @@ namespace Pleisure
 {
 	public class HtmlPage
 	{
+		User user;
+
+		[HtmlVariable("is_parent")]
+		public bool IsParent
+		{
+			get { return user?.Role == UserRole.Parent; }
+		}
+
+		[HtmlVariable("is_organizer")]
+		public bool IsOrganizer
+		{
+			get { return user?.Role == UserRole.Organizer; }
+		}
+
+		[HtmlVariable("is_admin")]
+		public bool IsAdmin
+		{
+			get { return user?.Role == UserRole.Admin; }
+		}
+
+		[HtmlVariable("is_loggeding")]
+		public bool IsLoggedIn
+		{
+			get { return user != null; }
+		}
+
+		[HtmlVariable("user_email")]
+		public string UserEmail
+		{
+			get { return user.Email; }
+		}
+
+		[HtmlVariable("user_name")]
+		public string UserName
+		{
+			get { return user.FullName; }
+		}
+
+		[HtmlVariable("user_credits")]
+		public int UserCredits
+		{
+			get { return user.Credits; }
+		}
+
 		[HtmlVariable("html.navbar")]
 		public Task<string> Navbar { get { return GetHtml("navbar"); } }
 
@@ -35,7 +79,10 @@ namespace Pleisure
 		[HtmlVariable("modal.add_event")]
 		public Task<string> ModalAddEvent { get { return GetHtml("modal/add_event"); } }
 
-
+		public HtmlPage(User user)
+		{
+			this.user = user;
+		}
 
 		async Task<string> GetHtml(string file)
 		{
