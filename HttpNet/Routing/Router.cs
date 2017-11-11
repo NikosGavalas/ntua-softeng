@@ -60,7 +60,7 @@ namespace HttpNet
 				}
 			}
 
-			await request.Close();
+			//await request.Close();
 		}
 
 		public Router Add<Behavior>(string path, Func<HttpRequest, Task> handler)

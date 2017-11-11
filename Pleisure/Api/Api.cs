@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 using HttpNet;
@@ -20,18 +20,18 @@ namespace Pleisure
 
 		public async Task Users(HttpRequest request)
 		{
-			request.SetContentType(ContentType.Json);
-
-
+			request.SetContentType(ContentType.Html);
+			
+			await request.Write("<img src='/img/logo.png'>");
 
 			await request.Close();
 		}
 
 		public async Task Kids(HttpRequest request)
 		{
-			request.SetContentType(ContentType.Json);
+			request.SetContentType(ContentType.Html);
 
-
+			await request.Write(request.Session.SessionID);
 
 			await request.Close();
 		}

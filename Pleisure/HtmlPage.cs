@@ -44,11 +44,19 @@ namespace Pleisure
 		async Task<string> GetHtml(string file)
 		{
 			string fileName = Program.GetPath(string.Format("app/html/{0}.html", file));
-			using (StreamReader reader = new StreamReader(File.OpenRead(fileName)))
+			try
 			{
-				string html = await reader.ReadToEndAsync();
-				HtmlRenderer renderer = new HtmlRenderer(html);
-				return await renderer.Render(this);
+				using (StreamReader reader = new StreamReader(File.OpenRead(fileName)))
+				{
+					string html = await reader.ReadToEndAsync();
+					HtmlRenderer renderer = new HtmlRenderer(html);
+					return await renderer.Render(this);
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+				return null;
 			}
 		}
 	}

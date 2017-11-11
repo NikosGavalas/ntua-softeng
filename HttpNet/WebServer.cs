@@ -89,22 +89,26 @@ namespace HttpNet
 
 		void HandleRequest(HttpListenerContext connection)
 		{
+			Log(LogLevels.Debug, "GET " + connection.Request.RawUrl);
+
 			Session session = GetOrSetSession(connection.Request, connection.Response);
-
 			HttpRequest request = new HttpRequest(connection.Request, connection.Response, session);
-
-			Log(LogLevels.Debug, "Request: " + request.Path);
-
-			rootRouter.Handle(request, session);
+			
+			rootRouter.Handle(request, session).Wait();
 		}
 
 		Session GetOrSetSession(HttpListenerRequest request, HttpListenerResponse response)
 		{
+			/*
+			 * Debt: The browser doesn't send any cookies when requesting favicon.ico so we start a new session for each.
+			 */
+
 			Session session = null;
 			Cookie sessCookie = request.Cookies["SESSID"];
 
 			if (sessCookie != null)
 			{
+				Console.WriteLine("Sess: " + sessCookie.Value);
 				session = sessionManager.GetSessionWithId(sessCookie.Value);
 			}
 

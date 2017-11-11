@@ -106,8 +106,7 @@ namespace HttpNet
 		/// <returns></returns>
 		public Task Write(string data, Encoding encoding)
 		{
-			StreamWriter responseStream = new StreamWriter(response.OutputStream, encoding);
-			return responseStream.WriteAsync(data);
+			return Write(encoding.GetBytes(data));
 		}
 
 		/// <summary>
