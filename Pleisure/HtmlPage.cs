@@ -13,28 +13,28 @@ namespace Pleisure
 	{
 
 		[HtmlVariable("html.navbar")]
-		public string Navbar { get { return GetHtml("navbar").Result; } }
+		public Task<string> Navbar { get { return GetHtml("navbar"); } }
 
 		[HtmlVariable("html.header")]
-		public string Header { get { return GetHtml("header").Result; } }
+		public Task<string> Header { get { return GetHtml("header"); } }
 
 		[HtmlVariable("html.footer")]
-		public string Footer { get { return GetHtml("footer").Result; } }
+		public Task<string> Footer { get { return GetHtml("footer"); } }
 
 		[HtmlVariable("modal.login")]
-		public string ModalLogin { get { return GetHtml("modal/login").Result; } }
+		public Task<string> ModalLogin { get { return GetHtml("modal/login"); } }
 
 		[HtmlVariable("modal.register")]
-		public string ModalRegister { get { return GetHtml("modal/register").Result; } }
+		public Task<string> ModalRegister { get { return GetHtml("modal/register"); } }
 
 		[HtmlVariable("modal.edit_profile")]
-		public string ModalEditProfile { get { return GetHtml("modal/edit_profile").Result; } }
+		public Task<string> ModalEditProfile { get { return GetHtml("modal/edit_profile"); } }
 
 		[HtmlVariable("modal.add_kid")]
-		public string ModalAddKid { get { return GetHtml("modal/add_kid").Result; } }
+		public Task<string> ModalAddKid { get { return GetHtml("modal/add_kid"); } }
 
 		[HtmlVariable("modal.add_event")]
-		public string ModalAddEvent { get { return GetHtml("modal/add_event").Result; } }
+		public Task<string> ModalAddEvent { get { return GetHtml("modal/add_event"); } }
 
 		public HtmlPage()
 		{

@@ -21,11 +21,6 @@ namespace Pleisure
 
 		static WebServer server;
 
-		static async Task<int> Foo()
-		{
-			return 2;
-		}
-
 		static void Main(string[] args)
 		{
 			server = new WebServer(HOST, PORT, sessionLifetime: 300);

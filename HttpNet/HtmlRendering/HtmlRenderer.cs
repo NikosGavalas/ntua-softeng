@@ -87,7 +87,8 @@ namespace HttpNet
 							string varName = parseVariableName();
 							bool negate = varName.StartsWith("!");
 							varName = varName.TrimStart('!');
-							object varValue = GetHtmlVariable(obj, varName);
+
+							object varValue = await GetHtmlVariable(obj, varName);
 
 							if (varValue == null)
 							{
@@ -107,7 +108,7 @@ namespace HttpNet
 						if (isOpenTag())
 						{
 							string varName = parseVariableName();
-							object varValue = GetHtmlVariable(obj, varName);
+							object varValue = await GetHtmlVariable(obj, varName);
 
 							if (varValue == null)
 							{
@@ -192,7 +193,37 @@ namespace HttpNet
 			if (obj.GetType().IsGenericType
 				&& obj.GetType().GetGenericTypeDefinition() == typeof(Task<>))
 			{
-				return await (Task<object>)obj;
+				try
+				{
+					return await (Task<string>)obj;
+				}
+				catch (Exception) { }
+
+				try
+				{
+					return await (Task<int>)obj;
+				}
+				catch (Exception) { }
+				
+				try
+				{
+					return await (Task<double>)obj;
+				}
+				catch (Exception) { }
+				
+				try
+				{
+					return await (Task<bool>)obj;
+				}
+				catch (Exception) { }
+
+				try
+				{
+					return await (Task<float>)obj;
+				}
+				catch (Exception) { }
+
+				return obj;
 			}
 			else
 			{
