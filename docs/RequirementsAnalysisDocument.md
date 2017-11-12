@@ -12,7 +12,7 @@ The users of the platform can belong to one of the following groups:
 3. Organizers
 4. Administrators
 
-Guest users have access to most of the content of the platform. They can view, without the need to login, all the events that are available, with priority to those hosted near them by sumbmitting their area of interest. They can also apply filters, to limit the events displayed and adjust the search to their preferences. However, they cannot book events.
+Guest users have access to most of the content of the platform. They can view, without the need to login, all the events that are available, with priority to those hosted near them by submitting their area of interest. They can also apply filters, to limit the events displayed and adjust the search to their preferences. However, they cannot book events.
 
 Parents are the users that are logged in as such. They can perform all the actions that a Guest user can, plus they have access to a private profile page where they can add information and photos, and can also buy credits (see [Monetization](#monetization)). In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as age and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization.
 
