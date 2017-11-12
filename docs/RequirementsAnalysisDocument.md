@@ -12,9 +12,9 @@ The users of the platform can belong to one of the following groups:
 3. Organizers
 4. Administrators
 
-Guest users have access to all the content of the platform. They can view, without the need to login, all the events that are available, with priority to those hosted near them (if they choose to share their location). They can also apply filters, to limit the events displayed and adjust the search to their preferences.
+Guest users have access to most of the content of the platform. They can view, without the need to login, all the events that are available, with priority to those hosted near them (if they choose to share their location). They can also apply filters, to limit the events displayed and adjust the search to their preferences. However, they cannot book events.
 
-Parents are the users that are logged in as such. They can perform all the actions that an Guest user can, plus they have access to a personal profile page where they can add information and photos, and can also buy credits (see [Monetization](#monetization)). In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as age and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization.
+Parents are the users that are logged in as such. They can perform all the actions that a Guest user can, plus they have access to a private profile page where they can add information and photos, and can also buy credits (see [Monetization](#monetization)). In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as age and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization.
 
 Organizers are the activity/events providers. They can perform all the actions that Guest users can too, and also create events. Their "profile page" is similar to this of the "parent" user, but instead of "add child" option, they have the "add event" option, where they can fill out a special form with details to publish the event. These details include the exact time and date of the event, info about it being reccuring or not, its pricing, address (geolocation), photos etc.
 
