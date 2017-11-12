@@ -68,7 +68,7 @@ Users can instruct their browsers to refuse all cookies or to indicate when a co
 ### Security
 The software implements all the security standards to prevent SQL injection attacks, XSS, and user accounts leak from the database.
 Sessions are over TLS so all communication with the server is encrypted.
-The sensitive data of the users (such as information about the children of the "parent" users) are visible only to the user itself and the Administrator users.
+The sensitive data of the users (such as information about the children of the "parent" users) are visible only to the user himself and the Administrator users.
 ### Usability
 The User Interface is the simplest possible, so that even inexperienced users can have full experience of the functionality of the service. It features easy navigation for all user groups.
 
