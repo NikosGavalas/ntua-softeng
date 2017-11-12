@@ -12,7 +12,7 @@ The users of the platform can belong to one of the following groups:
 3. Organizers
 4. Administrators
 
-Guest users have access to most of the content of the platform. They can view, without the need to login, all the events that are available, with priority to those hosted near them (if they choose to share their location). They can also apply filters, to limit the events displayed and adjust the search to their preferences. However, they cannot book events.
+Guest users have access to most of the content of the platform. They can view, without the need to login, all the events that are available, with priority to those hosted near them by sumbmitting their area of interest. They can also apply filters, to limit the events displayed and adjust the search to their preferences. However, they cannot book events.
 
 Parents are the users that are logged in as such. They can perform all the actions that a Guest user can, plus they have access to a private profile page where they can add information and photos, and can also buy credits (see [Monetization](#monetization)). In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as age and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization.
 
@@ -28,13 +28,15 @@ Administrators are special users that can manage the registered users (Parents a
 
 Authentication of the users (belonging to the groups Parents/Organizers/Administrators) is performed with the use of  passwords that are set on each respective signup.
 ### Entry Points
-All the users visiting the web platform, can immediately utilise the functionality of the service by entering their address in the main textfield (or by allowing their browser to share their location so it can be automatically determined). The nearby events are then displayed on another page, to which the user is redirected after performing the query action.
+All the users visiting the web platform, can immediately utilise the functionality of the service by entering their location of interest in the main textfield. The nearby events are then displayed on another page, to which the user is redirected after performing the query action.
 ### Monetization
 The platform uses an internal currency system. 
 
 More specifically, different types of users can interact financially with each other by using "credits". "Parents" can buy credits via PayPal, and use these tokens to pay the "Organizers" for the chosen activities. The amount of credits is bound to the user's account, and no further kind of transactions are supported.
 
 Moreover, the website's owner can profit by keeping a commission for every transaction fulfilled.
+
+Another way of monetization is "sponsored events". Specifically, an organizer can choose to spend credits to advertise an event of his. Sponsored events appear first on the events display list.
 ### Legal
 #### Software license
 The software is licensed under the MIT License:
