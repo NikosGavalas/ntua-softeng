@@ -1,12 +1,8 @@
 # 'Pleisure' Requirements Analysis Document
-***
+
 ## Software Description
-<<<<<<< HEAD
-targets-aims-purposes, problems addressed, general description. To what kind of people the software is addressed (according to the prof we'll need to explain how the software will be friendly to inexperienced users - also how we will make sure that the service/ativities providers will not be psychos/pedos).
-=======
 Pleisure is a web platform which connects parents with activities providers for their children. It aims to offer parents the capability of finding high quality activities for their kids via a simple and easy to use user interface, and at the same time, provide a handy environment for corresponding services and businesses for advertising and reaching out to more potential customers.
-***
->>>>>>> 03b5a770df729746678082bf71869e398d90b852
+
 ## Functional Requirements
 ### User Groups and corresponding operations
 The users of the platform can belong to one of the following groups:
@@ -32,15 +28,7 @@ Administrators are special users that can manage the registered users (Parents a
 
 Authentication of the users (belonging to the groups Parents/Organizers/Administrators) is performed with the use of  passwords that are set on each respective signup.
 ### Entry Points
-<<<<<<< HEAD
-the first actions of a user, to begin using the software
-### Business Logic
-Data import/export support, Reporting Requirements (Logging etc)...
-### Limitations and Assumptions
-Paradoxes sta ellhnika. All decisions that are made inb4 and things taken for granted.
-=======
 All the users visiting the web platform, can immediately utilise the functionality of the service by entering their location of interest in the main textfield. The nearby events are then displayed on another page, to which the user is redirected after performing the query action.
->>>>>>> 03b5a770df729746678082bf71869e398d90b852
 ### Monetization
 The platform uses an internal currency system. 
 
