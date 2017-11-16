@@ -1,0 +1,65 @@
+/*
+	Sliders
+*/
+.my-slider {
+	-webkit-appearance: none;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	height: 10px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+	transition: opacity .2s;
+}
+.my-slider:hover {
+    opacity: 1;
+}
+.my-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #2fa4e7;
+	cursor: pointer;
+	border-radius: 20px;
+}
+/* 
+.my-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #2fa4e7;
+	cursor: pointer;
+}*/
+
+/*
+	Event items
+*/
+.event-item {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.center-image {
+	margin-top: 30%;
+}
+
+/*
+	Filters Button
+*/
+#filters-button {
+	border-radius: 50px;
+	z-index: 5;
+	position: fixed;
+	width:70px;
+	height:70px;
+	bottom:40px;
+	right:40px;
+	box-shadow: 5px 5px 6px #999;
+}
+
+/*
+	Bug Fixing
+*/
+#takis {
+	z-index: 0;
+}
+

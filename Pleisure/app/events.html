@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>Pleisure</title>
+
+		<!-- Fontawesome -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+		<!-- Bootstrap 3 based theme -->
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  -->
+		<link rel="stylesheet" href="css/theme.css">
+
+		<!-- Filters Bar -->
+		<link rel="stylesheet" href="css/filters.css">		
+
+		<!-- Custom stylesheet-->
+		<link rel="stylesheet" href="css/main.css">
+	</head>
+
+	<body>
+
+		<!-- Navbar -->
+		<nav class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Pleisure</a>
+				</div>
+		
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="#">About</a>
+						</li>
+					</ul>
+
+					<!-- Search Bar (not used currently) -->
+					<!-- <form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Search">
+						</div>
+						<button type="submit" class="btn btn-default">Search</button>
+					</form> -->
+
+					<ul class="nav navbar-nav navbar-right">
+						<!-- @if{is_loggedin} -->
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@{user_name} (@{user_credits} Credits)
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu" role="menu">
+								<li>
+									<a href="#">My Profile</a>
+								</li>
+								<li>
+									<a href="#">Settings</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="#">Log Out</a>
+								</li>
+							</ul>
+						</li>
+						<!-- @else{} -->
+						<!-- <li>
+							<a href="#"><b>Log In</b> or <b>Sign Up</b></a>
+						</li> -->
+						<!-- @endif{} -->
+					</ul>
+
+				</div>
+			</div>
+		</nav> <!-- /Navbar -->
+
+		<!-- Main Content -->
+		<div class="container">
+
+			<div class="row">
+
+				<!-- Breadcumb -->
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<ul class="breadcrumb">
+								<li>
+									<a href="#">Home</a>
+								</li>
+								<li class="active">
+									<a href="#">Events</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Filter Sidebar -->
+				<!-- BUG: when the list is very big, the filters don't display correctly -->
+				<div class="visible-xs">
+					<div class="container">
+						<button id="filters-button" class="btn btn-primary navbar-btn" data-toggle="collapse" data-target="#filter-sidebar">
+							<i class="fa fa-sliders"></i>							
+						</button>
+					</div>
+				</div>
+
+				<div id="filter-sidebar" class="col-xs-12 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar" >
+					<h3>Filters</h3>
+
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-1">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Location
+						</h4>
+						<div id="group-1" class="list-group collapse in">
+							<div class="input-group">
+								<span class="input-group-addon fa fa-map-marker"></span>
+								<input type="text" class="form-control" placeholder="Search...">
+							</div>
+						</div>
+					</div>
+		
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-2">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Price Range
+						</h4>
+						<div id="group-2" class="list-group collapse in" data-role="rangeslider">
+							<span>
+								<label for="price-min">Minimum Price: </label>
+								<label></label>
+							</span>
+							<input class="my-slider" type="range" name="price-min" id="price-min" value="0" min="0" max="1000">
+							<span>
+								<label for="price-max">Maximum Price: </label>
+								<label></label>
+							</span>
+							<input class="my-slider" type="range" name="price-max" id="price-max" value="1000" min="0" max="1000">
+						</div>
+					</div>
+		
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-3">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Age Range
+						</h4>
+						<div id="group-3" class="list-group collapse in" data-role="rangeslider">
+							<span>
+								<label for="price-min">Minimum Age:</label>	
+								<label></label>
+							</span>
+							<input class="my-slider" type="range" name="age-min" id="age-min" value="0" min="0" max="18">
+							<span>
+								<label for="price-max">Maximum Age</label>
+								<label></label>
+							</span>
+							<input class="my-slider" type="range" name="age-max" id="age-max" value="18" min="0" max="18">	
+						</div>
+					</div>
+		
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-4">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Category
+						</h4>
+						<div id="group-4" class="list-group collapse in">
+							<select id="category-selector" class="form-control">
+								<option value="all">All</option>								
+								<option value="sports">Sports</option>
+								<option value="playground">Playground</option>
+								<option value="party">Party</option>
+								<option value="excursion">Excursion</option>
+								<option value="outdoor">Outdoor</option>
+								<option value="inquisition">Spanish Inquisition</option>
+							</select>
+						</div>
+					</div>
+
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-5">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Recurring
+						</h4>
+						<form id="group-5" class="list-group collapse in">
+							<div class="radio">
+								<label><input id="optionsRadios1" name="optradio" type="radio" checked="">Yes</label>
+							</div>
+							<div class="radio">
+								<label><input id="optionsRadios2" name="optradio" type="radio" checked="">No</label>
+							</div>
+							<div class="radio">
+								<label><input id="optionsRadios3" name="optradio" type="radio" checked="">Display All</label>
+							</div>
+						</form>
+					</div>
+				</div>
+		
+				<!-- List container -->
+				<div class="col-sm-9">
+					<h3>Nearby Events for your Children! (@x_results)</h3>
+
+					<!-- Tabs -->
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#home" data-toggle="tab" aria-expanded="false">List View</a>
+						</li>
+						<li>
+							<a href="#profile" data-toggle="tab" aria-expanded="true">Map View</a>
+						</li>
+					</ul>
+					<div id="myTabContent" class="tab-content">
+						<div class="tab-pane fade active in" id="home">
+							<!-- Table or list?? here's the table option -->
+							<!-- <table class="table table-striped table-hover table-responsive">
+								<thead>
+									<tr>
+										<th>Title</th>
+										<th>Artist</th>
+										<th class="align-right">Price</th>
+										<th></th>
+									</tr>
+								</thead>
+							
+								<tbody>
+									<tr>
+										<td class="valign-middle" data-label="Title">
+											<a href="#">Mr Cuck</a>
+										</td>
+										<td class="valign-middle" data-label="Artist">
+											Kek
+										</td>
+										<td class="valign-middle align-right" data-label="Price">
+											$1.99
+										</td>
+										<td class="valign-middle align-right">
+											<a class="btn btn-default" href="#" data-toggle="tooltip" title="Add to Cart" data-placement="bottom" data-trigger="hover">
+												<i class="fa fa-cart-plus"></i>
+												<span class="visible-xs">Add to Cart</span>
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table> -->
+							
+							<!-- with list it will look like this -->
+							<!-- <ul class="list-unstyled">
+								<li>
+									<div class="row event-item">
+										<div class="col-md-3">
+											<img src="http://lorempixel.com/70/70/" alt="image placeholder">
+										</div>
+										<div class="col-md-9">
+											<p>description</p>
+										</div>
+									</div>
+								</li>
+							</ul> -->
+
+							<div class="list-group">
+								<a href="#" class="list-group-item event-item">
+									<h4 class="list-group-item-heading">First Activity</h4>
+									<p class="list-group-item-text">Lorem Ipsum description</p>
+								</a>
+								<a href="#" class="list-group-item event-item">
+									<h4 class="list-group-item-heading">Second Activity</h4>
+									<p class="list-group-item-text">Ice cream party at Mr Smith's van</p>
+								</a>
+								<a href="#" class="list-group-item event-item">
+									<div class="row">
+										<div class="col-md-12">
+											<h4>Another list item view I am trying out</h4>
+										</div>
+										<div class="col-sm-3">
+											<img class="img-responsive" src="http://lorempixel.com/200/200/" alt="image placeholder">
+										</div>
+										<div class="col-sm-9">
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porttitor consectetur mauris vel eleifend. Cras ac turpis
+											maximus, tincidunt sapien eu, sollicitudin mi. Nulla est libero, convallis et blandit a, auctor et purus. Aenean et ornare
+											massa, eget mollis urna. Ut vitae dui sed metus faucibus rutrum. Phasellus quam augue, dignissim non condimentum vitae, hendrerit
+											et diam. Suspendisse ultrices sagittis nunc, non varius odio rutrum nec. Donec blandit nunc quis dolor interdum tempor.</p>
+										</div>	
+									</div>
+								</a>
+							</div>
+
+						</div>
+						<div class="tab-pane fade" id="profile">
+							<p>TODO</p>
+						</div>
+					</div><!-- /Tabs -->
+					
+					<!-- Pagination -->
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-12">
+								<ul class="pagination">
+									<li>
+										<a href="#">Prev</a>
+									</li>
+									<li class="active">
+										<a id="takis" href="#">1</a>
+									</li>
+									<li>
+										<a href="#">2</a>
+									</li>
+									<li>
+										<a href="#">3</a>
+									</li>
+									<li>
+										<a href="#">4</a>
+									</li>
+									<li>
+										<a href="#">5</a>
+									</li>
+									<li>
+										<a href="#">Next</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+		
+				</div>
+		
+			</div>
+		</div>
+		<!-- /Main Content -->
+		
+		<!-- Js Includes -->
+		<script src="js/filters.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	</body>
+</html>
