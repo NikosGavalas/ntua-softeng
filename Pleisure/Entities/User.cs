@@ -23,9 +23,12 @@ namespace Pleisure
 			Query query = new Query("SELECT email, full_name, role, credits FROM users WHERE user_id=@uid");
 			query.AddParameter("@uid", userId);
 
-			DBRow res = await conn.Execute(query).ContinueWith(
-				table => table.Result.First()
-				);
+			DBTable result = await conn.Execute(query);
+
+			if (result.RowCount == 0)
+				return null;
+
+			DBRow res = result.First();
 
 			return new User()
 			{

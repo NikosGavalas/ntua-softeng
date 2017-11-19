@@ -57,8 +57,7 @@ namespace Pleisure
 			server.Add<UserSession>("/events", pages.Events);
 			server.Add<UserSession>("/event/*", pages.Event);
 			server.Add<UserSession>("/profile", pages.Profile);
-
-
+			
 
 
 			server.Start();
@@ -107,7 +106,7 @@ namespace Pleisure
 
 		public static HaathMySql Mysql()
 		{
-			return new HaathMySql("127.0.0.1", "progtech", "@ntua123", "pleisure");
+			return new HaathMySql("192.168.1.11", "progtech", "@ntua123", "pleisure");
 		}
 	}
 }
