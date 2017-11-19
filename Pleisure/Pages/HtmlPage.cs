@@ -41,19 +41,19 @@ namespace Pleisure
 		[HtmlVariable("user_email")]
 		public string UserEmail
 		{
-			get { return user.Email; }
+			get { return user?.Email; }
 		}
 
 		[HtmlVariable("user_name")]
 		public string UserName
 		{
-			get { return user.FullName; }
+			get { return user?.FullName; }
 		}
 
 		[HtmlVariable("user_credits")]
 		public int UserCredits
 		{
-			get { return user.Credits; }
+			get { return user != null ? user.Credits : 0; }
 		}
 
 		[HtmlVariable("html.navbar")]

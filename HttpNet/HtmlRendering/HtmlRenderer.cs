@@ -117,10 +117,6 @@ namespace HttpNet
 							}
 							else
 							{
-								if (varValue is Task<string>)
-								{
-
-								}
 								rendered.Append(varValue.ToString());
 							}
 						}
@@ -132,6 +128,11 @@ namespace HttpNet
 						{
 							goto case State.EndIf;
 						}
+						else if (isElseTag())
+						{
+							state = State.FalseIf;
+							break;
+						}
 						else
 						{
 							goto case State.Writing;
@@ -141,6 +142,11 @@ namespace HttpNet
 						if (isEndifTag())
 						{
 							goto case State.EndIf;
+						}
+						else if (isElseTag())
+						{
+							state = State.TrueIf;
+							i += 5;
 						}
 						i++;
 						break;
