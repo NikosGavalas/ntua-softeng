@@ -99,7 +99,7 @@ namespace Pleisure
 		{
 			if (session.LoggedIn)
 			{
-				return await User.WithId(session.UserID);
+				return null;
 			}
 			else
 			{

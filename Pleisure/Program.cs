@@ -52,6 +52,7 @@ namespace Pleisure
 
 
 
+
 			HtmlProvider pages = new HtmlProvider();
 			server.Add<UserSession>("/", pages.Index);
 			server.Add<UserSession>("/events", pages.Events);
@@ -104,9 +105,9 @@ namespace Pleisure
 			return Path.Combine(GetPath(), relative);
 		}
 
-		public static HaathMySql Mysql()
+		public static MySqlConn MySql()
 		{
-			return new HaathMySql("192.168.1.11", "progtech", "@ntua123", "pleisure");
+			return new MySqlConn("192.168.1.11", "progtech", "@ntua123", "pleisure");
 		}
 	}
 }

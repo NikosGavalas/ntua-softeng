@@ -8,36 +8,30 @@ using HaathDB;
 
 namespace Pleisure
 {
+	[DBTable("users")]
 	public class User
 	{
-		public int ID { get; private set; }
-		public string Email { get; private set; }
-		public string FullName { get; private set; }
-		public UserRole Role { get; private set; }
-		public int Credits { get; private set; }
+		[DBColumn("user_id")]
+		public uint ID;
 
-		public static async Task<User> WithId(int userId)
+		[DBColumn("email")]
+		public string Email;
+
+		[DBColumn("full_name")]
+		public string FullName;
+
+		[DBColumn("role")]
+		public UserRole Role;
+
+		[DBColumn("credits")]
+		public int Credits;
+
+		public Task<List<Kid>> GetKids()
 		{
-			HaathMySql conn = Program.Mysql();
+			SelectQuery<Kid> query = new SelectQuery<Kid>();
+			query.Where("parent_id", ID);
 
-			Query query = new Query("SELECT email, full_name, role, credits FROM users WHERE user_id=@uid");
-			query.AddParameter("@uid", userId);
-
-			DBTable result = await conn.Execute(query);
-
-			if (result.RowCount == 0)
-				return null;
-
-			DBRow res = result.First();
-
-			return new User()
-			{
-				ID = userId,
-				Email = res.GetString("email"),
-				FullName = res.GetString("full_name"),
-				Role = (UserRole)res.GetInteger("role"),
-				Credits = res.GetInteger("credits")
-			};
+			return Program.MySql().Execute(query);
 		}
 	}
 

@@ -9,17 +9,35 @@ using Newtonsoft.Json.Linq;
 
 namespace Pleisure
 {
+	[DBTable("events")]
 	public class Event
 	{
-		public int ID { get; private set; }
-		public User Organizer { get; private set; }
-		public string Title { get; private set; }
-		public string Description { get; private set; }
-		public int Price { get; private set; }
-		public double Latitude { get; private set; }
-		public double Longitude { get; private set; }
-		public string Address { get; private set; }
-		public int Duration { get; private set; }
+		[DBColumn("event_id")]
+		public int ID;
+
+		[DBColumn("title")]
+		public string Title;
+
+		[DBColumn("description")]
+		public string Description;
+
+		[DBColumn("price")]
+		public int Price;
+
+		[DBColumn("location_lat")]
+		public double Latitude;
+
+		[DBColumn("location_lng")]
+		public double Longitude;
+
+		[DBColumn("address")]
+		public string Address;
+
+		[DBColumn("duration")]
+		public int Duration;
+
+		[DBReference("organizer_id", "user_id")]
+		public User Organizer;
 
 
 		public JToken Serialize()
@@ -39,64 +57,6 @@ namespace Pleisure
 				address = Address,
 				thumbnail = "http://via.placeholder.com/128x128"
 			});
-		}
-
-
-		public static async Task<Event> WithId(int eventId)
-		{
-			List<Event> events = new List<Event>();
-
-			HaathMySql conn = Program.Mysql();
-			Query query = new Query("SELECT * FROM events WHERE event_id=@eid");
-			query.AddParameter("@eid", eventId);
-
-			DBTable result = await conn.Execute(query);
-
-			if (result.RowCount == 0)
-				return null;
-
-			DBRow res = result.First();
-
-			return new Event()
-			{
-				ID = res.GetInteger("event_id"),
-				Organizer = await User.WithId(res.GetInteger("organizer_id")),
-				Title = res.GetString("title"),
-				Description = res.GetString("description"),
-				Price = res.GetInteger("price"),
-				Latitude = res.GetDouble("location_lat"),
-				Longitude = res.GetDouble("location_long"),
-				Address = res.GetString("address"),
-				Duration = res.GetInteger("duration")
-			};
-		}
-
-		public static async Task<List<Event>> WithFilters()
-		{
-			List<Event> events = new List<Event>();
-
-			HaathMySql conn = Program.Mysql();
-			Query query = new Query("SELECT * FROM events");
-
-			query.OnRow += async (s, row) =>
-			{
-				events.Add(new Event()
-				{
-					ID = row.GetInteger("event_id"),
-					Organizer = await User.WithId(row.GetInteger("organizer_id")),
-					Title = row.GetString("title"),
-					Description = row.GetString("description"),
-					Price = row.GetInteger("price"),
-					Latitude = row.GetDouble("location_lat"),
-					Longitude = row.GetDouble("location_long"),
-					Address = row.GetString("address"),
-					Duration = row.GetInteger("duration")
-				});
-			};
-
-			await conn.Execute(query);
-
-			return events;
 		}
 	}
 }

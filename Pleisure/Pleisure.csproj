@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HaathDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Haath.HaathDB.1.0.6\lib\HaathDB.dll</HintPath>
+      <HintPath>..\packages\Haath.HaathDB.1.0.7\lib\HaathDB.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MySql.Data, Version=6.10.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="Api\Api.cs" />
     <Compile Include="Entities\Event.cs" />
+    <Compile Include="Entities\Kid.cs" />
+    <Compile Include="Entities\ScheduledEvent.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Pages\HtmlProvider.cs" />
     <Compile Include="Pages\HtmlPage.cs" />
