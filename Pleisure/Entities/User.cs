@@ -33,6 +33,14 @@ namespace Pleisure
 
 			return Program.MySql().Execute(query);
 		}
+
+		public Task<List<Event>> GetEvents()
+		{
+			SelectQuery<Event> query = new SelectQuery<Event>();
+			query.Where("organizer_id", ID);
+
+			return Program.MySql().Execute(query);
+		}
 	}
 
 	public enum UserRole

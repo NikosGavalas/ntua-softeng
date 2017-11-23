@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using HaathDB;
+using Newtonsoft.Json.Linq;
 
 namespace Pleisure
 {
@@ -25,6 +26,33 @@ namespace Pleisure
 
 		[DBReference("parent_id", "user_id")]
 		public User Parent;
+
+		public int Age
+		{
+			get
+			{
+				int age = DateTime.Now.Year - Birthday.Year;
+				if (DateTime.Now.DayOfYear < Birthday.DayOfYear)
+					age--;
+				return age;
+			}
+		}
+
+		public JToken Serialize()
+		{
+			return JToken.FromObject(new
+			{
+				kid_id = ID,
+				name = Name,
+				age = Age,
+				gender = (int)Gender,
+				parent = new
+				{
+					id = Parent.ID,
+					name = Parent.FullName
+				}
+			});
+		}
 	}
 
 	public enum Gender

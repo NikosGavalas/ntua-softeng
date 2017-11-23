@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 
 using HttpNet;
-
+using HaathDB;
 using Newtonsoft.Json.Linq;
 
 namespace Pleisure
@@ -33,23 +33,12 @@ namespace Pleisure
 
 			JArray arr = new JArray();
 
-			Random rand = new Random();
-			for (int i = 0; i < 10; i++)
+			SelectQuery<Event> query = new SelectQuery<Event>();
+
+			List<Event> events = await Program.MySql().Execute(query);
+			foreach (Event evt in events)
 			{
-				JToken evt = JToken.FromObject(new
-				{
-					id = i,
-					title = "We like kids!",
-					price = rand.Next(10, 100),
-					coordinates = new
-					{
-						lat = Math.Round(59 + rand.NextDouble(), 6),
-						lng = Math.Round(37 + rand.NextDouble(), 6),
-					},
-					description = "We really do love all the kids",
-					duration = 120
-				});
-				arr.Add(evt);
+				arr.Add(evt.Serialize());
 			}
 
 			await request.Write(arr.ToString());

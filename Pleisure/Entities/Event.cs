@@ -42,7 +42,7 @@ namespace Pleisure
 
 		public JToken Serialize()
 		{
-			return JToken.FromObject(new
+			JToken obj = JToken.FromObject(new
 			{
 				id = ID,
 				title = Title,
@@ -57,6 +57,31 @@ namespace Pleisure
 				address = Address,
 				thumbnail = "http://via.placeholder.com/128x128"
 			});
+
+			return obj;
+		}
+
+		public async Task<JToken> SerializeWithScheduled(bool includeAttendance)
+		{
+			JToken obj = Serialize();
+			obj["scheduled"] = new JArray();
+			 
+			foreach (ScheduledEvent scheduled in await GetScheduled())
+			{
+				JToken item = await scheduled.Serialize(includeAttendance);
+
+				obj.Value<JArray>("scheduled").Add(item);
+			}
+
+			return obj;
+		}
+
+		public Task<List<ScheduledEvent>> GetScheduled()
+		{
+			SelectQuery<ScheduledEvent> query = new SelectQuery<ScheduledEvent>()
+				.Where<SelectQuery<ScheduledEvent>>("event_id", ID);
+
+			return Program.MySql().Execute(query);
 		}
 	}
 }

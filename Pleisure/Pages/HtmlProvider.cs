@@ -61,7 +61,7 @@ namespace Pleisure
 			int eventId = GetEventId(request.Path);
 			
 			string html = await GetHtml("event");
-			if (html == null)
+			if (html == null || eventId < 0)
 			{
 				await request.SetStatusCode(HttpStatusCode.NotFound).Close();
 				return;

@@ -52,7 +52,6 @@ namespace Pleisure
 
 
 
-
 			HtmlProvider pages = new HtmlProvider();
 			server.Add<UserSession>("/", pages.Index);
 			server.Add<UserSession>("/events", pages.Events);
