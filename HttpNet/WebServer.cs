@@ -92,7 +92,7 @@ namespace HttpNet
 			Log(LogLevels.Debug, "GET " + connection.Request.RawUrl);
 
 			Session session = GetOrSetSession(connection.Request, connection.Response);
-			HttpRequest request = new HttpRequest(connection.Request, connection.Response, session);
+			HttpRequest request = new HttpRequest(this ,connection.Request, connection.Response, session);
 
 
 			rootRouter.Handle(request, session).ContinueWith(
@@ -141,6 +141,11 @@ namespace HttpNet
 			{
 				OnLog?.Invoke(this, new LogEventArgs(level, message));
 			}
+		}
+
+		internal void Log(LogLevels level, string messageFormat, params object[] args)
+		{
+			Log(level, string.Format(messageFormat, args));
 		}
 
 		bool Match(string pattern, string path)

@@ -32,7 +32,7 @@ namespace Pleisure
 			get { return user?.Role == UserRole.Admin; }
 		}
 
-		[HtmlVariable("is_loggeding")]
+		[HtmlVariable("is_loggedin")]
 		public bool IsLoggedIn
 		{
 			get { return user != null; }
@@ -47,7 +47,7 @@ namespace Pleisure
 		[HtmlVariable("user_name")]
 		public string UserName
 		{
-			get { return user?.FullName; }
+			get { return user.FullName; }
 		}
 
 		[HtmlVariable("user_credits")]
