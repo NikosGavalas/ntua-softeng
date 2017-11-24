@@ -69,8 +69,9 @@
 		display: inline-block !important;
 	}
 
+	/* changed position to fixed */
 	.sliding-sidebar {
-		position: absolute;
+		position: fixed;
 		z-index: 1;
 		background: #fff;
 		min-height: 100%;
