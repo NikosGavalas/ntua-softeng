@@ -45,7 +45,7 @@ namespace HttpNet
 					&& htmlDocument[i] == '@'
 					&& htmlDocument[i + 1] == 'e' && htmlDocument[i + 2] == 'l'
 					&& htmlDocument[i + 3] == 's' && htmlDocument[i + 4] == 'e'
-					&& htmlDocument[i + 5] == '{';
+					&& htmlDocument[i + 5] == '{' && htmlDocument[i + 6] == '}'; ;
 			};
 
 			Func<bool> isEndifTag = () =>
@@ -54,7 +54,8 @@ namespace HttpNet
 					&& htmlDocument[i] == '@'
 					&& htmlDocument[i + 1] == 'e' && htmlDocument[i + 2] == 'n'
 					&& htmlDocument[i + 3] == 'd' && htmlDocument[i + 4] == 'i'
-					&& htmlDocument[i + 5] == 'f' && htmlDocument[i + 6] == '{';
+					&& htmlDocument[i + 5] == 'f' && htmlDocument[i + 6] == '{'
+					&& htmlDocument[i + 7] == '}';
 			};
 
 			Func<string> parseVariableName = () =>
@@ -117,20 +118,25 @@ namespace HttpNet
 							}
 							else
 							{
-								if (varValue is Task<string>)
-								{
-
-								}
 								rendered.Append(varValue.ToString());
 							}
 						}
-						rendered.Append(htmlDocument[i++]);
+
+						if (i < htmlDocument.Length)
+							rendered.Append(htmlDocument[i++]);
+
 						break;
 
 					case State.TrueIf:
 						if (isEndifTag())
 						{
 							goto case State.EndIf;
+						}
+						else if (isElseTag())
+						{
+							state = State.FalseIf;
+							i += 6;
+							break;
 						}
 						else
 						{
@@ -141,6 +147,11 @@ namespace HttpNet
 						if (isEndifTag())
 						{
 							goto case State.EndIf;
+						}
+						else if (isElseTag())
+						{
+							state = State.TrueIf;
+							i += 6;
 						}
 						i++;
 						break;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -6,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 
 using HttpNet;
+using HaathDB;
 
 namespace Pleisure
 {
@@ -18,6 +20,12 @@ namespace Pleisure
 			User user = await GetUser(session);
 
 			string html = await GetHtml("index");
+			if (html == null)
+			{
+				await request.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
 			HtmlPage page = new HtmlPage(html, user);
 
 			string rendered = await page.Render();
@@ -32,6 +40,12 @@ namespace Pleisure
 			User user = await GetUser(session);
 			
 			string html = await GetHtml("events");
+			if (html == null)
+			{
+				await request.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
 			HtmlPage page = new HtmlPage(html, user);
 
 			string rendered = await page.Render();
@@ -45,9 +59,14 @@ namespace Pleisure
 			UserSession session = request.Session as UserSession;
 			User user = await GetUser(session);
 			int eventId = GetEventId(request.Path);
-
-
+			
 			string html = await GetHtml("event");
+			if (html == null || eventId < 0)
+			{
+				await request.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
 			HtmlPage page = new HtmlPage(html, user);
 
 			string rendered = await page.Render();
@@ -74,6 +93,12 @@ namespace Pleisure
 
 
 			string html = await GetHtml("profile");
+			if (html == null)
+			{
+				await request.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
 			HtmlPage page = new HtmlPage(html, user);
 
 			string rendered = await page.Render();
@@ -99,7 +124,9 @@ namespace Pleisure
 		{
 			if (session.LoggedIn)
 			{
-				return await User.WithId(session.UserID);
+				SelectQuery<User> query = new SelectQuery<User>()
+					.Where<SelectQuery<User>>("user_id", session.UserID);
+				return await Program.MySql().Execute(query).ContinueWith(res => res.Result.FirstOrDefault());
 			}
 			else
 			{
@@ -119,7 +146,7 @@ namespace Pleisure
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.ToString());
+				Console.WriteLine("File not found: " + fileName);
 				return null;
 			}
 		}

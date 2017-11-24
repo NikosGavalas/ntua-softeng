@@ -50,11 +50,13 @@ namespace HttpNet
 		
 		string _requestBody = null;
 
+		WebServer webServer;
 		HttpListenerRequest request;
 		HttpListenerResponse response;
 
-		internal HttpRequest(HttpListenerRequest request, HttpListenerResponse response, Session session)
+		internal HttpRequest(WebServer webServer, HttpListenerRequest request, HttpListenerResponse response, Session session)
 		{
+			this.webServer = webServer;
 			this.request = request;
 			this.response = response;
 			_session = session;
@@ -154,6 +156,8 @@ namespace HttpNet
 			await response.OutputStream.FlushAsync();
 			response.OutputStream.Close();
 			response.OutputStream.Dispose();
+
+			webServer.Log(LogLevels.Debug, "Closing request {0} [{1}] [{2}]", AbsolutePath, response.StatusCode, response.ContentType);
 		}
 
 		/// <summary>
