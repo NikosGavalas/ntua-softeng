@@ -72,6 +72,9 @@ namespace Pleisure
 					break;
 			}
 
+			fileStream.Close();
+			fileStream.Dispose();
+
 			return HttpStatusCode.OK;
 		}
 	}
