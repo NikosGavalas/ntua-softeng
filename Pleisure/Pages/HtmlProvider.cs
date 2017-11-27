@@ -144,7 +144,7 @@ namespace Pleisure
 					return await reader.ReadToEndAsync();
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				Console.WriteLine("File not found: " + fileName);
 				return null;

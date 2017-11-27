@@ -25,16 +25,16 @@ namespace Pleisure
 		
 		public async Task OnRequest(HttpRequest request)
 		{
-			HttpStatusCode status = await ServeFile(request);
-			await request.SetStatusCode(status).Close();
+			await ServeFile(request);
 			await request.Close();
 		}
 
-		async Task<HttpStatusCode> ServeFile(HttpRequest request)
+		async Task ServeFile(HttpRequest request)
 		{
 			if (!request.Path.StartsWith(virtualRoot))
 			{
-				return HttpStatusCode.Forbidden;
+				request.SetStatusCode(HttpStatusCode.Forbidden);
+                return;
 			}
 			
 			string requestedFile = request.Path.Remove(0, virtualRoot.Length).TrimStart('/');
@@ -47,18 +47,29 @@ namespace Pleisure
 			catch (Exception ex)
 			{
 				if (ex is FileNotFoundException || ex is DirectoryNotFoundException)
-					return HttpStatusCode.NotFound;
+                {
+                    request.SetStatusCode(HttpStatusCode.NotFound);
+                    return;
+                }
 				else if (ex is UnauthorizedAccessException)
-					return HttpStatusCode.Forbidden;
+                {
+                    request.SetStatusCode(HttpStatusCode.Forbidden);
+                    return;
+                }
 				else
-					Console.WriteLine(ex.ToString());
+				{
+					Console.WriteLine(ex);
+                    request.SetStatusCode(HttpStatusCode.InternalServerError);
+                    return;
+                }
 			}
-
 
 			byte[] data = new byte[fileStream.Length];
 			await fileStream.ReadAsync(data, 0, (int)fileStream.Length);
-			await request.Write(data);
-			
+
+
+            // If we managed to read the file, first set the headers
+            request.SetStatusCode(HttpStatusCode.OK);
 
 			// Set the appropriate Content-Type
 			switch (contentType)
@@ -72,10 +83,13 @@ namespace Pleisure
 					break;
 			}
 
+
+            // Then write the file to the response stream
+			await request.Write(data);
+		    
+            // Dispose of the file
 			fileStream.Close();
 			fileStream.Dispose();
-
-			return HttpStatusCode.OK;
 		}
 	}
 }
