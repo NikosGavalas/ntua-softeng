@@ -42,6 +42,12 @@ body {
 .event-item {
 	margin-top: 20px;
 }
+.clickable:hover {
+	cursor: pointer;
+}
+.event-thumbnail {
+	width: 130px;
+}
 
 /*
 	Filters Button

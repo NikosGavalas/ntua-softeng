@@ -1,17 +1,15 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="">
-		<meta name="author" content="">
 
 		<title>Events</title>
 
 		@{html.header}
+
 	</head>
 
 	<body>
+
 		<!-- Navbar -->
 		@{html.navbar}
 		<!-- /Navbar -->
@@ -106,7 +104,12 @@
 							</div>
 						</form>
 					</div>
-				</div> <!-- Filter Sidebar -->
+
+					<div>
+						<input type="submit" class="btn btn-primary btn-block" value="Filter" />
+					</div>
+				</div> 
+				<!-- Filter Sidebar -->
 		
 				<!-- EventsView -->
 				<div class="col-sm-9">
@@ -271,5 +274,58 @@
 		</div><!-- /Main Content -->
 
 		@{html.footer}
+
+		<script>
+
+			function eventListItem(event)
+			{
+				return $("<div class='panel panel-primary event-item'>")
+					.append(
+						$("<div class='panel-heading clickable'>").append(
+							$("<h3 class='panel-title'>").append(
+								$("<strong>").html(event.title)
+							)
+						)
+					).append(
+						$("<div class='panel-body'>").append(
+							$("<div class='media'>").append(
+								$("<div class='media-left'>").append(
+									$("<img class='media-object event-thumbnail'>").attr('src', event.thumbnail)
+								)
+							).append(
+								$("<div class='media-body'>").append(
+									$("<p>").html(event.description)
+								).append(
+									$("<p>").append("<b>Address:</b>&nbsp;").append(event.address)
+								).append(
+									$("<p>").append("<b>Price:</b>&nbsp;").append(event.price).append("&nbsp;").append("<i class='fa fa-money'>")
+								)
+							)
+						)
+					);
+			}
+
+
+
+			$(document).ready(function()
+			{
+				$.get({
+					url: 'api/events',
+					success: function(resp, satus, xhr)
+					{
+						$('#listview').empty();
+
+						for (var i = 0; i < resp.length; i++)
+						{
+							$('#listview').append(
+								eventListItem(resp[i])
+							);
+						}
+					}
+				})
+
+			});
+		</script>
+
 	</body>
 </html>
