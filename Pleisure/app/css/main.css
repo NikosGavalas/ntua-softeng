@@ -48,6 +48,10 @@ body {
 .event-thumbnail {
 	width: 130px;
 }
+a.panel-heading {
+	display: block;
+	text-decoration: none;
+}
 
 /*
 	Filters Button

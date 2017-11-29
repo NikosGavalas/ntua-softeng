@@ -281,20 +281,22 @@
 			{
 				return $("<div class='panel panel-primary event-item'>")
 					.append(
-						$("<div class='panel-heading clickable'>").append(
-							$("<h3 class='panel-title'>").append(
-								$("<strong>").html(event.title)
-							)
-						)
+						$("<a class='panel-heading'>").append(
+								$("<h3 class='panel-title'>").append(
+									$("<strong>").html(event.title)
+								)
+						).attr('href', "/event/" + event.id)
 					).append(
 						$("<div class='panel-body'>").append(
 							$("<div class='media'>").append(
 								$("<div class='media-left'>").append(
-									$("<img class='media-object event-thumbnail'>").attr('src', event.thumbnail)
+									$("<a>").append(
+										$("<img class='media-object event-thumbnail'>").attr('src', event.thumbnail)
+									).attr('href', "/event/" + event.id)
 								)
 							).append(
 								$("<div class='media-body'>").append(
-									$("<p>").html(event.description)
+									$("<p>").html(event.description) // TODO: Find a good maximum number of characters and crop the description with '...'
 								).append(
 									$("<p>").append("<b>Address:</b>&nbsp;").append(event.address)
 								).append(
