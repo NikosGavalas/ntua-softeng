@@ -129,105 +129,6 @@
 						<!-- Items ListView -->
 						<div class="tab-pane fade active in" id="listview">
 
-							<div class="panel panel-primary event-item">
-								<div class="panel-heading">
-									<h3 class="panel-title"><strong>Event Tilel</strong></h3>
-								</div>
-								<div class="panel-body">
-									<div class="media">
-										<div class="media-left">
-											<img src="http://lorempixel.com/200/200/" class="media-object" style="width:130px">
-										</div>
-										<div class="media-body">
-											<h4 class="media-heading">Description:</h4>
-											<p>
-												 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non euismod ligula, sed tristique lacus. Donec vel nibh
-												id quam tempus pharetra non eu quam. Curabitur euismod velit a ligula feugiat dictum. Etiam malesuada, odio sit amet rhoncus
-												pretium, orci ligula lacinia eros, non hendrerit metus neque eget orci. Curabitur eget imperdiet risus, nec pulvinar arcu.
-												Ut odio leo, tempus a pulvinar sed, dignissim vitae odio.
-											</p>
-											<p>
-												<b>Date:</b>&nbsp;Day Month, time, recurrence
-											</p>
-											<p>
-												<b>Address:</b>&nbsp;Street 20, Area 12345, City
-											</p>
-											<p>
-												<b>Price:&nbsp;45</b>&nbsp;<span class="fa fa-money"></span>
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="panel panel-primary event-item">
-								<div class="panel-heading">
-									<h3 class="panel-title">
-										<strong>Event Tilel</strong>
-									</h3>
-								</div>
-								<div class="panel-body">
-									<div class="media">
-										<div class="media-left">
-											<img src="http://lorempixel.com/200/200/" class="media-object" style="width:130px">
-										</div>
-										<div class="media-body">
-											<h4 class="media-heading">Description:</h4>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non euismod ligula, sed tristique lacus. Donec vel nibh id
-												quam tempus pharetra non eu quam. Curabitur euismod velit a ligula feugiat dictum. Etiam malesuada, odio sit amet rhoncus
-												pretium, orci ligula lacinia eros, non hendrerit metus neque eget orci. Curabitur eget imperdiet risus, nec pulvinar
-												arcu. Ut odio leo, tempus a pulvinar sed, dignissim vitae odio.
-											</p>
-											<p>
-												<b>Date:</b>&nbsp;Day Month, time, recurrence
-											</p>
-											<p>
-												<b>Address:</b>&nbsp;Street 20, Area 12345, City
-											</p>
-											<p>
-												<b>Price:&nbsp;45</b>&nbsp;
-												<span class="fa fa-money"></span>
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="panel panel-primary event-item">
-								<div class="panel-heading">
-									<h3 class="panel-title">
-										<strong>Event Tilel</strong>
-									</h3>
-								</div>
-								<div class="panel-body">
-									<div class="media">
-										<div class="media-left">
-											<img src="http://lorempixel.com/200/200/" class="media-object" style="width:130px">
-										</div>
-										<div class="media-body">
-											<h4 class="media-heading">Description:</h4>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non euismod ligula, sed tristique lacus. Donec vel nibh id
-												quam tempus pharetra non eu quam. Curabitur euismod velit a ligula feugiat dictum. Etiam malesuada, odio sit amet rhoncus
-												pretium, orci ligula lacinia eros, non hendrerit metus neque eget orci. Curabitur eget imperdiet risus, nec pulvinar
-												arcu. Ut odio leo, tempus a pulvinar sed, dignissim vitae odio.
-											</p>
-											<p>
-												<b>Date:</b>&nbsp;Day Month, time, recurrence
-											</p>
-											<p>
-												<b>Address:</b>&nbsp;Street 20, Area 12345, City
-											</p>
-											<p>
-												<b>Price:&nbsp;45</b>&nbsp;
-												<span class="fa fa-money"></span>
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
 							<!-- Pagination -->
 							<div class="container-fluid">
 								<div class="row">
@@ -263,7 +164,7 @@
 						
 						<!-- MapView -->
 						<div class="tab-pane fade" id="mapview">
-							<p>TODO</p>
+							<div id="map"></div>
 						</div><!-- MapView -->
 
 					</div><!-- /Tabs -->
@@ -274,8 +175,12 @@
 		</div><!-- /Main Content -->
 
 		@{html.footer}
+		<!-- Google Maps -->
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP7eXQB4hzRcSobhv8W5_uMAAfCv3oRDs&callback=initMap"></script>
 
 		<script>
+
+			var currentEvents = [];
 
 			function eventListItem(event)
 			{
@@ -296,7 +201,7 @@
 								)
 							).append(
 								$("<div class='media-body'>").append(
-									$("<p>").html(event.description) // TODO: Find a good maximum number of characters and crop the description with '...'
+									$("<p>").html(event.description) // TODO: Find a good maximum number of characters and crop the rest of the description with '...'
 								).append(
 									$("<p>").append("<b>Address:</b>&nbsp;").append(event.address)
 								).append(
@@ -307,25 +212,64 @@
 					);
 			}
 
+			function refreshEventList(events)
+			{
+				// Update the list view
+				$('#listview').empty();
 
+				for (var i = 0; i < events.length; i++) {
+					$('#listview').append(
+						eventListItem(events[i])
+					);
+				}
+
+				// Update the map if it is currently visible
+				if ($('#mapview').hasClass('active'))
+				{
+					updateMap();
+				}
+			}
+
+			function updateMap()
+			{
+				// Update the map view
+				var map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 12,	// TODO: set the zoom to match the searching range somehow
+					center: currentEvents[0].coordinates
+				});
+
+				for (var i = 0; i < currentEvents.length; i++) {
+					var marker = new google.maps.Marker({
+						position: currentEvents[i].coordinates,
+						map: map
+					});
+				}
+			}
+
+			function initMap()
+			{
+				$(window).resize(function ()
+				{
+					google.maps.event.trigger(map, 'resize');
+				});
+			}
 
 			$(document).ready(function()
 			{
 				$.get({
 					url: 'api/events',
-					success: function(resp, satus, xhr)
-					{
-						$('#listview').empty();
-
-						for (var i = 0; i < resp.length; i++)
-						{
-							$('#listview').append(
-								eventListItem(resp[i])
-							);
-						}
+					success: function (resp, satus, xhr) {
+						currentEvents = resp;
+						refreshEventList(resp);
 					}
-				})
+				});
 
+				$('a[href="#mapview"]').on('shown.bs.tab', function (e)
+				{
+					// Update the map if it just came into view
+					updateMap();
+					google.maps.event.trigger(map, 'resize');
+				});
 			});
 		</script>
 
