@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>Pleisure</title>
+
+		<!-- Fonts and icons -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+		<!-- Bootstrap 3 based theme -->
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  -->
+		<link rel="stylesheet" href="css/theme.css">
+
+		<!-- Filters Bar -->
+		<link rel="stylesheet" href="css/filters.css">		
+
+		<!-- Custom stylesheet-->
+		<link rel="stylesheet" href="css/main.css">
+	</head>
+
+	<body>
+		<!-- Navbar -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a id="logo" class="navbar-brand" href="#"><b>Pleisure</b></a>
+				</div>
+		
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="#">About</a>
+						</li>
+					</ul>
+
+					<ul class="nav navbar-nav navbar-right">
+						@if{is_loggedin}
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@{user_name} (@{user_credits} Credits)
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu" role="menu">
+								<li>
+									<a href="#">My Profile</a>
+								</li>
+								<li>
+									<a href="#">Settings</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="#">Log Out</a>
+								</li>
+							</ul>
+						</li>
+						@else{}
+						<li>
+							<a href="#"><b>Log In</b> or <b>Sign Up</b></a>
+						</li>
+						@endif{}
+					</ul>
+
+				</div>
+			</div>
+		</nav> <!-- /Navbar -->
+
+		<!-- Main Content -->
+		<div id="main_content" class="container">
+			<div class="row">
+				<!-- Filter Sidebar -->
+				<div class="visible-xs">
+					<div class="container">
+						<button id="filters-button" class="btn btn-primary navbar-btn" data-toggle="collapse" data-target="#filter-sidebar">
+							<i class="fa fa-sliders"></i>							
+						</button>
+					</div>
+				</div>
+
+				<div id="filter-sidebar" class="col-xs-12 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar" >
+					<h3>Filters</h3>
+
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-1">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Location
+						</h4>
+						<div id="group-1" class="list-group collapse in">
+							<div class="input-group">
+								<span class="input-group-addon fa fa-map-marker"></span>
+								<input type="text" class="form-control" placeholder="Search...">
+							</div>
+						</div>
+					</div>
+		
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-2">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Price Range
+						</h4>
+						<div id="group-2" class="list-group collapse in" data-role="rangeslider">
+							<span>
+								<label for="price-max">Maximum Price:</label>
+								<label id="price-slider-value"></label>
+							</span>
+							<input class="my-slider" type="range" name="price-max" id="price-max" value="1000" min="0" max="1000">
+						</div>
+					</div>
+		
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-3">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Age Range
+						</h4>
+						<!-- add selects -->
+					</div>
+		
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-4">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Category
+						</h4>
+						<div id="group-4" class="list-group collapse in">
+							<select id="category-selector" class="form-control">
+								<option value="all">All</option>								
+								<option value="sports">Sports</option>
+								<option value="playground">Playground</option>
+								<option value="party">Party</option>
+								<option value="excursion">Excursion</option>
+								<option value="outdoor">Outdoor</option>
+								<option value="inquisition">Spanish Inquisition</option>
+							</select>
+						</div>
+					</div>
+
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-5">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Recurring
+						</h4>
+						<form id="group-5" class="list-group collapse in">
+							<div class="radio">
+								<label><input id="optionsRadios1" name="optradio" type="radio" checked="">Yes</label>
+							</div>
+							<div class="radio">
+								<label><input id="optionsRadios2" name="optradio" type="radio" checked="">No</label>
+							</div>
+							<div class="radio">
+								<label><input id="optionsRadios3" name="optradio" type="radio" checked="">Display All</label>
+							</div>
+						</form>
+					</div>
+				</div> <!-- Filter Sidebar -->
+		
+				<!-- EventsView -->
+				<div class="col-sm-9">
+					<h3>Nearby Events for your Children! (@{x_results}?)</h3>
+
+					<!-- Tabs -->
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#listview" data-toggle="tab" aria-expanded="false">List View</a>
+						</li>
+						<li>
+							<a href="#mapview" data-toggle="tab" aria-expanded="true">Map View</a>
+						</li>
+					</ul>
+					<div id="myTabContent" class="tab-content">
+
+						<!-- Items ListView -->
+						<div class="tab-pane fade active in" id="listview">
+
+							<div class="panel panel-primary event-item">
+								<div class="panel-heading">
+									<h3 class="panel-title"><strong>Event Tilel</strong></h3>
+								</div>
+								<div class="panel-body">
+									<div class="media">
+										<div class="media-left">
+											<img src="http://lorempixel.com/200/200/" class="media-object" style="width:130px">
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">Description:</h4>
+											<p>
+												 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non euismod ligula, sed tristique lacus. Donec vel nibh
+												id quam tempus pharetra non eu quam. Curabitur euismod velit a ligula feugiat dictum. Etiam malesuada, odio sit amet rhoncus
+												pretium, orci ligula lacinia eros, non hendrerit metus neque eget orci. Curabitur eget imperdiet risus, nec pulvinar arcu.
+												Ut odio leo, tempus a pulvinar sed, dignissim vitae odio.
+											</p>
+											<p>
+												<b>Date:</b>&nbsp;Day Month, time, recurrence
+											</p>
+											<p>
+												<b>Address:</b>&nbsp;Street 20, Area 12345, City
+											</p>
+											<p>
+												<b>Price:&nbsp;45</b>&nbsp;<span class="fa fa-money"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="panel panel-primary event-item">
+								<div class="panel-heading">
+									<h3 class="panel-title">
+										<strong>Event Tilel</strong>
+									</h3>
+								</div>
+								<div class="panel-body">
+									<div class="media">
+										<div class="media-left">
+											<img src="http://lorempixel.com/200/200/" class="media-object" style="width:130px">
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">Description:</h4>
+											<p>
+												Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non euismod ligula, sed tristique lacus. Donec vel nibh id
+												quam tempus pharetra non eu quam. Curabitur euismod velit a ligula feugiat dictum. Etiam malesuada, odio sit amet rhoncus
+												pretium, orci ligula lacinia eros, non hendrerit metus neque eget orci. Curabitur eget imperdiet risus, nec pulvinar
+												arcu. Ut odio leo, tempus a pulvinar sed, dignissim vitae odio.
+											</p>
+											<p>
+												<b>Date:</b>&nbsp;Day Month, time, recurrence
+											</p>
+											<p>
+												<b>Address:</b>&nbsp;Street 20, Area 12345, City
+											</p>
+											<p>
+												<b>Price:&nbsp;45</b>&nbsp;
+												<span class="fa fa-money"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="panel panel-primary event-item">
+								<div class="panel-heading">
+									<h3 class="panel-title">
+										<strong>Event Tilel</strong>
+									</h3>
+								</div>
+								<div class="panel-body">
+									<div class="media">
+										<div class="media-left">
+											<img src="http://lorempixel.com/200/200/" class="media-object" style="width:130px">
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">Description:</h4>
+											<p>
+												Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non euismod ligula, sed tristique lacus. Donec vel nibh id
+												quam tempus pharetra non eu quam. Curabitur euismod velit a ligula feugiat dictum. Etiam malesuada, odio sit amet rhoncus
+												pretium, orci ligula lacinia eros, non hendrerit metus neque eget orci. Curabitur eget imperdiet risus, nec pulvinar
+												arcu. Ut odio leo, tempus a pulvinar sed, dignissim vitae odio.
+											</p>
+											<p>
+												<b>Date:</b>&nbsp;Day Month, time, recurrence
+											</p>
+											<p>
+												<b>Address:</b>&nbsp;Street 20, Area 12345, City
+											</p>
+											<p>
+												<b>Price:&nbsp;45</b>&nbsp;
+												<span class="fa fa-money"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Pagination -->
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-12">
+										<ul class="pagination">
+											<li>
+												<a href="#">Prev</a>
+											</li>
+											<li class="active">
+												<a id="takis" href="#">1</a>
+											</li>
+											<li>
+												<a href="#">2</a>
+											</li>
+											<li>
+												<a href="#">3</a>
+											</li>
+											<li>
+												<a href="#">4</a>
+											</li>
+											<li>
+												<a href="#">5</a>
+											</li>
+											<li>
+												<a href="#">Next</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div><!-- /Pagination -->
+							
+						</div><!-- /Items ListView -->
+						
+						<!-- MapView -->
+						<div class="tab-pane fade" id="mapview">
+							<p>TODO</p>
+						</div><!-- MapView -->
+
+					</div><!-- /Tabs -->
+		
+				</div><!-- /EventsView -->
+		
+			</div>
+		</div><!-- /Main Content -->
+		
+		<!-- Js Includes -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="js/filters.js"></script>
+		<script src="js/main.js"></script>
+	</body>
+</html>
