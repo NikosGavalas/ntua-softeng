@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -6,73 +6,15 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>Pleisure</title>
+		<title>Events</title>
 
-		<!-- Fonts and icons -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-		<!-- Bootstrap 3 based theme -->
-		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  -->
-		<link rel="stylesheet" href="css/theme.css">
-
-		<!-- Filters Bar -->
-		<link rel="stylesheet" href="css/filters.css">		
-
-		<!-- Custom stylesheet-->
-		<link rel="stylesheet" href="css/main.css">
+		@{html.header}
 	</head>
 
 	<body>
 		<!-- Navbar -->
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a id="logo" class="navbar-brand" href="#"><b>Pleisure</b></a>
-				</div>
-		
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav">
-						<li>
-							<a href="#">About</a>
-						</li>
-					</ul>
-
-					<ul class="nav navbar-nav navbar-right">
-						@if{is_loggedin}
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@{user_name} (@{user_credits} Credits)
-								<span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu" role="menu">
-								<li>
-									<a href="#">My Profile</a>
-								</li>
-								<li>
-									<a href="#">Settings</a>
-								</li>
-								<li class="divider"></li>
-								<li>
-									<a href="#">Log Out</a>
-								</li>
-							</ul>
-						</li>
-						@else{}
-						<li>
-							<a href="#"><b>Log In</b> or <b>Sign Up</b></a>
-						</li>
-						@endif{}
-					</ul>
-
-				</div>
-			</div>
-		</nav> <!-- /Navbar -->
+		@{html.navbar}
+		<!-- /Navbar -->
 
 		<!-- Main Content -->
 		<div id="main_content" class="container">
@@ -327,11 +269,7 @@
 		
 			</div>
 		</div><!-- /Main Content -->
-		
-		<!-- Js Includes -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src="js/filters.js"></script>
-		<script src="js/main.js"></script>
+
+		@{html.footer}
 	</body>
 </html>

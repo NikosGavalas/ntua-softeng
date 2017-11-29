@@ -76,7 +76,7 @@ namespace Pleisure
 				Console.CancelKeyPress += (s, e) => Shutdown();
 				while (true)
 				{
-					Thread.Sleep(5000);
+					Thread.Sleep(1000);
 				}
 			}
 		}
