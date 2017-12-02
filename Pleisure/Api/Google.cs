@@ -1,0 +1,36 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.IO;
+using System.Threading.Tasks;
+
+using Newtonsoft.Json.Linq;
+
+namespace Pleisure
+{
+	public static class Google
+	{
+		const string GEOCODE_URL = @"https://maps.googleapis.com/maps/api/geocode/json?key=%20AIzaSyCNS7KGAlnxigqmUTRwq3R60jISsKd6GoA&address=";
+		public static async Task<Location> Geocode(string address)
+		{
+			address = HttpUtility.UrlEncode(address);
+			WebRequest request = WebRequest.Create(GEOCODE_URL + address);
+			request.Method = "GET";
+
+			WebResponse response = await request.GetResponseAsync();
+
+			StreamReader reader = new StreamReader(response.GetResponseStream());
+
+			JToken respObj = JToken.Parse(await reader.ReadToEndAsync());
+
+			JToken location = respObj["results"][0]["geometry"]["location"];
+
+			double lat = location.Value<double>("lat");
+			double lng = location.Value<double>("lng");
+
+			return new Location(lat, lng);
+		}
+	}
+}
