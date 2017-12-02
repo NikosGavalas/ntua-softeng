@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pleisure
 {
-	public struct Location
+	public class Location
 	{
 		public readonly double Latitude;
 		public readonly double Longitude;

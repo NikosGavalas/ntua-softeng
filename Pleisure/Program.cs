@@ -55,6 +55,7 @@ namespace Pleisure
 			server.Add<UserSession>("/events", pages.Events);
 			server.Add<UserSession>("/event/*", pages.Event);
 			server.Add<UserSession>("/profile", pages.Profile);
+
 			
 
 
@@ -104,7 +105,7 @@ namespace Pleisure
 
 		public static MySqlConn MySql()
 		{
-			return new MySqlConn("192.168.1.11", "progtech", "@ntua123", "pleisure");
+			return new MySqlConn("gmantaos.com", "progtech", "@ntua123", "pleisure");
 		}
 	}
 }

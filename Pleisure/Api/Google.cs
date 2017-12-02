@@ -25,7 +25,14 @@ namespace Pleisure
 
 			JToken respObj = JToken.Parse(await reader.ReadToEndAsync());
 
-			JToken location = respObj["results"][0]["geometry"]["location"];
+			JArray results = respObj["results"] as JArray;
+
+			if (results.Count == 0)
+			{
+				return null;
+			}
+
+			JToken location = results[0]["geometry"]["location"];
 
 			double lat = location.Value<double>("lat");
 			double lng = location.Value<double>("lng");
