@@ -56,13 +56,7 @@ namespace Pleisure
 			server.Add<UserSession>("/event/*", pages.Event);
 			server.Add<UserSession>("/profile", pages.Profile);
 
-
-
-			List<Event> events = MySql().Select<Event>().Result;
-			foreach (Event e in events)
-			{
-				Console.WriteLine(e.Latitude + ", " + e.Longitude);
-			}
+			
 
 
 			server.Start();

@@ -61,7 +61,7 @@ namespace Pleisure
 			return obj;
 		}
 
-		public async Task<JToken> SerializeWithScheduled(bool includeAttendance)
+		public async Task<JToken> SerializeWithScheduled(bool includeAttendance = false)
 		{
 			JToken obj = Serialize();
 			obj["scheduled"] = new JArray();
