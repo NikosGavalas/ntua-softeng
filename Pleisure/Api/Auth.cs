@@ -44,6 +44,11 @@ namespace Pleisure
 			return Hash(soup.ToString());
 		}
 
+		/// <summary>
+		/// Checks if an email is already taken by another user.
+		/// </summary>
+		/// <param name="email"></param>
+		/// <returns></returns>
 		public static async Task<bool> EmailTaken(string email)
 		{
 			SelectQuery query = new SelectQuery("user_id");
@@ -55,6 +60,16 @@ namespace Pleisure
 			return result.RowCount > 0;
 		}
 
+		/// <summary>
+		/// Registers a user and returns his ID.
+		/// <para>Returns -1 if the email is already taken.</para>
+		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
+		/// <param name="fullName"></param>
+		/// <param name="role"></param>
+		/// <param name="credits"></param>
+		/// <returns></returns>
 		public static async Task<long> RegisterUser(string email, string password, string fullName, UserRole role, int credits = 0)
 		{
 			if (await EmailTaken(email))
@@ -84,7 +99,31 @@ namespace Pleisure
 			return result.LastInsertedId;
 		}
 
+		/// <summary>
+		/// Attempt to login with an email and a password.
+		/// <para>On success the User object is returned, and null is returned on failure.</para>
+		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
+		/// <returns></returns>
+		public static async Task<User> Authenticate(string email, string password)
+		{
+			SelectQuery<User> query = Query.Select<User>();
+			query.Where("email", email);
 
+			List<User> result = await Program.MySql().Execute(query);
+
+			if (result.Count == 0)
+			{
+				return null;
+			}
+
+			User user = result.First();
+
+			string givenHash = GetPasswordHash(password, user.Salt);
+
+			return user.Password == givenHash ? user : null;
+		}
 
 		private static class StaticRandom
 		{
