@@ -54,6 +54,9 @@ namespace HttpNet
 		HttpListenerRequest request;
 		HttpListenerResponse response;
 
+		HttpListenerRequest Request { get { return request; } }
+		HttpListenerResponse Response { get { return response; } }
+
 		internal HttpRequest(WebServer webServer, HttpListenerRequest request, HttpListenerResponse response, Session session)
 		{
 			this.webServer = webServer;
@@ -158,6 +161,17 @@ namespace HttpNet
 			response.OutputStream.Dispose();
 
 			webServer.Log(LogLevels.Debug, "Closing request {0} [{1}] [{2}]", AbsolutePath, response.StatusCode, response.ContentType);
+		}
+
+		/// <summary>
+		/// Set the response to redirect to the given url and close the response stream.
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
+		public Task Redirect(string url)
+		{
+			response.Redirect(url);
+			return Close();
 		}
 
 		/// <summary>

@@ -95,8 +95,7 @@ namespace Pleisure
 
 			if (!session.LoggedIn)
 			{
-				request.SetHeader("Location", "/");
-				await request.Close();
+				await request.Redirect("/");
 				return;
 			}
 
