@@ -26,12 +26,15 @@ namespace Pleisure
 				return;
 			}
 
+			request.SetStatusCode(HttpStatusCode.OK);
+			request.SetContentType(ContentType.Html);
+
 			HtmlPage page = new HtmlPage(html, user);
 
 			string rendered = await page.Render();
 			await request.Write(rendered);
 
-			await request.Success(ContentType.Html);
+			await request.Close();
 		}
 
 		public async Task Events(HttpRequest request)
@@ -46,12 +49,15 @@ namespace Pleisure
 				return;
 			}
 
+			request.SetStatusCode(HttpStatusCode.OK);
+			request.SetContentType(ContentType.Html);
+
 			HtmlPage page = new HtmlPage(html, user);
 
 			string rendered = await page.Render();
 			await request.Write(rendered);
-			
-			await request.Success(ContentType.Html);
+
+			await request.Close();
 		}
 
 		public async Task Event(HttpRequest request)
@@ -67,6 +73,9 @@ namespace Pleisure
 				return;
 			}
 
+			request.SetStatusCode(HttpStatusCode.OK);
+			request.SetContentType(ContentType.Html);
+
 			HtmlPage page = new HtmlPage(html, user);
 
 			string rendered = await page.Render();
@@ -76,7 +85,7 @@ namespace Pleisure
 
 			await request.Write(rendered);
 
-			await request.Success(ContentType.Html);
+			await request.Close();
 		}
 
 		public async Task Profile(HttpRequest request)
@@ -99,12 +108,15 @@ namespace Pleisure
 				return;
 			}
 
+			request.SetStatusCode(HttpStatusCode.OK);
+			request.SetContentType(ContentType.Html);
+
 			HtmlPage page = new HtmlPage(html, user);
 
 			string rendered = await page.Render();
 			await request.Write(rendered);
 
-			await request.Success(ContentType.Html);
+			await request.Close();
 		}
 
 		int GetEventId(string requestUrl)

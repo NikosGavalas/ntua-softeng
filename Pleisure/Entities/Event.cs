@@ -24,10 +24,10 @@ namespace Pleisure
 		[DBColumn("price")]
 		public int Price;
 
-		[DBColumn("location_lat")]
+		[DBColumn("lat")]
 		public double Latitude;
 
-		[DBColumn("location_lng")]
+		[DBColumn("lng")]
 		public double Longitude;
 
 		[DBColumn("address")]

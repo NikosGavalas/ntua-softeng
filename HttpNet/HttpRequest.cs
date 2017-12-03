@@ -29,7 +29,7 @@ namespace HttpNet
 		/// <summary>
 		/// The GET parameters sent with the request
 		/// </summary>
-		public Dictionary<string, string> GET
+		public Dictionary<string, string> GETParams
 		{
 			get { return Utils.GetUrlParams(request.RawUrl); } 
 		}
@@ -38,7 +38,7 @@ namespace HttpNet
 		/// The url-encoded POST parameters in the body of the request.
 		/// <para>WARNING: await reading the RequestBody() first!!!</para>
 		/// </summary>
-		public Dictionary<string, string> POST
+		public Dictionary<string, string> POSTParams
 		{
 			get { return Utils.GetUrlParams("x?" + RequestBody().Result); }
 		}
@@ -161,15 +161,25 @@ namespace HttpNet
 		}
 
 		/// <summary>
-		/// Shortcut to setting the Content-Type, the StatusCode to 200 and closing the stream.
+		/// Returns the GET parameter with the given key, or the defaultValue if it doesnt exist.
 		/// </summary>
-		/// <param name="contentType"></param>
+		/// <param name="key"></param>
+		/// <param name="defaultValue">The value to return if this parameter doesn't exist</param>
 		/// <returns></returns>
-		public async Task Success(ContentType contentType)
+		public string GET(string key, string defaultValue = null)
 		{
-			SetContentType(contentType);
-			SetStatusCode(HttpStatusCode.OK);
-			await Close();
+			return GETParams.ContainsKey(key) ? GETParams[key] : defaultValue;
+		}
+
+		/// <summary>
+		/// Returns the POST parameter with the given key, or the defaultValue if it doesnt exist.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="defaultValue">The value to return if this parameter doesn't exist</param>
+		/// <returns></returns>
+		public string POST(string key, string defaultValue = null)
+		{
+			return POSTParams.ContainsKey(key) ? POSTParams[key] : defaultValue;
 		}
 	}
 }

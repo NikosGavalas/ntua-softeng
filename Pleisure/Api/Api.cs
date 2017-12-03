@@ -31,10 +31,26 @@ namespace Pleisure
 		{
 			request.SetContentType(ContentType.Json);
 
+			if (request.GET("address") == null)
+			{
+				request.SetStatusCode(System.Net.HttpStatusCode.BadRequest);
+				await request.Close();
+				return;
+			}
+			
+			int distance = int.Parse(request.GET("distance", "1000"));
+			Location location = await Google.Geocode(request.GET("address"));
+
 			JArray arr = new JArray();
 
 			SelectQuery<Event> query = new SelectQuery<Event>();
 
+
+			query.Where("DISTANCE(lat, lng, @loc_lat, @loc_lng) < @distance");
+			query.AddParameter("@loc_lat", location.Latitude);
+			query.AddParameter("@loc_lng", location.Longitude);
+			query.AddParameter("@distance", distance);
+			
 			List<Event> events = await Program.MySql().Execute(query);
 			foreach (Event evt in events)
 			{
