@@ -56,8 +56,8 @@ namespace Pleisure
 			server.Add<UserSession>("/event/*", pages.Event);
 			server.Add<UserSession>("/profile", pages.Profile);
 
-			
-
+			long ret = Auth.RegisterUser("penis", "password", "Greg Mnt", UserRole.Admin, 100).Result;
+			Console.WriteLine(ret);
 
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");

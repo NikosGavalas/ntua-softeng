@@ -26,6 +26,12 @@ namespace Pleisure
 		[DBColumn("credits")]
 		public int Credits;
 
+		[DBColumn("password")]
+		public string Password;
+
+		[DBColumn("salt")]
+		public string Salt;
+
 		public Task<List<Kid>> GetKids()
 		{
 			SelectQuery<Kid> query = new SelectQuery<Kid>();
