@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<title>Events</title>
+
+		@{html.header}
+
+	</head>
+
+	<body>
+
+		<!-- Navbar -->
+		@{html.navbar}
+		<!-- /Navbar -->
+
+		<!-- Main Content -->
+		<div id="main_content" class="container">
+			<div class="row">
+				<!-- Filter Sidebar -->
+				<div class="visible-xs">
+					<div class="container">
+						<button id="filters-button" class="btn btn-primary navbar-btn" data-toggle="collapse" data-target="#filter-sidebar">
+							<i class="fa fa-sliders"></i>							
+						</button>
+					</div>
+				</div>
+
+				<div id="filter-sidebar" class="col-xs-12 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar" >
+					<h3>Filters</h3>
+
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-1">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Location
+						</h4>
+						<div id="group-1" class="list-group collapse in">
+							<div class="input-group">
+								<span class="input-group-addon fa fa-map-marker"></span>
+								<input type="text" class="form-control" placeholder="Search...">
+							</div>
+						</div>
+					</div>
+		
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-2">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Price Range
+						</h4>
+						<div id="group-2" class="list-group collapse in" data-role="rangeslider">
+							<span>
+								<label for="price-max">Maximum Price:</label>
+								<label id="price-slider-value"></label>
+							</span>
+							<input class="my-slider" type="range" name="price-max" id="price-max" value="1000" min="0" max="1000">
+						</div>
+					</div>
+		
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-3">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Age Range
+						</h4>
+						<!-- add selects -->
+					</div>
+		
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-4">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Category
+						</h4>
+						<div id="group-4" class="list-group collapse in">
+							<select id="category-selector" class="form-control">
+								<option value="all">All</option>								
+								<option value="sports">Sports</option>
+								<option value="playground">Playground</option>
+								<option value="party">Party</option>
+								<option value="excursion">Excursion</option>
+								<option value="outdoor">Outdoor</option>
+								<option value="inquisition">Spanish Inquisition</option>
+							</select>
+						</div>
+					</div>
+
+					<div>
+						<h4 data-toggle="collapse" data-target="#group-5">
+							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+							Recurring
+						</h4>
+						<form id="group-5" class="list-group collapse in">
+							<div class="radio">
+								<label><input id="optionsRadios1" name="optradio" type="radio" checked="">Yes</label>
+							</div>
+							<div class="radio">
+								<label><input id="optionsRadios2" name="optradio" type="radio" checked="">No</label>
+							</div>
+							<div class="radio">
+								<label><input id="optionsRadios3" name="optradio" type="radio" checked="">Display All</label>
+							</div>
+						</form>
+					</div>
+
+					<div>
+						<input type="submit" class="btn btn-primary btn-block" value="Filter" />
+					</div>
+				</div> 
+				<!-- Filter Sidebar -->
+		
+				<!-- EventsView -->
+				<div class="col-sm-9">
+					<h3>Nearby Events for your Children! (@{x_results}?)</h3>
+
+					<!-- Tabs -->
+					<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#listview" data-toggle="tab" aria-expanded="false">List View</a>
+						</li>
+						<li>
+							<a href="#mapview" data-toggle="tab" aria-expanded="true">Map View</a>
+						</li>
+					</ul>
+					<div id="myTabContent" class="tab-content">
+
+						<!-- Items ListView -->
+						<div class="tab-pane fade active in" id="listview">
+
+							<!-- Pagination -->
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-12">
+										<ul class="pagination">
+											<li>
+												<a href="#">Prev</a>
+											</li>
+											<li class="active">
+												<a id="takis" href="#">1</a>
+											</li>
+											<li>
+												<a href="#">2</a>
+											</li>
+											<li>
+												<a href="#">3</a>
+											</li>
+											<li>
+												<a href="#">4</a>
+											</li>
+											<li>
+												<a href="#">5</a>
+											</li>
+											<li>
+												<a href="#">Next</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div><!-- /Pagination -->
+							
+						</div><!-- /Items ListView -->
+						
+						<!-- MapView -->
+						<div class="tab-pane fade" id="mapview">
+							<div id="map"></div>
+						</div><!-- MapView -->
+
+					</div><!-- /Tabs -->
+		
+				</div><!-- /EventsView -->
+		
+			</div>
+		</div><!-- /Main Content -->
+
+		@{html.footer}
+		<!-- Google Maps -->
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP7eXQB4hzRcSobhv8W5_uMAAfCv3oRDs&callback=initMap"></script>
+
+		<script>
+
+			var currentEvents = [];
+
+			function eventListItem(event)
+			{
+				return $("<div class='panel panel-primary event-item'>")
+					.append(
+						$("<a class='panel-heading'>").append(
+								$("<h3 class='panel-title'>").append(
+									$("<strong>").html(event.title)
+								)
+						).attr('href', "/event/" + event.id)
+					).append(
+						$("<div class='panel-body'>").append(
+							$("<div class='media'>").append(
+								$("<div class='media-left'>").append(
+									$("<a>").append(
+										$("<img class='media-object event-thumbnail'>").attr('src', event.thumbnail)
+									).attr('href', "/event/" + event.id)
+								)
+							).append(
+								$("<div class='media-body'>").append(
+									$("<p>").html(event.description) // TODO: Find a good maximum number of characters and crop the rest of the description with '...'
+								).append(
+									$("<p>").append("<b>Address:</b>&nbsp;").append(event.address)
+								).append(
+									$("<p>").append("<b>Price:</b>&nbsp;").append(event.price).append("&nbsp;").append("<i class='fa fa-money'>")
+								)
+							)
+						)
+					);
+			}
+
+			function refreshEventList(events)
+			{
+				// Update the list view
+				$('#listview').empty();
+
+				for (var i = 0; i < events.length; i++) {
+					$('#listview').append(
+						eventListItem(events[i])
+					);
+				}
+
+				// Update the map if it is currently visible
+				if ($('#mapview').hasClass('active'))
+				{
+					updateMap();
+				}
+			}
+
+			function updateMap()
+			{
+				// Update the map view
+				var map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 12,	// TODO: set the zoom to match the searching range somehow
+					center: currentEvents[0].coordinates
+				});
+
+				for (var i = 0; i < currentEvents.length; i++) {
+					var marker = new google.maps.Marker({
+						position: currentEvents[i].coordinates,
+						map: map
+					});
+				}
+			}
+
+			function initMap()
+			{
+				$(window).resize(function ()
+				{
+					google.maps.event.trigger(map, 'resize');
+				});
+			}
+
+			$(document).ready(function()
+			{
+				$.get({
+					url: 'api/events',
+					success: function (resp, satus, xhr) {
+						currentEvents = resp;
+						refreshEventList(resp);
+					}
+				});
+
+				$('a[href="#mapview"]').on('shown.bs.tab', function (e)
+				{
+					// Update the map if it just came into view
+					updateMap();
+					google.maps.event.trigger(map, 'resize');
+				});
+			});
+		</script>
+
+	</body>
+</html>
