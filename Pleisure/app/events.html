@@ -201,7 +201,10 @@
 			</div>
 		</div><!-- /Main Content -->
 
+		<!-- Footer -->
 		@{html.footer}
+		<!-- /Footer -->
+
 		<!-- Google Maps -->
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP7eXQB4hzRcSobhv8W5_uMAAfCv3oRDs&callback=initMap"></script>
 
@@ -228,7 +231,7 @@
 								)
 							).append(
 								$("<div class='media-body'>").append(
-									$("<p>").html(event.description) // TODO: Find a good maximum number of characters and crop the rest of the description with '...'
+									$("<p>").html(event.description.length > 210 ? event.description.slice(0, 200) + '...' : event.description)
 								).append(
 									$("<p>").append("<b>Address:</b>&nbsp;").append(event.address)
 								).append(

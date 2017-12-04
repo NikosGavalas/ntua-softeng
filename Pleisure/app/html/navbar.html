@@ -39,7 +39,7 @@
 				</li>
 				@else{}
 				<li>
-					<a href="#"><b>Log In</b> or <b>Sign Up</b></a>
+					<a href="#" data-toggle="modal" data-target="#loginModal"><b>Log In</b> or <b>Sign Up</b></a>
 				</li>
 				@endif{}
 			</ul>
@@ -47,3 +47,7 @@
 		</div>
 	</div>
 </nav>
+
+@{modal.login}
+@{modal.register}
+
