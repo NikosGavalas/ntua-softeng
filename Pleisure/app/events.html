@@ -50,7 +50,7 @@
 								<label class="slider-value"></label>
 								&nbsp;km
 							</span>
-							<input class="my-slider" type="range" name="distance" id="distance" value="1000" min="0" max="1000">
+							<input class="my-slider" type="range" name="distance" id="distance" value="100" min="0" max="100">
 						</div>
 					</div>
 		
@@ -58,16 +58,15 @@
 						<h4 data-toggle="collapse" data-target="#group-2">
 							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
 							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-							Price
+							Maximum Price
 						</h4>
 						<div id="group-2" class="list-group collapse in" data-role="rangeslider">
 							<span>
-								<label for="price-max">Maximum Price:</label>
 								<label class="slider-value"></label>
 								&nbsp;
 								<span class="fa fa-money"></span>
 							</span>
-							<input class="my-slider" type="range" name="price-max" id="price-max" value="1000" min="0" max="1000">
+							<input class="my-slider" type="range" name="max-price" id="max-price" value="1000" min="0" max="1000">
 						</div>
 					</div>
 		
@@ -77,7 +76,22 @@
 							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
 							Age Range
 						</h4>
-						<!-- add selects -->
+						<select class="form-control" id="age" name="age">
+							<option>4</option>
+							<option>5</option>
+							<option>6</option>
+							<option>7</option>
+							<option>8</option>
+							<option>9</option>
+							<option>10</option>
+							<option>11</option>
+							<option>12</option>
+							<option>13</option>
+							<option>14</option>
+							<option>15</option>
+							<option>16</option>
+							<option>17</option>
+						</select>
 					</div>
 		
 					<div>
@@ -247,12 +261,15 @@
 			{
 				return {
 					price:		$('#max-price').val(),
-					address:	$('#address').val()
+					address:	$('#address').val(),
+					distance:	parseInt($('#distance').val()) * 1000,
+					age:		$('#age').val()
 				}
 			}
 
 			function getEvents()
 			{
+				console.log(filters());
 				if (!$('#address').val())
 				{
 					// Address has not been set yet.
@@ -264,8 +281,8 @@
 					url: 'api/events',
 					data: filters(),
 					success: function (resp, satus, xhr) {
-						currentEvents = resp;
-						refreshEventList(resp);
+						currentEvents = resp.results;
+						refreshEventList(currentEvents);
 
 						waitingDialog.hide();
 					}
