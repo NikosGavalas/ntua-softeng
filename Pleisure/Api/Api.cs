@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 
 using HttpNet;
@@ -13,33 +14,142 @@ namespace Pleisure
 	public class Api
 	{
 
-		public Api(Router router)
+		public Api(WebServer server)
 		{
-			router.Add("/kids", Kids);
-			router.Add("/events", Events);
+			server.Add("/login", Login);
+			server.Add("/register", Register);
+			server.Add("/signout", SignOut);
+
+			Router apiRouter = server.AddRouter("/api");
+			apiRouter.Add("/kids", Kids);
+			apiRouter.Add("/events", Events);
+			apiRouter.Add("/email_available", EmailAvailable);
 		}
 
-		public async Task Kids(HttpRequest request)
+		public async Task Login(HttpRequest req)
 		{
-			request.SetContentType(ContentType.Json);
-
-
-			await request.Close();
-		}
-
-		public async Task Events(HttpRequest request)
-		{
-			request.SetContentType(ContentType.Json);
-
-			if (request.GET("address") == null)
+			if (!req.HasPOST("email", "password"))
 			{
-				request.SetStatusCode(System.Net.HttpStatusCode.BadRequest);
-				await request.Close();
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			string onSuccess = req.POST("on_success", "/");
+			string onFail = req.POST("on_failure", "/?loginfail=1");
+
+
+			User user = await Auth.Authenticate(req.POST("email"), req.POST("password"));
+
+			if (user == null)
+			{
+				// Login failed
+				await req.Redirect(onFail);
+			}
+			else
+			{
+				// Login was successful
+				UserSession session = req.Session as UserSession;
+
+				// Set the session to keep the user logged in
+				session.UserID = (int)user.ID;
+
+				await req.Redirect(onSuccess);
+			}
+		}
+
+		public async Task EmailAvailable(HttpRequest req)
+		{
+			req.SetContentType(ContentType.Json);
+			if (!req.HasGET("email"))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			string email = req.GET("email");
+
+			JToken response = JToken.FromObject(new
+			{
+				available = !await Auth.EmailTaken(email)
+			});
+
+			req.SetStatusCode(HttpStatusCode.OK);
+
+			await req.Write(response.ToString());
+			await req.Close();
+		}
+
+		public async Task Register(HttpRequest req)
+		{
+			if (!req.HasPOST("email", "password", "password2", "full_name", "role"))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			string onSuccess = req.POST("on_success", "/");
+			string onFail = req.POST("on_failure", "/?registerfail=1");
+
+			string email = req.POST("email");
+			string password = req.POST("password");
+			string password2 = req.POST("password2");
+			string fullName = req.POST("full_name");
+			int role;
+
+			if (password != password2 							// Check if passwords match
+			    || !int.TryParse(req.POST("role"), out role) 	// Check if the POSTed role is an integer
+			    || !(role == (int)UserRole.Parent 
+			         || role == (int)UserRole.Organizer)		// Check if the user isn't trying to bamboozle us
+			    || !Auth.ValidateEmail(email)					// Check if the email address is valid
+			    || await Auth.EmailTaken(email))				// Check if the email is available				
+			{
+				await req.Redirect(onFail);
+				return;
+			}
+
+			// All looks good, register...
+			long userId = await Auth.RegisterUser(email, password, fullName, role);
+
+			// Let's also set the session so the user stays logged in
+			UserSession session = req.Session as UserSession;
+			session.UserID = userId;
+
+			await req.Redirect(onSuccess);
+		}
+
+		public async Task SignOut(HttpRequest req)
+		{
+			string redirect = req.POST("redirect") ?? req.GET("redirect", "/");
+
+			req.Session.Destroy();
+
+			await req.Redirect(redirect);
+		}
+
+		public async Task Kids(HttpRequest req)
+		{
+			req.SetContentType(ContentType.Json);
+
+
+			await req.Close();
+		}
+
+		public async Task Events(HttpRequest req)
+		{
+			req.SetContentType(ContentType.Json);
+
+			if (req.GET("address") == null)
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
 				return;
 			}
 			
-			int distance = int.Parse(request.GET("distance", "1000"));
-			Location location = await Google.Geocode(request.GET("address"));
+			int distance = int.Parse(req.GET("distance", "1000"));
+			Location location = await Google.Geocode(req.GET("address"));
 
 
 			SelectQuery<Event> query = new SelectQuery<Event>();
@@ -51,26 +161,26 @@ namespace Pleisure
 			query.AddParameter("@distance", distance);
 
 			// Filter by price
-			if (request.GET("price") != null)
+			if (req.GET("price") != null)
 			{
-				query.Where("price", WhereRelation.UpTo, request.GET("price"));
+				query.Where("price", WhereRelation.UpTo, req.GET("price"));
 			}
 
 			// Filter by age
-			if (request.GET("age") != null)
+			if (req.GET("age") != null)
 			{
-				query.Where("age_min", WhereRelation.UpTo, request.GET("age"))
-					.Where("age_max", WhereRelation.AtLeast, request.GET("age"));
+				query.Where("age_min", WhereRelation.UpTo, req.GET("age"))
+					.Where("age_max", WhereRelation.AtLeast, req.GET("age"));
 			}
 
 			// Filter by duration
-			if (request.GET("duration_min") != null)
+			if (req.GET("duration_min") != null)
 			{
-				query.Where("duration", WhereRelation.AtLeast, request.GET("duration_min"));
+				query.Where("duration", WhereRelation.AtLeast, req.GET("duration_min"));
 			}
-			if (request.GET("duration_max") != null)
+			if (req.GET("duration_max") != null)
 			{
-				query.Where("duration", WhereRelation.UpTo, request.GET("duration_max"));
+				query.Where("duration", WhereRelation.UpTo, req.GET("duration_max"));
 			}
 
 			// Perform query and build the response object
@@ -81,9 +191,9 @@ namespace Pleisure
 				arr.Add(await evt.SerializeWithScheduled());
 			}
 
-			await request.Write(arr.ToString());
+			await req.Write(arr.ToString());
 
-			await request.Close();
+			await req.Close();
 		}
 
 

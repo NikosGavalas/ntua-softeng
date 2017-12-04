@@ -47,7 +47,7 @@ namespace Pleisure
 			/*
 			 * Register API
 			 */
-			Api api = new Api(server.AddRouter("/api"));
+			Api api = new Api(server);
 
 
 			HtmlProvider pages = new HtmlProvider();

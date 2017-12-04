@@ -40,7 +40,7 @@ namespace HttpNet
 						&& (route.SessionBehavior == typeof(SessionBehavior) || route.SessionBehavior.IsSubclassOf(typeof(SessionBehavior))))
 					{
 						session.Behavior = (SessionBehavior)Activator.CreateInstance(route.SessionBehavior);
-						await session.Behavior.OnCreate(session.SessionID, session.RemoteEndPoint);
+						await session.Behavior.OnCreate(session, session.SessionID, session.RemoteEndPoint);
 					}
 
 					server.Log(LogLevels.Debug, string.Format("Handling path {0} at route {1}", request.Path, route.RelativePath));

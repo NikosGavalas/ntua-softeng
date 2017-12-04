@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -70,7 +71,7 @@ namespace Pleisure
 		/// <param name="role"></param>
 		/// <param name="credits"></param>
 		/// <returns></returns>
-		public static async Task<long> RegisterUser(string email, string password, string fullName, UserRole role, int credits = 0)
+		public static async Task<long> RegisterUser(string email, string password, string fullName, int role, int credits = 0)
 		{
 			if (await EmailTaken(email))
 			{
@@ -85,7 +86,7 @@ namespace Pleisure
 				.Value("password", passwordHash)
 				.Value("salt", salt)
 				.Value("full_name", fullName)
-				.Value("role", (int)role)
+				.Value("role", role)
 				.Value("credits", credits);
 
 			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
@@ -123,6 +124,19 @@ namespace Pleisure
 			string givenHash = GetPasswordHash(password, user.Salt);
 
 			return user.Password == givenHash ? user : null;
+		}
+
+		public static bool ValidateEmail(string email)
+		{
+			try
+			{
+				var addr = new System.Net.Mail.MailAddress(email);
+				return addr.Address == email;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 
 		private static class StaticRandom

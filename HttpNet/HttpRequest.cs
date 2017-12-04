@@ -186,6 +186,21 @@ namespace HttpNet
 		}
 
 		/// <summary>
+		/// Checks if all the given keys are present in the GET Parameters.
+		/// </summary>
+		/// <returns><c>false</c>, if at least one key is missing <c>false</c> otherwise.</returns>
+		/// <param name="keys">Keys.</param>
+		public bool HasGET(params string[] keys)
+		{
+			foreach (string key in keys)
+			{
+				if (!GETParams.ContainsKey(key))
+					return false;
+			}
+			return true;
+		}
+
+		/// <summary>
 		/// Returns the POST parameter with the given key, or the defaultValue if it doesnt exist.
 		/// </summary>
 		/// <param name="key"></param>
@@ -194,6 +209,21 @@ namespace HttpNet
 		public string POST(string key, string defaultValue = null)
 		{
 			return POSTParams.ContainsKey(key) ? POSTParams[key] : defaultValue;
+		}
+
+		/// <summary>
+		/// Checks if all the given keys are present in the POST Parameters.
+		/// </summary>
+		/// <returns><c>false</c>, if at least one key is missing <c>false</c> otherwise.</returns>
+		/// <param name="keys">Keys.</param>
+		public bool HasPOST(params string[] keys)
+		{
+			foreach (string key in keys)
+			{
+				if (!POSTParams.ContainsKey(key))
+					return false;
+			}
+			return true;
 		}
 	}
 }

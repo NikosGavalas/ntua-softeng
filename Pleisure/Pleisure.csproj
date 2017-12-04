@@ -61,6 +61,9 @@
       <HintPath>..\packages\XXHash.1.0.0\lib\net46\x86\XXHash.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ChanceNET">
+      <HintPath>..\packages\Chance.NET.1.0.0\lib\ChanceNET.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Api.cs" />

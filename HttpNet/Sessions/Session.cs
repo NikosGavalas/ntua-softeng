@@ -16,6 +16,8 @@ namespace HttpNet
 
 		Stopwatch timer;
 
+		internal bool Valid = true;
+
 		public Session(string sessionId, IPEndPoint remoteEndPoint)
 		{
 			SessionID = sessionId;
@@ -37,6 +39,11 @@ namespace HttpNet
 		internal void Update()
 		{
 			timer.Restart();
+		}
+
+		internal void Destroy()
+		{
+			Valid = false;
 		}
 	}
 }
