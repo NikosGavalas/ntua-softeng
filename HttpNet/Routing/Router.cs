@@ -37,9 +37,10 @@ namespace HttpNet
 				if (route.MatchesPath(request.Path))
 				{
 					if (session.Behavior == null 
-						&& (route.SessionBehavior == typeof(SessionBehavior) || route.SessionBehavior.IsSubclassOf(typeof(SessionBehavior))))
+					    && (server.SessionBehaviorType == typeof(SessionBehavior) 
+					        || server.SessionBehaviorType.IsSubclassOf(typeof(SessionBehavior))))
 					{
-						session.Behavior = (SessionBehavior)Activator.CreateInstance(route.SessionBehavior);
+						session.Behavior = (SessionBehavior)Activator.CreateInstance(server.SessionBehaviorType);
 						await session.Behavior.OnCreate(session, session.SessionID, session.RemoteEndPoint);
 					}
 
@@ -65,8 +66,7 @@ namespace HttpNet
 			await request.Close();
 		}
 
-		public Router Add<Behavior>(string path, Func<HttpRequest, Task> handler)
-			where Behavior : SessionBehavior, new()
+		public Router Add(string path, Func<HttpRequest, Task> handler)
 		{
 			if (routes.Exists(r => r.MatchesPath(path)))
 			{
@@ -74,14 +74,9 @@ namespace HttpNet
 				throw new ArgumentException(string.Format("Cannot add {0} to router {1} because of conflict with existing route {2}.", path, this.path, c.RelativePath));
 			}
 
-			routes.Add(new Route(path, handler, typeof(Behavior)));
+			routes.Add(new Route(path, handler));
 			server.Log(LogLevels.Debug, string.Format("Added path {0} to router at {1}", path, this.path + "/"));
 			return this;
-		}
-
-		public Router Add(string path, Func<HttpRequest, Task> handler)
-		{
-			return Add<SessionBehavior>(path, handler);
 		}
 
 		public Router CreateRouter(string path)

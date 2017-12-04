@@ -10,7 +10,7 @@ using System.Net;
 
 namespace HttpNet
 {
-	public class WebServer
+	public class WebServer 
 	{
 		HttpListener server;
 		SessionManager sessionManager;
@@ -24,8 +24,9 @@ namespace HttpNet
 		int sessionLifetime;
 
 		Router rootRouter;
+		internal Type SessionBehaviorType;
 
-		public WebServer(string host, int port, int sessionLifetime = 300)
+		private WebServer(string host, int port, int sessionLifetime = 300)
 		{
 			this.sessionLifetime = sessionLifetime;
 			
@@ -37,16 +38,23 @@ namespace HttpNet
 			rootRouter = new Router(this, "");
 		}
 
-		public WebServer Add<Behavior>(string path, Func<HttpRequest, Task> handler)
+		public static WebServer Create<Behavior>(string host, int port, int sessionLifetime = 300)
 			where Behavior : SessionBehavior, new()
 		{
-			rootRouter.Add<Behavior>(path, handler);
-			return this;
+			WebServer server = new WebServer(host, port, sessionLifetime);
+			server.SessionBehaviorType = typeof(Behavior);
+			return server;
+		}
+
+		public static WebServer Create(string host, int port, int sessionLifetime = 300)
+		{
+			return Create<SessionBehavior>(host, port, sessionLifetime);
 		}
 
 		public WebServer Add(string path, Func<HttpRequest, Task> handler)
 		{
-			return Add<SessionBehavior>(path, handler);
+			rootRouter.Add(path, handler);
+			return this;
 		}
 
 		public Router AddRouter(string path)

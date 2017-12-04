@@ -137,6 +137,7 @@ namespace Pleisure
 		{
 			req.SetContentType(ContentType.Json);
 
+			UserSession session = req.Session as UserSession;
 
 			await req.Close();
 		}
