@@ -174,6 +174,12 @@ namespace Pleisure
 			int distance = int.Parse(req.GET("distance", "1000"));
 			Location location = await Google.Geocode(req.GET("address"));
 
+			if (location == null)
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
 
 			SelectQuery<Event> query = new SelectQuery<Event>();
 
@@ -220,7 +226,13 @@ namespace Pleisure
 				arr.Add(await evt.SerializeWithScheduled());
 			}
 
-			await req.Write(arr.ToString());
+			JToken response = JToken.FromObject(new
+			{
+				center = location.Serialize(),
+				results = arr
+			});
+
+			await req.Write(response.ToString());
 
 			await req.Close();
 		}
