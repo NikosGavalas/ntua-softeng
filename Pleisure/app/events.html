@@ -30,9 +30,7 @@
 					<h3>Filters</h3>
 
 					<div>
-						<h4 data-toggle="collapse" data-target="#group-1">
-							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
-							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+						<h4>
 							Address
 						</h4>
 						<div id="group-1" class="list-group collapse in">
@@ -49,8 +47,8 @@
 						</h4>
 						<div id="distance_slider" data-role="rangeslider">
 							<span>
-								<label for="price-max">Distance</label>
-								<label id="price-slider-value"></label>
+								<label class="slider-value"></label>
+								&nbsp;km
 							</span>
 							<input class="my-slider" type="range" name="distance" id="distance" value="1000" min="0" max="1000">
 						</div>
@@ -60,12 +58,14 @@
 						<h4 data-toggle="collapse" data-target="#group-2">
 							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
 							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-							Price Range
+							Price
 						</h4>
 						<div id="group-2" class="list-group collapse in" data-role="rangeslider">
 							<span>
 								<label for="price-max">Maximum Price:</label>
-								<label id="price-slider-value"></label>
+								<label class="slider-value"></label>
+								&nbsp;
+								<span class="fa fa-money"></span>
 							</span>
 							<input class="my-slider" type="range" name="price-max" id="price-max" value="1000" min="0" max="1000">
 						</div>
@@ -84,7 +84,7 @@
 						<h4 data-toggle="collapse" data-target="#group-4">
 							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
 							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-							Category
+							Categories
 						</h4>
 						<div id="group-4" class="list-group collapse in">
 							<select id="category-selector" class="form-control">
@@ -262,6 +262,7 @@
 				waitingDialog.show("Loading...");
 				$.get({
 					url: 'api/events',
+					data: filters(),
 					success: function (resp, satus, xhr) {
 						currentEvents = resp;
 						refreshEventList(resp);
