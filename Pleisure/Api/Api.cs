@@ -70,9 +70,13 @@ namespace Pleisure
 
 			string email = req.GET("email");
 
+			bool isValid = Auth.ValidateEmail(email);
+			bool isAvailable = isValid && !await Auth.EmailTaken(email);
+
 			JToken response = JToken.FromObject(new
 			{
-				available = !await Auth.EmailTaken(email)
+				valid		= isValid,
+				available	= isAvailable
 			});
 
 			req.SetStatusCode(HttpStatusCode.OK);
@@ -141,7 +145,7 @@ namespace Pleisure
 		{
 			req.SetContentType(ContentType.Json);
 
-			if (req.GET("address") == null)
+			if (!req.HasGET("address"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -161,26 +165,32 @@ namespace Pleisure
 			query.AddParameter("@distance", distance);
 
 			// Filter by price
-			if (req.GET("price") != null)
+			if (req.HasGET("price"))
 			{
 				query.Where("price", WhereRelation.UpTo, req.GET("price"));
 			}
 
 			// Filter by age
-			if (req.GET("age") != null)
+			if (req.HasGET("age"))
 			{
 				query.Where("age_min", WhereRelation.UpTo, req.GET("age"))
 					.Where("age_max", WhereRelation.AtLeast, req.GET("age"));
 			}
 
 			// Filter by duration
-			if (req.GET("duration_min") != null)
+			if (req.HasGET("duration_min"))
 			{
 				query.Where("duration", WhereRelation.AtLeast, req.GET("duration_min"));
 			}
-			if (req.GET("duration_max") != null)
+			if (req.HasGET("duration_max"))
 			{
 				query.Where("duration", WhereRelation.UpTo, req.GET("duration_max"));
+			}
+
+			// Filter by id
+			if (req.HasGET("id"))
+			{
+				query.Where("id", req.GET("id"));
 			}
 
 			// Perform query and build the response object
