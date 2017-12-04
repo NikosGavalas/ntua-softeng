@@ -139,6 +139,24 @@ namespace Pleisure
 
 			UserSession session = req.Session as UserSession;
 
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+			}
+			else
+			{
+				JArray response = new JArray();
+
+				foreach (Kid kid in await user.GetKids())
+				{
+					response.Add(kid.Serialize());
+				}
+
+				await req.Write(response.ToString());
+			}
+
 			await req.Close();
 		}
 

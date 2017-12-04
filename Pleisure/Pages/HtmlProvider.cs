@@ -17,7 +17,7 @@ namespace Pleisure
 		public async Task Index(HttpRequest request)
 		{
 			UserSession session = request.Session as UserSession;
-			User user = await GetUser(session);
+			User user = await session.GetUser();
 
 			string html = await GetHtml("index");
 			if (html == null)
@@ -40,7 +40,7 @@ namespace Pleisure
 		public async Task Events(HttpRequest request)
 		{
 			UserSession session = request.Session as UserSession;
-			User user = await GetUser(session);
+			User user = await session.GetUser();
 			
 			string html = await GetHtml("events");
 			if (html == null)
@@ -63,7 +63,7 @@ namespace Pleisure
 		public async Task Event(HttpRequest request)
 		{
 			UserSession session = request.Session as UserSession;
-			User user = await GetUser(session);
+			User user = await session.GetUser();
 			int eventId = GetEventId(request.Path);
 			
 			string html = await GetHtml("event");
@@ -91,7 +91,7 @@ namespace Pleisure
 		public async Task Profile(HttpRequest request)
 		{
 			UserSession session = request.Session as UserSession;
-			User user = await GetUser(session);
+			User user = await session.GetUser();
 
 			if (!session.LoggedIn)
 			{
@@ -129,20 +129,6 @@ namespace Pleisure
 			}
 
 			return id;
-		}
-
-		async Task<User> GetUser(UserSession session)
-		{
-			if (session.LoggedIn)
-			{
-				SelectQuery<User> query = new SelectQuery<User>()
-					.Where<SelectQuery<User>>("user_id", session.UserID);
-				return await Program.MySql().Execute(query).ContinueWith(res => res.Result.FirstOrDefault());
-			}
-			else
-			{
-				return null;
-			}
 		}
 
 		async Task<string> GetHtml(string page)
