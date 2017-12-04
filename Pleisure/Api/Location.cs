@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json.Linq;
+
 namespace Pleisure
 {
 	public class Location
@@ -15,6 +17,15 @@ namespace Pleisure
 		{
 			Latitude = latitude;
 			Longitude = longitude;
+		}
+
+		public JToken Serialize()
+		{
+			return JToken.FromObject(new
+			{
+				lat = Latitude,
+				lng = Longitude
+			});
 		}
 
 		public override string ToString()

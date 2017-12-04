@@ -13,6 +13,7 @@ namespace Pleisure
 	public static class Google
 	{
 		const string GEOCODE_URL = @"https://maps.googleapis.com/maps/api/geocode/json?key=%20AIzaSyCNS7KGAlnxigqmUTRwq3R60jISsKd6GoA&address=";
+
 		public static async Task<Location> Geocode(string address)
 		{
 			address = HttpUtility.UrlEncode(address);
@@ -21,7 +22,15 @@ namespace Pleisure
 
 			WebResponse response = await request.GetResponseAsync();
 
-			StreamReader reader = new StreamReader(response.GetResponseStream());
+			StreamReader reader;
+			try
+			{
+				reader = new StreamReader(response.GetResponseStream());
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 
 			JToken respObj = JToken.Parse(await reader.ReadToEndAsync());
 
