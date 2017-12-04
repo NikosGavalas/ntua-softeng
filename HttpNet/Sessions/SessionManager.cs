@@ -17,7 +17,10 @@ namespace HttpNet
 		{
 			get
 			{
-				_sessions = _sessions.Where(s => s.Value.ElapsedSeconds() <= sessionLifeTimeSeconds).ToDictionary(k => k.Key, v => v.Value);
+				_sessions = _sessions.Where(s => 
+		                            s.Value.ElapsedSeconds() <= sessionLifeTimeSeconds
+		                            && s.Value.Valid
+	                           ).ToDictionary(k => k.Key, v => v.Value);
 				return _sessions;
 			}
 		}

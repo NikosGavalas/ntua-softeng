@@ -99,8 +99,8 @@ namespace Pleisure
 			{
 				using (StreamReader reader = new StreamReader(File.OpenRead(fileName)))
 				{
-					string html = await reader.ReadToEndAsync();
-					HtmlRenderer renderer = new HtmlRenderer(html);
+					string fileHtml = await reader.ReadToEndAsync();
+					HtmlRenderer renderer = new HtmlRenderer(fileHtml);
 					return await renderer.Render(this);
 				}
 			}

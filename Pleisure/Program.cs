@@ -25,7 +25,7 @@ namespace Pleisure
 
 		static void Main(string[] args)
 		{
-			server = new WebServer(HOST, PORT, sessionLifetime: 300);
+			server = WebServer.Create<UserSession>(HOST, PORT, sessionLifetime: 300);
 			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
 			
@@ -47,17 +47,17 @@ namespace Pleisure
 			/*
 			 * Register API
 			 */
-			Api api = new Api(server.AddRouter("/api"));
-
-
+			Api api = new Api(server);
 
 
 			HtmlProvider pages = new HtmlProvider();
-			server.Add<UserSession>("/", pages.Index);
-			server.Add<UserSession>("/events", pages.Events);
-			server.Add<UserSession>("/event/*", pages.Event);
-			server.Add<UserSession>("/profile", pages.Profile);
-			
+			server.Add("/", pages.Index);
+			server.Add("/events", pages.Events);
+			server.Add("/event/*", pages.Event);
+			server.Add("/profile", pages.Profile);
+
+
+
 
 
 			server.Start();
@@ -106,7 +106,7 @@ namespace Pleisure
 
 		public static MySqlConn MySql()
 		{
-			return new MySqlConn("192.168.1.11", "progtech", "@ntua123", "pleisure");
+			return new MySqlConn("gmantaos.com", "progtech", "@ntua123", "pleisure");
 		}
 	}
 }

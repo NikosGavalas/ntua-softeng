@@ -11,13 +11,11 @@ namespace HttpNet
 	{
 		public readonly string RelativePath;
 		public readonly Func<HttpRequest, Task> Handler;
-		public readonly Type SessionBehavior;
 
-		public Route(string relativePath, Func<HttpRequest, Task> handler, Type SessionBehavior)
+		public Route(string relativePath, Func<HttpRequest, Task> handler)
 		{
 			RelativePath = relativePath;
 			Handler = handler;
-			this.SessionBehavior = SessionBehavior;
 		}
 
 		public bool MatchesPath(string path)

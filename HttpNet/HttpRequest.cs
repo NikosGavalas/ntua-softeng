@@ -29,7 +29,7 @@ namespace HttpNet
 		/// <summary>
 		/// The GET parameters sent with the request
 		/// </summary>
-		public Dictionary<string, string> GET
+		public Dictionary<string, string> GETParams
 		{
 			get { return Utils.GetUrlParams(request.RawUrl); } 
 		}
@@ -38,7 +38,7 @@ namespace HttpNet
 		/// The url-encoded POST parameters in the body of the request.
 		/// <para>WARNING: await reading the RequestBody() first!!!</para>
 		/// </summary>
-		public Dictionary<string, string> POST
+		public Dictionary<string, string> POSTParams
 		{
 			get { return Utils.GetUrlParams("x?" + RequestBody().Result); }
 		}
@@ -53,6 +53,9 @@ namespace HttpNet
 		WebServer webServer;
 		HttpListenerRequest request;
 		HttpListenerResponse response;
+
+		HttpListenerRequest Request { get { return request; } }
+		HttpListenerResponse Response { get { return response; } }
 
 		internal HttpRequest(WebServer webServer, HttpListenerRequest request, HttpListenerResponse response, Session session)
 		{
@@ -161,15 +164,66 @@ namespace HttpNet
 		}
 
 		/// <summary>
-		/// Shortcut to setting the Content-Type, the StatusCode to 200 and closing the stream.
+		/// Set the response to redirect to the given url and close the response stream.
 		/// </summary>
-		/// <param name="contentType"></param>
+		/// <param name="url"></param>
 		/// <returns></returns>
-		public async Task Success(ContentType contentType)
+		public Task Redirect(string url)
 		{
-			SetContentType(contentType);
-			SetStatusCode(HttpStatusCode.OK);
-			await Close();
+			response.Redirect(url);
+			return Close();
+		}
+
+		/// <summary>
+		/// Returns the GET parameter with the given key, or the defaultValue if it doesnt exist.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="defaultValue">The value to return if this parameter doesn't exist</param>
+		/// <returns></returns>
+		public string GET(string key, string defaultValue = null)
+		{
+			return GETParams.ContainsKey(key) ? GETParams[key] : defaultValue;
+		}
+
+		/// <summary>
+		/// Checks if all the given keys are present in the GET Parameters.
+		/// </summary>
+		/// <returns><c>false</c>, if at least one key is missing <c>false</c> otherwise.</returns>
+		/// <param name="keys">Keys.</param>
+		public bool HasGET(params string[] keys)
+		{
+			foreach (string key in keys)
+			{
+				if (!GETParams.ContainsKey(key))
+					return false;
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Returns the POST parameter with the given key, or the defaultValue if it doesnt exist.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="defaultValue">The value to return if this parameter doesn't exist</param>
+		/// <returns></returns>
+		public string POST(string key, string defaultValue = null)
+		{
+			return POSTParams.ContainsKey(key) ? POSTParams[key] : defaultValue;
+		}
+
+		/// <summary>
+		/// Checks if all the given keys are present in the POST Parameters.
+		/// </summary>
+		/// <returns><c>false</c>, if at least one key is missing <c>false</c> otherwise.</returns>
+		/// <param name="keys">Keys.</param>
+		public bool HasPOST(params string[] keys)
+		{
+			foreach (string key in keys)
+			{
+				if (!POSTParams.ContainsKey(key))
+					return false;
+			}
+			return true;
 		}
 	}
 }
