@@ -33,13 +33,26 @@
 						<h4 data-toggle="collapse" data-target="#group-1">
 							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
 							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-							Location
+							Address
 						</h4>
 						<div id="group-1" class="list-group collapse in">
 							<div class="input-group">
 								<span class="input-group-addon fa fa-map-marker"></span>
-								<input type="text" class="form-control" placeholder="Search...">
+								<input type="text" id="address" class="form-control" placeholder="Search...">
 							</div>
+						</div>
+					</div>
+					
+					<div>
+						<h4>
+							Distance
+						</h4>
+						<div id="distance_slider" data-role="rangeslider">
+							<span>
+								<label for="price-max">Distance</label>
+								<label id="price-slider-value"></label>
+							</span>
+							<input class="my-slider" type="range" name="distance" id="distance" value="1000" min="0" max="1000">
 						</div>
 					</div>
 		
@@ -106,14 +119,14 @@
 					</div>
 
 					<div>
-						<input type="submit" class="btn btn-primary btn-block" value="Filter" />
+						<input type="submit" class="btn btn-primary btn-block" value="Filter" onclick="getEvents()"/>
 					</div>
 				</div> 
 				<!-- Filter Sidebar -->
 		
 				<!-- EventsView -->
 				<div class="col-sm-9">
-					<h3>Nearby Events for your Children! (@{x_results}?)</h3>
+					<h3>Nearby Events for your Children!</h3>
 
 					<!-- Tabs -->
 					<ul class="nav nav-tabs">
@@ -230,6 +243,34 @@
 				}
 			}
 
+			function filters()
+			{
+				return {
+					price:		$('#max-price').val(),
+					address:	$('#address').val()
+				}
+			}
+
+			function getEvents()
+			{
+				if (!$('#address').val())
+				{
+					// Address has not been set yet.
+					return;
+				}
+
+				waitingDialog.show("Loading...");
+				$.get({
+					url: 'api/events',
+					success: function (resp, satus, xhr) {
+						currentEvents = resp;
+						refreshEventList(resp);
+
+						waitingDialog.hide();
+					}
+				});
+			}
+
 			function updateMap()
 			{
 				// Update the map view
@@ -256,13 +297,7 @@
 
 			$(document).ready(function()
 			{
-				$.get({
-					url: 'api/events',
-					success: function (resp, satus, xhr) {
-						currentEvents = resp;
-						refreshEventList(resp);
-					}
-				});
+				getEvents();
 
 				$('a[href="#mapview"]').on('shown.bs.tab', function (e)
 				{
