@@ -8,40 +8,35 @@
 				<h4 class="modal-title">Welcome!</h4>
 			</div>
 			<div class="modal-body">
-				<form class="form-horizontal">
+				<form name="loginForm" id="loginForm" class="form-horizontal">
 					<fieldset>
 						<legend>Log in to your account</legend>
 						<div class="form-group">
-							<label for="inputEmail" class="col-lg-2 control-label">Email</label>
+							<label for="loginEmail" class="col-lg-2 control-label">Email</label>
 							<div class="col-lg-10">
 								<div class="input-group">
 									<i class="input-group-addon fa fa-envelope" aria-hidden="true"></i>
-									<input type="email" class="form-control" id="inputEmail" placeholder="Email" autocomplete="off">
+									<input type="email" class="form-control" name="loginEmail" id="loginEmail" placeholder="Email" autocomplete="off">
 								</div>
 							</div>
 						</div>
-						<!-- <div class="form-group">
-							<label for="inputUsername" class="col-lg-2 control-label">Username</label>
-							<div class="col-lg-10">
-								<input type="text" class="form-control fa fa-user" id="inputUsername" placeholder="Username" autocomplete="off">
-							</div>
-						</div> -->
 						<div class="form-group">
-							<label for="inputPassword" class="col-lg-2 control-label">Password</label>
+							<label for="loginPassword" class="col-lg-2 control-label">Password</label>
 							<div class="col-lg-10">
 								<div class="input-group">
 									<i class="input-group-addon fa fa-key" aria-hidden="true"></i>
-									<input type="password" class="form-control " id="inputPassword" placeholder="Password" autocomplete="off">
+									<input type="password" class="form-control " name="loginPassword" id="loginPassword" placeholder="Password" autocomplete="off">
 								</div>
 							</div>
 						</div>
 						<div class="col-lg-10 col-lg-offset-2">
 							<div class="checkbox">
 								<label>
-									<input type="checkbox"> Remember me
+									<input name="rememberMe" id="rememberMe" type="checkbox"> Remember me
 								</label>
 							</div>
 						</div>
+						<input type="submit" class="hidden" id="loginSubmit">
 					</fieldset>
 				</form>
 
@@ -61,7 +56,7 @@
 						</p>
 					</div>
 				</div>
-				<button type="submit" class="btn btn-primary btn-lg">Log In&nbsp;<span class="fa fa-sign-in"></span></button>
+				<label for="loginSubmit" class="btn btn-primary btn-lg">Log In&nbsp;<span class="fa fa-sign-in"></span></label>
 			</div>
 		</div> <!-- /Modal content-->
 

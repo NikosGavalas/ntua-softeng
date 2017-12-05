@@ -82,3 +82,13 @@ a.panel-heading {
 #main_content {
 	margin-top: 50px; 
 }
+
+@media screen and (max-width: 767px) {
+	.modal-dialog {
+		overflow-y: initial !important
+	}
+	.modal-body {
+		height: 325px;
+		overflow-y: auto;
+	}
+}
