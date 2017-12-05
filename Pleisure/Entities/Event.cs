@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 using HaathDB;
+using ChanceNET;
 using Newtonsoft.Json.Linq;
+
+
 
 namespace Pleisure
 {
@@ -39,6 +42,32 @@ namespace Pleisure
 		[DBReference("organizer_id", "user_id")]
 		public User Organizer;
 
+		[DBColumn("age_min")]
+		public int AgeMin;
+
+		[DBColumn("age_max")]
+		public int AgeMax;
+
+		public string Thumbnail = "http://via.placeholder.com/128x128";
+
+		public static Event Random(Chance c)
+		{
+			int ageMin = c.Integer(4, 18);
+			return new Event()
+			{
+				ID =			c.Natural(),
+				Title =			c.Sentence(capitalize: true),
+				Description =	c.Paragraph(),
+				Price =			c.Natural(100),
+				Latitude =		c.Latitude(min: 55.70, max: 55.79),
+				Longitude =		c.Longitude(min: 37.49, max: 37.74),
+				Address =		c.Address(numberFirst: false),
+				Duration =		c.PickOne(new int[] { 15, 30, 45, 60, 75, 90, 120, 180 }),
+				Thumbnail =		c.Avatar(GravatarDefaults.Identicon),
+				AgeMin =		ageMin,
+				AgeMax =		c.Integer(ageMin, 18)
+			};
+		}
 
 		public JToken Serialize()
 		{
@@ -55,7 +84,7 @@ namespace Pleisure
 				description = Description,
 				duration = Duration,
 				address = Address,
-				thumbnail = "http://via.placeholder.com/128x128"
+				thumbnail = Thumbnail
 			});
 
 			return obj;

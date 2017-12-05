@@ -54,8 +54,8 @@ namespace HttpNet
 		HttpListenerRequest request;
 		HttpListenerResponse response;
 
-		HttpListenerRequest Request { get { return request; } }
-		HttpListenerResponse Response { get { return response; } }
+		public HttpListenerRequest Request { get { return request; } }
+		public HttpListenerResponse Response { get { return response; } }
 
 		internal HttpRequest(WebServer webServer, HttpListenerRequest request, HttpListenerResponse response, Session session)
 		{

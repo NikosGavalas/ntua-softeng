@@ -57,9 +57,6 @@ namespace Pleisure
 			server.Add("/profile", pages.Profile);
 
 
-
-
-
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
 

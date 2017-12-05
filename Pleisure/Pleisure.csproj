@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ChanceNET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Chance.NET.1.0.1\lib\ChanceNET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HaathDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Haath.HaathDB.1.0.8\lib\HaathDB.dll</HintPath>
       <Private>True</Private>
@@ -61,9 +65,6 @@
       <HintPath>..\packages\XXHash.1.0.0\lib\net46\x86\XXHash.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ChanceNET">
-      <HintPath>..\packages\Chance.NET.1.0.0\lib\ChanceNET.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Api.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Entities\Kid.cs" />
     <Compile Include="Entities\ScheduledEvent.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Pages\HtmlProvider.cs" />
     <Compile Include="Pages\HtmlPage.cs" />
     <Compile Include="Program.cs" />
