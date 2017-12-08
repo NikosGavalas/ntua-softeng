@@ -101,6 +101,8 @@ namespace Pleisure
 			string password = req.POST("password");
 			string password2 = req.POST("password2");
 			string fullName = req.POST("full_name");
+			string address = req.POST("address");
+
 			int role;
 
 			if (password != password2 							// Check if passwords match
@@ -115,7 +117,7 @@ namespace Pleisure
 			}
 
 			// All looks good, register...
-			long userId = await Auth.RegisterUser(email, password, fullName, role);
+			long userId = await Auth.RegisterUser(email, password, fullName, role, address);
 
 			// Let's also set the session so the user stays logged in
 			UserSession session = req.Session as UserSession;
