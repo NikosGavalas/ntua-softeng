@@ -65,9 +65,14 @@ namespace Pleisure
 			UserSession session = request.Session as UserSession;
 			User user = await session.GetUser();
 			int eventId = GetEventId(request.Path);
-			
+
+			SelectQuery<Event> query = new SelectQuery<Event>()
+				.Where<SelectQuery<Event>>("event_id", eventId);
+
+			Event evt = (await Program.MySql().Execute(query)).FirstOrDefault(); 
+
 			string html = await GetHtml("event");
-			if (html == null || eventId < 0)
+			if (html == null || eventId < 0 || evt == null)
 			{
 				await request.SetStatusCode(HttpStatusCode.NotFound).Close();
 				return;
@@ -76,11 +81,9 @@ namespace Pleisure
 			request.SetStatusCode(HttpStatusCode.OK);
 			request.SetContentType(ContentType.Html);
 
-			HtmlPage page = new HtmlPage(html, user);
+			HtmlPage page = new EventPage(html, user, evt);
 
 			string rendered = await page.Render();
-
-			// TODO: also render over Event
 
 
 			await request.Write(rendered);

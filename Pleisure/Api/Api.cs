@@ -164,7 +164,8 @@ namespace Pleisure
 		{
 			req.SetContentType(ContentType.Json);
 
-			if (!req.HasGET("address"))
+			// Check if we have enough parameters for the search
+			if (!req.HasGET("address") && !req.HasGET("lat", "lng"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -172,9 +173,18 @@ namespace Pleisure
 			}
 			
 			int distance = int.Parse(req.GET("distance", "1000"));
-			Location location = await Google.Geocode(req.GET("address"));
+			Location location;
 
-			if (location == null)
+			if (req.HasGET("lat", "lng"))
+			{
+				location = new Location(double.Parse(req.GET("lat")), double.Parse(req.GET("lng")));
+			}
+			else
+			{
+				location = await Google.Geocode(req.GET("address"));
+			}
+
+			if (location == null || distance > 50000)
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
