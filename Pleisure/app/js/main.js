@@ -20,52 +20,26 @@ function spawnModal(modal) {
 	}
 }
 
-// TODO: wrap the following functions properly
-$('#loginForm').submit(function (event) {
-	event.preventDefault();
 
-	var inp = $('#loginForm').serializeArray();
+$('#signupForm').submit(function(event) {
+	var inp = $('#signupForm').serializeArray();
 
-	$.post('/login',
-		{
-			email: inp[0].value,
-			password: inp[1].value
-		},
-		function (resp, status) {
-			$('#loginModal').modal('hide');
-			location.href = "/events";
-		});
-});
-
-function registerLoginSignupHandlers(selector) {
-	$(selector).submit(function(event) {
+	if (inp[4].value != "on") {
+		alert('You need to accept the Terms of Usage in order to sign up.');
 		event.preventDefault();
+		return;
+	}
 
-		var inp = $(selector).serializeArray();
+	// TODO: also if (password fields are not the same)...
+	if (!inp[0].value || !inp[1].value || !inp[2].value || !inp[3].value) {
+		alert('Please fill all the fields.');
+		event.preventDefault();
+		return;
+	}
 
-		if (inp[5].value != "on") {
-			alert('You need to accept the Terms of Usage in order to sign up.');
-			return;
-		}
+	$('#signupRole').val($('#signupOrganizerPill').hasClass('active') ? 2 : 1);
 
-		$('.submitAwait').removeClass('fa fa-sign-in').addClass('fa fa-spinner fa-spin fa-fw');
+	$('.submitAwait').removeClass('fa fa-sign-in').addClass('fa fa-spinner fa-spin fa-fw');
 
-		$.post('/register',
-			{
-				email: inp[0].value,
-				password: inp[3].value,
-				password2: inp[4].value,
-				full_name: inp[1].value + ' ' + inp[2].value,
-				role: $('signupParentPill').hasClass('active') ? 1 : 2
-			},
-			function (resp, status) {
-				// TODO: check status, handle errors (maybe use classes 'alert alert-dismissible alert-success' to display messages)
-				$('#signupModal').modal('hide');
-				location.href = "/events";
-			});
-	});
-}
-
-registerLoginSignupHandlers('#signupParentForm');
-registerLoginSignupHandlers('#signupOrganizerForm');
+});
 
