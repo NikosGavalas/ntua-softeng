@@ -62,3 +62,7 @@
 .collapsed .parent-collapsed {
 	display: inline-block;
 }
+
+#filterSubmit {
+	margin-bottom: 200px;
+}

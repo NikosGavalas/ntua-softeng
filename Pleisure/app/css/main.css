@@ -73,6 +73,21 @@ a.panel-heading {
 }
 
 /*
+	Logo
+*/
+
+#mainLogo {
+	font-size: 500%; 
+	font-family: 'Nunito', sans-serif;
+	font-weight: bold;
+}
+
+.jumbotron { 
+    background-color: white; /* Orange */
+    color: #2fa4e7;
+}
+
+/*
 	Bug Fixing
 */
 #takis {
@@ -80,7 +95,7 @@ a.panel-heading {
 }
 
 #main_content {
-	margin-top: 50px; 
+	margin-top: 50px;
 }
 
 @media screen and (max-width: 767px) {
@@ -91,4 +106,8 @@ a.panel-heading {
 		height: 325px;
 		overflow-y: auto;
 	}
+}
+
+.blabla {
+	padding-bottom: 180px;
 }
