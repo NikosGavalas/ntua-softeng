@@ -10,6 +10,14 @@ body {
 	font-size: 30px;
 }
 
+.space-with-navbar {
+	margin-top: 70px;
+}
+
+.space-with-above {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
 /*
 	Slider
 */
