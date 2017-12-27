@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using HttpNet;
 using HaathDB;
+using ChanceNET;
 using Newtonsoft.Json.Linq;
 
 namespace Pleisure
@@ -101,6 +102,8 @@ namespace Pleisure
 			string password = req.POST("password");
 			string password2 = req.POST("password2");
 			string fullName = req.POST("full_name");
+			string address = req.POST("address");
+
 			int role;
 
 			if (password != password2 							// Check if passwords match
@@ -115,7 +118,7 @@ namespace Pleisure
 			}
 
 			// All looks good, register...
-			long userId = await Auth.RegisterUser(email, password, fullName, role);
+			long userId = await Auth.RegisterUser(email, password, fullName, role, address);
 
 			// Let's also set the session so the user stays logged in
 			UserSession session = req.Session as UserSession;
@@ -163,13 +166,9 @@ namespace Pleisure
 		public async Task Events(HttpRequest req)
 		{
 			req.SetContentType(ContentType.Json);
-
-			if (req.HasGET("id"))
-			{
-				
-			}
-
-			if (!req.HasGET("address"))
+			
+			// Check if we have enough parameters for the search
+			if (!req.HasGET("address") && !req.HasGET("lat", "lng"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -177,9 +176,18 @@ namespace Pleisure
 			}
 			
 			int distance = int.Parse(req.GET("distance", "1000"));
-			Location location = await Google.Geocode(req.GET("address"));
+			Location location;
 
-			if (location == null)
+			if (req.HasGET("lat", "lng"))
+			{
+				location = new Location(double.Parse(req.GET("lat")), double.Parse(req.GET("lng")));
+			}
+			else
+			{
+				location = await Google.Geocode(req.GET("address"));
+			}
+
+			if (location == null || distance > 50000)
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -224,6 +232,19 @@ namespace Pleisure
 			{
 				arr.Add(await evt.SerializeWithScheduled());
 			}
+
+
+
+#if DEBUG
+			Chance c = new Chance(); 
+			for (int i = 0; i < 50; i++)
+			{
+				int id = c.Natural();
+				Event evt = Event.Random(id, location.Latitude, location.Longitude, distance);
+				arr.Add(evt.Serialize());
+			}
+#endif
+
 
 			JToken response = JToken.FromObject(new
 			{

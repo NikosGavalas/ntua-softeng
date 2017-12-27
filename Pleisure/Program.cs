@@ -18,14 +18,11 @@ namespace Pleisure
 {
 	class Program
 	{
-		const string HOST = "*";
-		const int PORT = 80;
-
 		static WebServer server;
 
 		static void Main(string[] args)
 		{
-			server = WebServer.Create<UserSession>(HOST, PORT, sessionLifetime: 300);
+			server = WebServer.Create<UserSession>(Options.Host, Options.Port, sessionLifetime: 300);
 			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
 			
@@ -103,7 +100,8 @@ namespace Pleisure
 
 		public static MySqlConn MySql()
 		{
-			return new MySqlConn("gmantaos.com", "progtech", "@ntua123", "pleisure");
+			return new MySqlConn(Options.MysqlHost, Options.MysqlUser, Options.MysqlPass, 
+			                     Options.MysqlDb, Options.MysqlPort);
 		}
 	}
 }
