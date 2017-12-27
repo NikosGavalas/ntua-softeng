@@ -18,6 +18,7 @@ body {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+
 /*
 	Slider
 */
@@ -64,6 +65,71 @@ a.panel-heading {
 #map {
 	width: 100%;
 	height: 600px;
+}
+
+/*
+	Footer
+*/
+.footer {
+    /* padding: 50px 0 20px 0; */
+	/* background-color: #f2f9fe; */
+	position: relative;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
+
+.footer .title{
+	text-align: left;
+	color:#000;
+	font-size:25px;
+}
+.footer .social-icon{
+	padding:0px;
+	margin:0px;
+}
+.footer .social-icon a{
+	display:inline-block;
+	color:#000;
+	font-size:25px;
+	padding:5px;
+}
+.footer .acount-icon a{
+	display:block;
+	color:#000;
+	font-size:18px;
+	padding:5px;
+	text-decoration:none;
+}
+.footer .acount-icon .fa{
+	margin-right:25px;
+}
+.footer .category a {
+    text-decoration: none;
+    color: #000;
+    display: inline-block;
+    padding: 5px 20px;
+    margin: 1px;
+    border-radius:4px;
+    margin-top: 6px;
+    background-color: black;
+    border: solid 1px #000;
+}
+.footer .payment{
+	margin:0px;
+	padding:0px;
+	list-style-type:none
+}
+.footer .payment li{
+	list-style-type:none
+}
+.footer .payment li a {
+    text-decoration: none;
+    display: inline-block;
+    color: #000;
+    float: left;
+    font-size: 25px;
+    padding: 10px 10px;
 }
 
 /*
@@ -121,6 +187,10 @@ a.panel-heading {
 	padding-bottom: 180px;
 }
 
-#mainSearch {
+/* #mainSearch {
 	margin-bottom: 300px;
 }
+
+#completed_events {
+	margin-bottom: 150px;
+} */

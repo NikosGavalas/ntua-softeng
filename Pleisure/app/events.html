@@ -37,7 +37,7 @@
 							<div class="input-group">
 								<span class="input-group-addon fa fa-map-marker"></span>
 								@if{is_loggedin}
-								<input type="text" id="address" class="form-control" placeholder="@{user_location}">
+								<input type="text" id="address" class="form-control" value="@{user.address}">
 								@else{}
 								<input type="text" id="address" class="form-control" placeholder="Enter your location">								
 								@endif{}
@@ -126,7 +126,6 @@
 						</div>
 					</div>
 
-
 					<!-- <div>
 						<h4>
 							Recurring
@@ -152,7 +151,7 @@
 		
 				<!-- EventsView -->
 				<div class="col-sm-9">
-					<h3>Nearby Events for your Children!</h3>
+					<h3 class="icon-large icon-dog">Nearby Events for your Children!</h3>
 
 					<!-- Tabs -->
 					<ul class="nav nav-tabs">
@@ -313,11 +312,31 @@
 				});
 
 				for (var i = 0; i < currentEvents.length; i++) {
-					var marker = new google.maps.Marker({
-						position: currentEvents[i].coordinates,
-						map: map
-					});
+					createMarker(map, currentEvents[i]);					
 				}
+			}
+
+			function createMarker(map, currentEvent) {
+				var marker = new google.maps.Marker({
+					position: currentEvent.coordinates,
+					map: map
+				});
+
+				var infowindow = new google.maps.InfoWindow({
+					content: eventListItem(currentEvent)[0]
+				});
+
+				marker.addListener('click', function () {
+					window.location = "/event/" + currentEvent.id;
+				});
+
+				marker.addListener('mouseover', function () {
+					infowindow.open(map, this);
+				});
+
+				marker.addListener('mouseout', function () {
+					infowindow.close();
+				});
 			}
 
 			function initMap()

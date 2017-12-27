@@ -21,7 +21,7 @@ function spawnModal(modal) {
 }
 
 
-$('#signupForm').submit(function(event) {
+$('#signupForm').submit(function (event) {
 	var inp = $('#signupForm').serializeArray();
 
 	if (inp[4].value != "on") {
@@ -46,3 +46,4 @@ $('#signupForm').submit(function(event) {
 $(document).ready(function () {
 	$('#datetimepicker1').datetimepicker();
 });
+

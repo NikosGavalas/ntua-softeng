@@ -22,9 +22,9 @@
 				<br>
 				<form class="form-inline">
 					<div id="mainSearch" class="input-group">
-						<input type="text" size="70" class="form-control" placeholder="Αναζητείστε εκδηλώσεις κοντά σας...">						
+						<input id="searchInput" type="text" size="70" class="form-control" placeholder="Αναζητείστε εκδηλώσεις κοντά σας...">						
 						<div class="input-group-btn">
-							<button type="button" class="btn btn-primary">
+							<button type="button" class="btn btn-primary" onclick="search()">
 								<span class="fa fa-search" aria-hidden="true"></span>
 								<b>&nbsp;Search</b>
 							</button>
@@ -38,6 +38,24 @@
 	<!-- Footer -->
 	@{html.footer}
 	<!-- /Footer -->
+
+	<script>
+		function search() {
+			/* $.get({
+				url: 'api/events',
+				data: {
+					price: 1000,
+					address: $('#searchInput').val(),
+					distance: 50000,
+					age: 17 // any when supported...
+				},
+				success:  function (resp) {
+					window.location = '/events';
+				}
+			}); */
+		}
+	</script>
+	
 </body>
 
 </html>

@@ -19,25 +19,25 @@
 			<div class="row">
 				<div class="col-md-4">	
 					<div class="panel panel-default">
-						<div class="panel-heading">@{user_name}</div>
+						<div class="panel-heading">@{user.name}</div>
 						<div class="panel-body">
 							<!-- http://via.placeholder.com/256x256 -->
-							<img src="@{user_avatar}" class="img-rounded center-block img-responsive">
+							<img src="@{user.avatar}" class="img-rounded center-block img-responsive">
 						</div>
 						<div class="panel-body">
-							Email: @{user_email}
+							Email: @{user.email}
 						</div>
 						<div class="panel-body">
-							Address: @{user_address}
+							Address: @{user.address}
 						</div>
 						<div class="panel-body">
-							Account Balance: @{user_credits} <i class="fa fa-money" aria-hidden="true"></i>
+							Account Balance: @{user.credits} <i class="fa fa-money" aria-hidden="true"></i>
 						</div>
 					</div>
 					<!-- <a href="#TODOeditProfileModal" style="width:100%;" class="btn btn-success btn-lg">Edit Profile</a> -->
 				</div>
 				<div class="col-md-8">
-					<div class="panel panel-default">
+					<div id="users_kids" class="panel panel-default">
 						<div class="panel-heading clearfix">
 							<div class="row">
 								<div class="col-md-6">
@@ -51,54 +51,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="panel-body">
-							<div class="media">
-								<div class="media-left">
-									<img src="img_avatar1.png" class="media-object" style="width:60px">
-								</div>
-								<div class="media-body">
-									<h4 class="media-heading">John Doe</h4>
-									<p>Lorem ipsum...</p>
-								</div>
-							</div>
-						</div>
-						<div class="panel-body">
-							<div class="media">
-								<div class="media-left">
-									<img src="img_avatar1.png" class="media-object" style="width:60px">
-								</div>
-								<div class="media-body">
-									<h4 class="media-heading">John Doe</h4>
-									<p>Lorem ipsum...</p>
-								</div>
-							</div>
-						</div>
-						<div class="panel-body">
-							<div class="media">
-								<div class="media-left">
-									<img src="img_avatar1.png" class="media-object" style="width:60px">
-								</div>
-								<div class="media-body">
-									<h4 class="media-heading">John Doe</h4>
-									<p>Lorem ipsum...</p>
-								</div>
-							</div>
-						</div>
-						<div class="panel-body">
-							<div class="media">
-								<div class="media-left">
-									<img src="img_avatar1.png" class="media-object" style="width:60px">
-								</div>
-								<div class="media-body">
-									<h4 class="media-heading">John Doe</h4>
-									<p>Lorem ipsum...</p>
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row space-with-above">
+
+			<div id="completed_events" class="row space-with-above">
 				<div class="col-md-12">
 					<div class="panel panel-default">
 						<div class="panel-heading">
@@ -112,11 +69,10 @@
 			</div>
 		</div>
 			
-		<div class="space-with-above">
-			<!-- Footer -->
-			@{html.footer}
-			<!-- /Footer -->
-		</div>
-	</body>
+		<!-- Footer -->
+		@{html.footer}
+		<!-- /Footer -->
 
+		<script src="js/fetchkids.js"></script>
+	</body>
 </html>
