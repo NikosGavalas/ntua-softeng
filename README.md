@@ -32,7 +32,7 @@ Add the following to your NuGet sources: `https://nuget.gmantaos.com/api/v2/`
 	- Obviously...
 - [HaathDB](https://git.gmantaos.com/Haath/HaathDB)
 	- MySQL wrapper for async operations and type conversion
-- [Chance.NET](https://git.gmantaos.com/Haath/Chance.NET)
+- [Chance.NET](https://github.com/gmantaos/Chance.NET)
 	- Random data generation for populating the database and running tests
-- [Watermark](https://git.gmantaos.com/ProgTech/Watermark)
+- [Watermark](https://bitbucket.org/teamdroptabel/watermark)
 	- Library for watermarking the photos of organizers
