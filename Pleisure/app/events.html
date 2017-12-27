@@ -36,7 +36,11 @@
 						<div id="group-1" class="list-group collapse in">
 							<div class="input-group">
 								<span class="input-group-addon fa fa-map-marker"></span>
-								<input type="text" id="address" class="form-control" placeholder="Search...">
+								@if{is_loggedin}
+								<input type="text" id="address" class="form-control" placeholder="@{user_location}">
+								@else{}
+								<input type="text" id="address" class="form-control" placeholder="Enter your location">								
+								@endif{}
 							</div>
 						</div>
 					</div>
@@ -50,17 +54,15 @@
 								<label class="slider-value"></label>
 								&nbsp;km
 							</span>
-							<input class="my-slider" type="range" name="distance" id="distance" value="100" min="0" max="100">
+							<input class="my-slider" type="range" name="distance" id="distance" value="100" min="0" max="50">
 						</div>
 					</div>
 		
 					<div>
-						<h4 data-toggle="collapse" data-target="#group-2">
-							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
-							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+						<h4>
 							Maximum Price
 						</h4>
-						<div id="group-2" class="list-group collapse" data-role="rangeslider">
+						<div id="group-2" data-role="rangeslider">
 							<span>
 								<label class="slider-value"></label>
 								&nbsp;
@@ -71,12 +73,11 @@
 					</div>
 		
 					<div>
-						<h4 data-toggle="collapse" data-target="#age">
-							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
-							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
+						<h4>
 							Age Range
 						</h4>
-						<select class="form-control list-group collapse" id="age" name="age">
+						<select class="form-control" id="age" name="age">
+							<option>Any</option>
 							<option>4</option>
 							<option>5</option>
 							<option>6</option>
@@ -95,12 +96,10 @@
 					</div>
 		
 					<div>
-						<h4 data-toggle="collapse" data-target="#group-4">
-							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+						<h4>
 							Categories
 						</h4>
-						<div id="group-4" class="list-group collapse">
+						<div id="group-4">
 							<select id="category-selector" class="form-control">
 								<option value="all">All</option>								
 								<option value="sports">Sports</option>
@@ -114,12 +113,25 @@
 					</div>
 
 					<div>
-						<h4 data-toggle="collapse" data-target="#group-5">
-							<i class="fa fa-fw fa-caret-right parent-collapsed"></i>
-							<i class="fa fa-fw fa-caret-down parent-expanded"></i>
+						<h4>
+							Date
+						</h4>
+						<div class="form-group">
+							<div class='input-group date' id='datetimepicker1'>
+								<input type='text' class="form-control" />
+								<span class="input-group-addon">
+									<i class="fa fa-calendar" aria-hidden="true"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- <div>
+						<h4>
 							Recurring
 						</h4>
-						<form id="group-5" class="list-group collapse">
+						<form id="group-5">
 							<div class="radio">
 								<label><input id="optionsRadios1" name="optradio" type="radio" checked="">Yes</label>
 							</div>
@@ -130,10 +142,10 @@
 								<label><input id="optionsRadios3" name="optradio" type="radio" checked="">Display All</label>
 							</div>
 						</form>
-					</div>
+					</div> -->
 
 					<div>
-						<input id="filterSubmit" type="submit" class="btn btn-primary btn-block" value="Filter" onclick="getEvents()"/>
+						<input id="filterSubmit" type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;" value="Search" onclick="getEvents()"/>
 					</div>
 				</div> 
 				<!-- Filter Sidebar -->
@@ -157,7 +169,7 @@
 						<div class="tab-pane fade active in" id="listview">
 
 							<!-- Pagination -->
-							<div class="container-fluid">
+							<!-- <div class="container-fluid">
 								<div class="row">
 									<div class="col-md-12">
 										<ul class="pagination">
@@ -185,7 +197,7 @@
 										</ul>
 									</div>
 								</div>
-							</div><!-- /Pagination -->
+							</div> --><!-- /Pagination -->
 							
 						</div><!-- /Items ListView -->
 						

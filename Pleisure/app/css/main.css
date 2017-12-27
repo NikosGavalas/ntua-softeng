@@ -88,6 +88,7 @@ a.panel-heading {
 	font-size: 500%; 
 	font-family: 'Nunito', sans-serif;
 	font-weight: bold;
+	padding-top: 100px;
 }
 
 .jumbotron { 
@@ -118,4 +119,8 @@ a.panel-heading {
 
 .blabla {
 	padding-bottom: 180px;
+}
+
+#mainSearch {
+	margin-bottom: 300px;
 }

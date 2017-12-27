@@ -1,7 +1,11 @@
 ﻿<style>
 .footer {
-    padding: 50px 0 20px 0;
+    /* padding: 50px 0 20px 0; */
 	background-color: #f2f9fe;
+	position: sticky;
+	bottom: 0;
+	left: 0;
+	width: 100%;
 }
 
 .footer .title{
@@ -92,7 +96,7 @@
 			<div class="col-sm-4">
 				<h3 class="title">Payment</h3>
 				<p>We accept paypal and bitcoin as methods of payment.</p>
-				<p>Buy credits:</p>
+				<p>Buy <i class="fa fa-money" aria-hidden="true"></i>:</p>
 				<ul class="payment">
 					<li>
 						<a href="#">
@@ -113,8 +117,11 @@
 
 
 <!-- Js Includes -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> <!-- older version of jquery for the datetime picker.. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script> <!-- for the datetime picker -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
 <script src="js/loading_modal.js"></script>
 <script src="js/filters.js"></script>
 <script src="js/main.js"></script>
