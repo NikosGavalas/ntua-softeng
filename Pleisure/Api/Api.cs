@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using HttpNet;
 using HaathDB;
+using ChanceNET;
 using Newtonsoft.Json.Linq;
 
 namespace Pleisure
@@ -55,6 +56,8 @@ namespace Pleisure
 				session.UserID = (int)user.ID;
 
 				await req.Redirect(onSuccess);
+
+				Console.WriteLine("User logged in: " + user.FullName);
 			}
 		}
 
@@ -101,6 +104,8 @@ namespace Pleisure
 			string password = req.POST("password");
 			string password2 = req.POST("password2");
 			string fullName = req.POST("full_name");
+			string address = req.POST("address");
+
 			int role;
 
 			if (password != password2 							// Check if passwords match
@@ -115,13 +120,15 @@ namespace Pleisure
 			}
 
 			// All looks good, register...
-			long userId = await Auth.RegisterUser(email, password, fullName, role);
+			long userId = await Auth.RegisterUser(email, password, fullName, role, address);
 
 			// Let's also set the session so the user stays logged in
 			UserSession session = req.Session as UserSession;
 			session.UserID = userId;
 
 			await req.Redirect(onSuccess);
+
+			Console.WriteLine("User registered: " + fullName);
 		}
 
 		public async Task SignOut(HttpRequest req)
@@ -163,8 +170,9 @@ namespace Pleisure
 		public async Task Events(HttpRequest req)
 		{
 			req.SetContentType(ContentType.Json);
-
-			if (!req.HasGET("address"))
+			
+			// Check if we have enough parameters for the search
+			if (!req.HasGET("address") && !req.HasGET("lat", "lng"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -172,9 +180,18 @@ namespace Pleisure
 			}
 			
 			int distance = int.Parse(req.GET("distance", "1000"));
-			Location location = await Google.Geocode(req.GET("address"));
+			Location location;
 
-			if (location == null)
+			if (req.HasGET("lat", "lng"))
+			{
+				location = new Location(double.Parse(req.GET("lat")), double.Parse(req.GET("lng")));
+			}
+			else
+			{
+				location = await Google.Geocode(req.GET("address"));
+			}
+
+			if (location == null || distance > 50000)
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -184,10 +201,10 @@ namespace Pleisure
 			SelectQuery<Event> query = new SelectQuery<Event>();
 
 			// Filter by distance
-			query.Where("DISTANCE(lat, lng, @loc_lat, @loc_lng) < @distance");
-			query.AddParameter("@loc_lat", location.Latitude);
-			query.AddParameter("@loc_lng", location.Longitude);
-			query.AddParameter("@distance", distance);
+			query.Where("DISTANCE(lat, lng, @loc_lat, @loc_lng) < @distance")
+				.AddParameter("@loc_lat", location.Latitude)
+				.AddParameter("@loc_lng", location.Longitude)
+				.AddParameter("@distance", distance);
 
 			// Filter by price
 			if (req.HasGET("price"))
@@ -212,12 +229,6 @@ namespace Pleisure
 				query.Where("duration", WhereRelation.UpTo, req.GET("duration_max"));
 			}
 
-			// Filter by id
-			if (req.HasGET("id"))
-			{
-				query.Where("id", req.GET("id"));
-			}
-
 			// Perform query and build the response object
 			JArray arr = new JArray();
 			List<Event> events = await Program.MySql().Execute(query);
@@ -225,6 +236,19 @@ namespace Pleisure
 			{
 				arr.Add(await evt.SerializeWithScheduled());
 			}
+
+
+
+#if DEBUG
+			Chance c = new Chance(); 
+			for (int i = 0; i < 50; i++)
+			{
+				int id = c.Natural();
+				Event evt = Event.Random(id, location.Latitude, location.Longitude, distance);
+				arr.Add(evt.Serialize());
+			}
+#endif
+
 
 			JToken response = JToken.FromObject(new
 			{

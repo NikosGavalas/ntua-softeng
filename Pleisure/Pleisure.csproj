@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ChanceNET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Chance.NET.1.1.3\lib\ChanceNET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HaathDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Haath.HaathDB.1.0.8\lib\HaathDB.dll</HintPath>
       <Private>True</Private>
@@ -57,12 +61,13 @@
       <HintPath>..\packages\UnixSignalWaiter.0.0.1\lib\UnixSignalWaiter.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Watermark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ProgTech.Watermak.1.0.0\lib\Watermark.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="XXHash, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\XXHash.1.0.0\lib\net46\x86\XXHash.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="ChanceNET">
-      <HintPath>..\packages\Chance.NET.1.0.0\lib\ChanceNET.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -70,22 +75,26 @@
     <Compile Include="Api\Auth.cs" />
     <Compile Include="Api\Google.cs" />
     <Compile Include="Api\Location.cs" />
+    <Compile Include="Content\WatermarkedResourceProvider.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\Kid.cs" />
     <Compile Include="Entities\ScheduledEvent.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Pages\HtmlProvider.cs" />
     <Compile Include="Pages\HtmlPage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StaticResourceProvider.cs" />
+    <Compile Include="Content\StaticResourceProvider.cs" />
     <Compile Include="UserSession.cs" />
+    <Compile Include="Pages\EventPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\eventimg\" />
     <Folder Include="app\img\" />
   </ItemGroup>
   <ItemGroup>

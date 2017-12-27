@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using HaathDB;
 using Newtonsoft.Json.Linq;
 
+using ChanceNET;
+
 namespace Pleisure
 {
 	[DBTable("kids")]
@@ -40,6 +42,7 @@ namespace Pleisure
 
 		public JToken Serialize()
 		{
+			Chance c = new Chance(ID);
 			return JToken.FromObject(new
 			{
 				kid_id = ID,
@@ -50,7 +53,8 @@ namespace Pleisure
 				{
 					id = Parent.ID,
 					name = Parent.FullName
-				}
+				},
+				avatar = c.Avatar(GravatarDefaults.Identicon)
 			});
 		}
 	}
