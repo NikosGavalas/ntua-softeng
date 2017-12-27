@@ -71,7 +71,8 @@ namespace Pleisure
 		/// <param name="role"></param>
 		/// <param name="credits"></param>
 		/// <returns></returns>
-		public static async Task<long> RegisterUser(string email, string password, string fullName, int role, int credits = 0)
+		public static async Task<long> RegisterUser(string email, string password, string fullName, 
+		                                            int role, string address = "", int credits = 0)
 		{
 			if (await EmailTaken(email))
 			{
@@ -87,6 +88,7 @@ namespace Pleisure
 				.Value("salt", salt)
 				.Value("full_name", fullName)
 				.Value("role", role)
+		     	.Value("address", address)
 				.Value("credits", credits);
 
 			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);

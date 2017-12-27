@@ -38,22 +38,28 @@ namespace Pleisure
 			get { return user != null; }
 		}
 
-		[HtmlVariable("user_email")]
+		[HtmlVariable("user.email")]
 		public string UserEmail
 		{
 			get { return user?.Email; }
 		}
 
-		[HtmlVariable("user_name")]
+		[HtmlVariable("user.name")]
 		public string UserName
 		{
 			get { return user.FullName; }
 		}
 
-		[HtmlVariable("user_credits")]
+		[HtmlVariable("user.credits")]
 		public int UserCredits
 		{
 			get { return user != null ? user.Credits : 0; }
+		}
+
+		[HtmlVariable("user.address")]
+		public string UserAddress
+		{
+			get { return user != null ? user.Address : ""; }
 		}
 
 		[HtmlVariable("html.navbar")]

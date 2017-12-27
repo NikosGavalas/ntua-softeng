@@ -32,6 +32,9 @@ namespace Pleisure
 		[DBColumn("salt")]
 		public string Salt;
 
+		[DBColumn("address")]
+		public string Address;
+
 		public Task<List<Kid>> GetKids()
 		{
 			SelectQuery<Kid> query = new SelectQuery<Kid>();

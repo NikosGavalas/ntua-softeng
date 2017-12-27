@@ -1,6 +1,7 @@
 # Pleisure
 
 ## Team
+
 |Member|AM|Development|Secondary Task|
 |---|---|---|---|
 |[Grigoris Mantaos](https://git.gmantaos.com/Haath)|03113171|Back-End||
@@ -10,24 +11,28 @@
 |[Karteris Antonis](https://git.gmantaos.com/UphillD)|03112076|Module| |
 
 ## Reports
+
 |Report|Deadline|
 |------|--------|
-|[Requirement Analysis](https://git.gmantaos.com/ProgTech/Pleisure/src/master/docs/RequirementsAnalysisDocument.md)|15/11/17|
-|[Technical Specifications](https://git.gmantaos.com/ProgTech/Pleisure/src/master/docs/TechnicalSpecificationsDocument.md)|13/12/17|
+|[Requirement Analysis](https://bitbucket.org/teamdroptabel/pleisure/src/7cb6c296062024cafe0498d5c44a37eba3f6001c/docs/RequirementsAnalysisDocument.md?at=master&fileviewer=file-view-default)|7/1/2017|
+|[Technical Specifications](https://bitbucket.org/teamdroptabel/pleisure/src/7cb6c296062024cafe0498d5c44a37eba3f6001c/docs/TechnicalSpecificationsDocument.md?at=master&fileviewer=file-view-default)|7/1/2017|
 
 ## Links
+
 - [Documentation](https://git.gmantaos.com/ProgTech/Pleisure/wiki)
 - [Project description](https://courses.softlab.ntua.gr/softeng/2017b/Project/project.pdf)
 - [Hosting](https://progtech.gmantaos.com) (soon)
 - [Slack](https://progtechteam.slack.com)
 
 ## Dependencies
+
 Add the following to your NuGet sources: `https://nuget.gmantaos.com/api/v2/`
+
 - [Newtonsoft.Json](https://www.newtonsoft.com/json)
 	- Obviously...
 - [HaathDB](https://git.gmantaos.com/Haath/HaathDB)
 	- MySQL wrapper for async operations and type conversion
-- [Chance.NET](https://git.gmantaos.com/Haath/Chance.NET)
+- [Chance.NET](https://github.com/gmantaos/Chance.NET)
 	- Random data generation for populating the database and running tests
-- [Watermark](https://git.gmantaos.com/ProgTech/Watermark)
+- [Watermark](https://bitbucket.org/teamdroptabel/watermark)
 	- Library for watermarking the photos of organizers
