@@ -14,8 +14,8 @@
 
 |Report|Deadline|
 |------|--------|
-|[Requirement Analysis](https://git.gmantaos.com/ProgTech/Pleisure/src/master/docs/RequirementsAnalysisDocument.md)|15/11/17|
-|[Technical Specifications](https://git.gmantaos.com/ProgTech/Pleisure/src/master/docs/TechnicalSpecificationsDocument.md)|13/12/17|
+|[Requirement Analysis](https://bitbucket.org/teamdroptabel/pleisure/src/7cb6c296062024cafe0498d5c44a37eba3f6001c/docs/RequirementsAnalysisDocument.md?at=master&fileviewer=file-view-default)|7/1/2017|
+|[Technical Specifications](https://bitbucket.org/teamdroptabel/pleisure/src/7cb6c296062024cafe0498d5c44a37eba3f6001c/docs/TechnicalSpecificationsDocument.md?at=master&fileviewer=file-view-default)|7/1/2017|
 
 ## Links
 
