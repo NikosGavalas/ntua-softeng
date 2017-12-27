@@ -39,7 +39,9 @@ namespace Pleisure
 
 			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
 			server.Add("/img/*", png.OnRequest);
-			
+
+			WatermarkedResourceProvider evtImg = new WatermarkedResourceProvider(GetPath("app/eventimg"), "/eventimg");
+			server.Add("/eventimg/*", evtImg.OnRequest);
 
 			/*
 			 * Register API

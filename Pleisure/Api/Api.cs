@@ -56,6 +56,8 @@ namespace Pleisure
 				session.UserID = (int)user.ID;
 
 				await req.Redirect(onSuccess);
+
+				Console.WriteLine("User logged in: " + user.FullName);
 			}
 		}
 
@@ -125,6 +127,8 @@ namespace Pleisure
 			session.UserID = userId;
 
 			await req.Redirect(onSuccess);
+
+			Console.WriteLine("User registered: " + fullName);
 		}
 
 		public async Task SignOut(HttpRequest req)

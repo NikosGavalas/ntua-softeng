@@ -8,6 +8,11 @@ namespace Pleisure
 	{
 		Event evt;
 
+		[HtmlVariable("event.id")]
+		public int EventId
+		{
+			get { return evt.ID; }
+		}
 
 		[HtmlVariable("event.title")]
 		public string EventTitle
@@ -75,6 +80,11 @@ namespace Pleisure
 			get { return evt.AgeMax; }
 		}
 
+		[HtmlVariable("event.image")]
+		public string EventImage
+		{
+			get { return "/eventimg/" + evt.ID; }
+		}
 
 		public EventPage(string html, User user, Event evt) : base(html, user)
 		{

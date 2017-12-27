@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using HttpNet;
 using HaathDB;
+using ChanceNET;
 
 namespace Pleisure
 {
@@ -74,7 +75,8 @@ namespace Pleisure
 #if DEBUG
 			if (evt == null)
 			{
-				evt = Pleisure.Event.Random(eventId);
+				Chance c = new Chance();
+				evt = Pleisure.Event.Random(eventId, c.Latitude(), c.Longitude(), c.Natural());
 			}
 
 #endif
