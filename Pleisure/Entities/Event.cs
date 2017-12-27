@@ -50,12 +50,13 @@ namespace Pleisure
 
 		public string Thumbnail = "http://via.placeholder.com/128x128";
 
-		public static Event Random(Chance c)
+		public static Event Random(int id)
 		{
+			Chance c = new Chance(id);
 			int ageMin = c.Integer(4, 18);
 			return new Event()
 			{
-				ID =			c.Natural(),
+				ID =			id,
 				Title =			c.Sentence(capitalize: true),
 				Description =	c.Paragraph(),
 				Price =			c.Natural(100),

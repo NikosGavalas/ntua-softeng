@@ -164,6 +164,11 @@ namespace Pleisure
 		{
 			req.SetContentType(ContentType.Json);
 
+			if (req.HasGET("id"))
+			{
+				
+			}
+
 			if (!req.HasGET("address"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
@@ -184,10 +189,10 @@ namespace Pleisure
 			SelectQuery<Event> query = new SelectQuery<Event>();
 
 			// Filter by distance
-			query.Where("DISTANCE(lat, lng, @loc_lat, @loc_lng) < @distance");
-			query.AddParameter("@loc_lat", location.Latitude);
-			query.AddParameter("@loc_lng", location.Longitude);
-			query.AddParameter("@distance", distance);
+			query.Where("DISTANCE(lat, lng, @loc_lat, @loc_lng) < @distance")
+				.AddParameter("@loc_lat", location.Latitude)
+				.AddParameter("@loc_lng", location.Longitude)
+				.AddParameter("@distance", distance);
 
 			// Filter by price
 			if (req.HasGET("price"))
@@ -210,12 +215,6 @@ namespace Pleisure
 			if (req.HasGET("duration_max"))
 			{
 				query.Where("duration", WhereRelation.UpTo, req.GET("duration_max"));
-			}
-
-			// Filter by id
-			if (req.HasGET("id"))
-			{
-				query.Where("id", req.GET("id"));
 			}
 
 			// Perform query and build the response object
