@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace HttpNet
 {
@@ -206,9 +207,21 @@ namespace HttpNet
 		/// <param name="key"></param>
 		/// <param name="defaultValue">The value to return if this parameter doesn't exist</param>
 		/// <returns></returns>
-		public string POST(string key, string defaultValue = null)
+		public async Task<string> POST(string key, string defaultValue = null)
 		{
-			return POSTParams.ContainsKey(key) ? POSTParams[key] : defaultValue;
+			await RequestBody();
+			if (POSTParams.ContainsKey(key))
+			{
+				return POSTParams[key];
+			}
+
+			if (GetContentData(key) != null)
+			{
+				StreamReader r = new StreamReader(await GetContentData(key));
+				return await r.ReadToEndAsync();
+			}
+
+			return defaultValue;
 		}
 
 		/// <summary>
@@ -225,5 +238,42 @@ namespace HttpNet
 			}
 			return true;
 		}
+
+		public async Task<Stream> GetContentData(string key)
+		{
+			string boundary = "--" + Request.ContentType.Split(';')[1].Split('=')[1];
+
+			string[] lines = (await RequestBody()).Split('\n');
+
+			for (int i = 0; i < lines.Length; i++)
+			{
+				Regex regex = new Regex(string.Format(@"Content-Disposition: form-data; name=""{0}""", key));
+				Match m = regex.Match(lines[i]);
+
+				if (m.Success)
+				{
+					i++;
+					if (lines[i].StartsWith("Content-Type:"))
+						i += 2;
+					else
+						i++;
+
+					StringBuilder output = new StringBuilder();
+
+					while (i < lines.Length && !lines[i].StartsWith("----------------------------"))
+					{
+						output.AppendLine(lines[i++]);
+					}
+
+					string str = output.ToString();
+					str = str.Substring(0, str.Length - 1);
+					MemoryStream outStream = new MemoryStream(Request.ContentEncoding.GetBytes(str));
+					outStream.Position = 0;
+					return outStream;
+				}
+			}
+			return null;
+		}
+
 	}
 }
