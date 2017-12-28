@@ -63,5 +63,10 @@ namespace Pleisure
 				return Environment.GetEnvironmentVariable("MYSQL_DB") ?? "pleisure";
 			}
 		}
+
+		public static string Gravatar(string email)
+		{
+			return string.Format("https://www.gravatar.com/avatar/{0}?d=retro", Auth.MD5(email));
+		}
 	}
 }

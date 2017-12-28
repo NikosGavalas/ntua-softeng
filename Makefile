@@ -20,6 +20,11 @@ FLAGS= /p:PostBuildEvent= /verbosity:minimal /p:OutputPath=$(OUTPUT_DIR) /p:Conf
 targets:	nuget	build
 
 
+docker:		targets
+	-docker rmi pleisure
+	docker build -t pleisure .
+
+
 # Restore packages
 nuget:	$(SOLUTION).sln
 	@$(NUGET) sources add -Name private -Source https://nuget.gmantaos.com/api/v2/ 2> /dev/null || true

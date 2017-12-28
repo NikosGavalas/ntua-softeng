@@ -39,7 +39,7 @@ namespace Pleisure
 		{
 			get
 			{
-				return string.Format("https://www.gravatar.com/avatar/{0}?d=retro", Auth.MD5(Email));
+				return Options.Gravatar(Email);
 			}
 		}
 
