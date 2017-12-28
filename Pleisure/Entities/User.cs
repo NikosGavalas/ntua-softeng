@@ -35,6 +35,14 @@ namespace Pleisure
 		[DBColumn("address")]
 		public string Address;
 
+		public string Avatar 
+		{
+			get
+			{
+				return string.Format("https://www.gravatar.com/avatar/{0}?d=retro", Auth.MD5(Email));
+			}
+		}
+
 		public Task<List<Kid>> GetKids()
 		{
 			SelectQuery<Kid> query = new SelectQuery<Kid>();

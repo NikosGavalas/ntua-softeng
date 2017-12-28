@@ -25,8 +25,6 @@ namespace Pleisure
 			server = WebServer.Create<UserSession>(Options.Host, Options.Port, sessionLifetime: 300);
 			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
-			
-
 
 			/*
 			 * Register content providers

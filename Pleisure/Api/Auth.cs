@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 using XXHash;
 using HaathDB;
@@ -152,6 +153,32 @@ namespace Pleisure
 			{
 				return random.Value.Next(min, max);
 			}
+		}
+
+		public static byte[] MD5(byte[] text)
+		{
+			MD5 md5 = System.Security.Cryptography.MD5.Create();
+			return md5.ComputeHash(text);
+		}
+
+		public static string MD5(string text, Encoding encoding)
+		{
+			byte[] input = encoding.GetBytes(text);
+			byte[] hash = MD5(input);
+
+			StringBuilder hex = new StringBuilder();
+
+			for (int i = 0; i < hash.Length; i++)
+			{
+				hex.Append(hash[i].ToString("x2"));
+			}
+
+			return hex.ToString();
+		}
+
+		public static string MD5(string text)
+		{
+			return MD5(text, Encoding.ASCII);
 		}
 	}
 }

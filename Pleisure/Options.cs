@@ -20,7 +20,7 @@ namespace Pleisure
 		{
 			get
 			{
-				return int.Parse(Environment.GetEnvironmentVariable("HTTP_PORT") ?? "80");
+				return int.Parse(Environment.GetEnvironmentVariable("HTTP_PORT") ?? "8080");
 			}
 		}
 

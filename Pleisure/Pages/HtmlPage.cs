@@ -62,6 +62,12 @@ namespace Pleisure
 			get { return user != null ? user.Address : ""; }
 		}
 
+		[HtmlVariable("user.avatar")]
+		public string UserAvatar
+		{
+			get { return user?.Avatar; }
+		}
+
 		[HtmlVariable("html.navbar")]
 		public Task<string> Navbar { get { return GetHtml("navbar"); } }
 
