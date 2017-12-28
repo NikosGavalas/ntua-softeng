@@ -50,14 +50,14 @@ namespace Pleisure
 			byte[] watermarkedData = new byte[watermarked.Length];
 			watermarked.Read(watermarkedData, 0, (int)watermarked.Length);
 
-			// Then write the file to the response stream
-			await request.Write(watermarkedData);
-
 			// Set the appropriate Content-Type
 			request.SetContentTypeByExtension(ContentType.Image, "png");
 
 			// If we managed to read the file, first set the headers
 			request.SetStatusCode(HttpStatusCode.OK);
+
+			// Then write the file to the response stream
+			await request.Write(watermarkedData);
 		}
 	}
 }
