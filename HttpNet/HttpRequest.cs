@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Text.RegularExpressions;
 
+using HttpNet.Extensions;
+
 namespace HttpNet
 {
 	public class HttpRequest
@@ -35,21 +37,12 @@ namespace HttpNet
 			get { return Utils.GetUrlParams(request.RawUrl); } 
 		}
 
-		/// <summary>
-		/// The url-encoded POST parameters in the body of the request.
-		/// <para>WARNING: await reading the RequestBody() first!!!</para>
-		/// </summary>
-		public Dictionary<string, string> POSTParams
-		{
-			get { return Utils.GetUrlParams("x?" + RequestBody().Result); }
-		}
-
 		public CookieCollection Cookies
 		{
 			get { return request.Cookies; }
 		}
 		
-		string _requestBody = null;
+		byte[] _requestBody = null;
 
 		WebServer webServer;
 		HttpListenerRequest request;
@@ -68,16 +61,36 @@ namespace HttpNet
 			Path = AbsolutePath;
 		}
 
-		public async Task<string> RequestBody()
+		public async Task<byte[]> RequestBody()
 		{
 			if (_requestBody == null)
 			{
-				using (StreamReader reader = new StreamReader(request.InputStream, Encoding.Default))
+				MemoryStream ms = new MemoryStream();
+				byte[] buffer = new byte[0xFFFF];
+
+				int i = 0;
+				do
 				{
-					_requestBody = await reader.ReadToEndAsync();
-				}
+					i = await Request.InputStream.ReadAsync(buffer, 0, 0xFFFF);
+					ms.Write(buffer, 0, i);
+				} while (i > 0);
+				ms.Flush();
+				ms.Position = 0;
+
+				_requestBody = new byte[ms.Length];
+				await ms.ReadAsync(_requestBody, 0, _requestBody.Length);
 			}
 			return _requestBody;
+		}
+
+		public async Task<string> RequestBodyString()
+		{
+			return Request.ContentEncoding.GetString(await RequestBody());
+		}
+
+		public async Task<Stream> RequestStream()
+		{
+			return new MemoryStream(await RequestBody());
 		}
 
 		public HttpRequest AddCookie(Cookie cookie)
@@ -209,15 +222,21 @@ namespace HttpNet
 		/// <returns></returns>
 		public async Task<string> POST(string key, string defaultValue = null)
 		{
-			await RequestBody();
-			if (POSTParams.ContainsKey(key))
+			try
 			{
-				return POSTParams[key];
+				string reqBody = await RequestBodyString();
+				Dictionary<string, string> postParams = Utils.GetUrlParams("x?" + reqBody);
+
+				if (postParams.ContainsKey(key))
+				{
+					return postParams[key];
+				}
 			}
+			catch (Exception) {}
 
 			if (GetContentData(key) != null)
 			{
-				StreamReader r = new StreamReader(await GetContentData(key));
+				StreamReader r = new StreamReader(await GetContentData(key), Request.ContentEncoding);
 				return await r.ReadToEndAsync();
 			}
 
@@ -229,45 +248,59 @@ namespace HttpNet
 		/// </summary>
 		/// <returns><c>false</c>, if at least one key is missing <c>false</c> otherwise.</returns>
 		/// <param name="keys">Keys.</param>
-		public bool HasPOST(params string[] keys)
+		public async Task<bool> HasPOST(params string[] keys)
 		{
 			foreach (string key in keys)
 			{
-				if (!POSTParams.ContainsKey(key))
+				if ((await POST(key)) == null)
 					return false;
 			}
 			return true;
 		}
 
-		public async Task<Stream> GetContentData(string key)
+		public Task<MemoryStream> GetContentData(string key)
+		{
+			return GetContentData<MemoryStream>(key);
+		}
+
+		public async Task<T> GetContentData<T>(string key) where T : Stream, new()
 		{
 			string boundary = "--" + Request.ContentType.Split(';')[1].Split('=')[1];
+			BinaryReader input = new BinaryReader(await RequestStream(), Request.ContentEncoding);
 
-			string[] lines = (await RequestBody()).Split('\n');
-
-			for (int i = 0; i < lines.Length; i++)
+			string line;
+			while ((line = input.ReadLine(Request.ContentEncoding)) != null)
 			{
 				Regex regex = new Regex(string.Format(@"Content-Disposition: form-data; name=""{0}""", key));
-				Match m = regex.Match(lines[i]);
+				Match m = regex.Match(line);
 
 				if (m.Success)
 				{
-					i++;
-					if (lines[i].StartsWith("Content-Type:"))
-						i += 2;
-					else
-						i++;
-
-					StringBuilder output = new StringBuilder();
-
-					while (i < lines.Length && !lines[i].StartsWith("----------------------------"))
+					line = input.ReadLine(Request.ContentEncoding);
+					if (line.StartsWith("Content-Type:", StringComparison.Ordinal))
 					{
-						output.AppendLine(lines[i++]);
+						line = input.ReadLine(Request.ContentEncoding); // Skip an extra line
 					}
 
-					string str = output.ToString();
-					str = str.Substring(0, str.Length - 1);
-					MemoryStream outStream = new MemoryStream(Request.ContentEncoding.GetBytes(str));
+
+					MemoryStream newStream = await RequestStream() as MemoryStream;
+
+					long endPos = input.BaseStream.Position;
+					newStream.Position = input.BaseStream.Position;
+
+					while (line != null && !line.StartsWith(boundary))
+					{
+						endPos = input.BaseStream.Position;
+						line = input.ReadLine(Request.ContentEncoding);
+					}
+
+					byte[] buffer = new byte[endPos - newStream.Position];
+					newStream.Read(buffer, 0, buffer.Length);
+
+
+					T outStream = new T();
+
+					outStream.Write(buffer, 0, buffer.Length - 1);
 					outStream.Position = 0;
 					return outStream;
 				}

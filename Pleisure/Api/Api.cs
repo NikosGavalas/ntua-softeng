@@ -37,7 +37,7 @@ namespace Pleisure
 
 		public async Task Login(HttpRequest req)
 		{
-			if (!req.HasPOST("email", "password"))
+			if (!await req.HasPOST("email", "password"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -98,7 +98,7 @@ namespace Pleisure
 
 		public async Task Register(HttpRequest req)
 		{
-			if (!req.HasPOST("email", "password", "password2", "full_name", "role"))
+			if (!await req.HasPOST("email", "password", "password2", "full_name", "role"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
