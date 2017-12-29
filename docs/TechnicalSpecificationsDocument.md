@@ -61,11 +61,34 @@ for example we assume that users have cookies available (to keep the sessions al
 
 ### Environment
 
-also Dependencies...
+The web server can run in either one of the following environments with their respective dendencies
+
+- Microsoft Windows
+	- .NET Framework 4.6 or higher
+- Any unix distribution
+	- Mono Framework 5.4 or higher
+- Any unix distribution
+	- Docker
+
+The web server can be built in either one of the following environments with their respective dendencies
+
+- Microsoft Windows
+	- NuGet
+	- MSbuild
+- Any unix distribution
+	- NuGet
+	- xBuild
+- Any unix distribution
+	- Docker
+
+The application also requires a stable connection to a `MySql server`.
 
 ### Hardware and Network requirements
 
-server hardware... bandwidth?..
+The application itself has a small memory footprint but is linearly scalable. The application has to store the high-resolution images that the organizers will upload and thus has a significant requirement for storage. Furthermore, since the application is going to handle a currency-like system as well as paid event booking, security coherency and fault tolerance are also big concerns.
+
+
+
 
 ## Implementation
 
@@ -78,10 +101,11 @@ tests descriptions
 The project's deployment will revolve around [Docker](https://www.docker.com/). A linux bash script will be used to automate the process, which will do the following:
 
 1. Pull the source code from the repository.
-2. Use `nuget restore`, which will download all the dependencies of the solution.
-3. Use `xbuild`, which is a clone of the official `MSBuild`, to build all projects in the solution in the correct order using the *Release* configuration.
-4. Build the docker image from the `Dockerfile` which in summary does the following
-	1. Installs `mono-complete`
+2. Build the project using a Makefile which in summary does the following
+	1. Use `nuget restore`, which will download all the dependencies of the solution.
+	2. Use `xbuild`, which is a clone of the official `MSBuild`, to build all projects in the solution in the correct order using the *Release* configuration.
+3. Build the docker image from the `Dockerfile` which in summary does the following
+	1. Use an image that has `mono-complete` installed.
 	2. Copies the build folder `Pleisure/bin/Release/` to `/opt/Pleisure` inside the container
 	3. Runs the web server as the image's entrypoint using the command `mono /opt/Pleisure/Pleisure.exe`
 
