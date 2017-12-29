@@ -38,7 +38,7 @@ namespace Pleisure
 			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
 			server.Add("/img/*", png.OnRequest);
 
-			WatermarkedResourceProvider evtImg = new WatermarkedResourceProvider(GetPath("app/eventimg"), "/eventimg");
+			WatermarkedResourceProvider evtImg = new WatermarkedResourceProvider(Options.StoragePath("eventimg"), "/eventimg");
 			server.Add("/eventimg/*", evtImg.OnRequest);
 
 			/*
@@ -56,6 +56,8 @@ namespace Pleisure
 
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
+
+
 
 			/*
              * Main thread now awaits SIGTERM

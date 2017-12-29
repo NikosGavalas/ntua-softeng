@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -62,6 +63,12 @@ namespace Pleisure
 			{
 				return Environment.GetEnvironmentVariable("MYSQL_DB") ?? "pleisure";
 			}
+		}
+
+		public static string StoragePath(string relative)
+		{
+			string root = Environment.GetEnvironmentVariable("STORAGE_PATH") ?? "data";
+			return Path.Combine(root, relative);
 		}
 
 		public static string Gravatar(string email)

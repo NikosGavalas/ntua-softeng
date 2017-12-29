@@ -30,7 +30,7 @@ namespace Pleisure
 
 		public async Task CreateEvent(HttpRequest req)
 		{
-			throw new NotImplementedException();
+			
 
 			await req.Close();
 		}
