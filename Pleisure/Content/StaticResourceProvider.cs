@@ -47,9 +47,6 @@ namespace Pleisure
 			{
 				return;
 			}
-			
-            // Then write the file to the response stream
-			await request.Write(data);
 
 			// Set the appropriate Content-Type
 			switch (contentType)
@@ -65,6 +62,9 @@ namespace Pleisure
 
 			// If we managed to read the file, first set the headers
 			request.SetStatusCode(HttpStatusCode.OK);
+
+			// Then write the file to the response stream
+			await request.Write(data);
 
 		}
 
