@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<title>Pleisure</title>
+
+	@{html.header}
+
+	<style>
+		#event_header {
+			padding-top: 50px;
+		}
+
+		#map {
+			height: 200px;
+			width: 100%;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	@{html.navbar}
+	<!-- /Navbar -->
+	
+	<div id="event_header" class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>
+					@{event.title}
+				</h1>
+				<p>
+					@{event.description}
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- @{event.image} doesn't work currently so I use this placeholder -->
+	<div style="background-image:url('https://d3uf2ssic990td.cloudfront.net/images/5031/413b4a3e-5bf8-494b-bfda-ed9488ca3b0d/kids.jpg');" class="parallax">
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<h3>
+					Details
+				</h3>
+				<p>
+					Age Range: @{event.age_min} - @{event.age_max}
+				</p>
+				<p>
+					Organizer: FIXME
+				</p>
+				<p>
+					Address: @{event.address}
+				</p>
+				<p>
+					Price: @{event.price} <i class="fa fa-money" aria-hidden="true"></i>
+				</p>
+				<a class="btn btn-lg btn-primary" href="#TODO">
+					Attend!
+				</a>
+			</div>
+			<div class="col-md-9">
+				<h3>Location on map</h3>
+				<div id="map" ></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	@{html.footer}
+	<!-- /Footer -->
+
+	<!-- Google maps -->
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP7eXQB4hzRcSobhv8W5_uMAAfCv3oRDs&callback=initMap"></script>
+	<script>
+		function initMap() {
+			var uluru = { lat: -25.363, lng: 131.044 };
+			var map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 4,
+				center: uluru
+			});
+			var marker = new google.maps.Marker({
+				position: uluru,
+				map: map
+			});
+		}
+
+	/* 	$(window).resize(function () {
+			google.maps.event.trigger(map, 'resize');
+		}); */
+	</script>
+
+</body>
+
+</html>

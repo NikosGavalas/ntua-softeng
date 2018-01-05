@@ -327,16 +327,18 @@
 				});
 
 				marker.addListener('click', function () {
-					window.location = "/event/" + currentEvent.id;
+					// window.location = "/event/" + currentEvent.id;
+					infowindow.open(map, this);					
 				});
 
-				marker.addListener('mouseover', function () {
+				/* not needed */
+				/* marker.addListener('mouseover', function () {
 					infowindow.open(map, this);
 				});
 
 				marker.addListener('mouseout', function () {
 					infowindow.close();
-				});
+				}); */
 			}
 
 			function initMap()
