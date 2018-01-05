@@ -25,6 +25,14 @@ namespace Pleisure
 			}
 		}
 
+		public static int SessionLifetime
+		{
+			get
+			{
+				return int.Parse(Environment.GetEnvironmentVariable("SESSION_LIFETIME") ?? "1800");
+			}
+		}
+
 		public static string MysqlHost
 		{
 			get

@@ -22,7 +22,7 @@ namespace Pleisure
 
 		static void Main(string[] args)
 		{
-			server = WebServer.Create<UserSession>(Options.Host, Options.Port, sessionLifetime: 300);
+			server = WebServer.Create<UserSession>(Options.Host, Options.Port, Options.SessionLifetime);
 			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
 
