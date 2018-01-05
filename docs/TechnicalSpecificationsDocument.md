@@ -2,8 +2,6 @@
 
 ## Architecture and Design
 
-Language, Libraries, Frameworks used...and the reasons that we chose these over others?
-
 The development stack has been arranged as follows:
 
 - Database: **MySql**
@@ -32,13 +30,12 @@ The development stack has been arranged as follows:
 #### Front-End
 
 - [jQuery](https://jquery.com/)
-	- This leading framework in DOM parsing and manipulation, will be utilized for just about every function of the website. Using its AJAX capabilities for asynchronous http requests, as well as its high-level methods for document event handling, each and every page will be designed to be fast and responsive.
+	- This leading library in DOM parsing and manipulation, will be utilized for just about every function of the website. Using its AJAX capabilities for asynchronous http requests, as well as its high-level methods for document event handling, each and every page will be designed to be fast and responsive.
 - [Bootstrap 3](https://getbootstrap.com/)
-	- Bootstrap will be used mostly for designing the layout of the pages but also for providing certain functionalities, like pop-up windows.
+	- Bootstrap will be used mostly for designing the responsive layout of the pages but also for providing certain functionalities, like pop-up windows.
 
 
-Visualizations/Modeling, flow charts, data flow charts, decision trees...
-
+<!-- Visualizations/Modeling, flow charts, data flow charts, decision trees...
 
 
 ### UML diagrams
@@ -55,13 +52,13 @@ also Interfacing between components etc
 
 ### Design Trade-offs
 
-for example we assume that users have cookies available (to keep the sessions alive) 
+for example we assume that users have cookies available (to keep the sessions alive)  -->
 
 ## System Requirements
 
 ### Environment
 
-The web server can run in either one of the following environments with their respective dendencies
+The web server can run in either one of the following environments with their respective dependencies
 
 - Microsoft Windows
 	- .NET Framework 4.6 or higher
@@ -83,20 +80,20 @@ The web server can be built in either one of the following environments with the
 
 The application also requires a stable connection to a `MySql server`.
 
-### Hardware and Network requirements
+### Hardware requirements
 
-The application itself has a small memory footprint but is linearly scalable. The application has to store the high-resolution images that the organizers will upload and thus has a significant requirement for storage. Furthermore, since the application is going to handle a currency-like system as well as paid event booking, security coherency and fault tolerance are also big concerns.
+The application itself has a small memory footprint but is linearly scalable. The application has to store the high-resolution images that the organizers will upload and thus has a significant requirement for storage. 
+
+Furthermore, since the application is going to handle a currency-like system as well as paid event booking, security coherency and fault tolerance are also big concerns.
 
 
-
-
-## Implementation
+<!-- ## Implementation
 
 ### Acceptance Tests
 
-tests descriptions
+tests descriptions -->
 
-## Deployment
+## Build & Deployment
 
 The project's deployment will revolve around [Docker](https://www.docker.com/). A linux bash script will be used to automate the process, which will do the following:
 
