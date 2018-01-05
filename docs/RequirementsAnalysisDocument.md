@@ -1,10 +1,13 @@
 # 'Pleisure' Requirements Analysis Document
 
 ## Software Description
+
 Pleisure is a web platform which connects parents with activities providers for their children. It aims to offer parents the capability of finding high quality activities for their kids via a simple and easy to use user interface, and at the same time, provide a handy environment for corresponding services and businesses for advertising and reaching out to more potential customers.
 
 ## Functional Requirements
+
 ### User Groups and corresponding operations
+
 The users of the platform can belong to one of the following groups:
 
 1. Guest users
@@ -27,9 +30,15 @@ Administrators are special users that can manage the registered users (Parents a
 - Reset passwords
 
 Authentication of the users (belonging to the groups Parents/Organizers/Administrators) is performed with the use of  passwords that are set on each respective signup.
+
 ### Entry Points
+
 All the users visiting the web platform, can immediately utilise the functionality of the service by entering their location of interest in the main textfield. The nearby events are then displayed on another page, to which the user is redirected after performing the query action.
+
+At this point the user will begin experiencing the application immediately. With no need for extra configurations or parameters, by providing only their location they will right away be able to view a concise and informative list of all the events that are within a default range from the given location. They can then set additional filters like the price and the category, or even browse through the map view, in order to narrow down their search for an event.
+
 ### Monetization
+
 The platform uses an internal currency system. 
 
 More specifically, different types of users can interact financially with each other by using "credits". "Parents" can buy credits via PayPal, and use these tokens to pay the "Organizers" for the chosen activities. The amount of credits is bound to the user's account, and no further kind of transactions are supported.
@@ -37,8 +46,11 @@ More specifically, different types of users can interact financially with each o
 Moreover, the website's owner can profit by keeping a commission for every transaction fulfilled.
 
 Another way of monetization is "sponsored events". Specifically, an organizer can choose to spend credits to advertise an event of his. Sponsored events appear first on the events display list.
+
 ### Legal
+
 #### Software license
+
 The software is licensed under the MIT License:
 
 > Copyright (c) 2017 Pleisure
@@ -62,21 +74,33 @@ The software is licensed under the MIT License:
 > SOFTWARE.
 
 #### Cookies Policy
+
 Users can instruct their browsers to refuse all cookies or to indicate when a cookie is being sent. However, if they do not accept cookies, they will not be able to use some portions of the service.
-***
+
 ## Non-functional Requirements
+
 ### Security
+
 The software implements all the security standards to prevent SQL injection attacks, XSS, and user accounts leak from the database.
 Sessions are over TLS so all communication with the server is encrypted.
 The sensitive data of the users (such as information about the children of the "parent" users) are visible only to the user himself and the Administrator users.
+
 ### Usability
+
 The User Interface is the simplest possible, so that even inexperienced users can have full experience of the functionality of the service. It features easy navigation for all user groups.
 
 ### Flexibility
+
 The software can be deployed on any platform that can run .NET >= 4.6 or Mono >= 5.4 and a MySQL database.
 
+It can easily be managed through an Administrator account with no need for technical skills or low-level access.
+
 ### Deployment
-The installation procedure (both building and deployment) is automated with the use of a script.
+
+The installation procedure (both building and deployment) will aim to be as automated as possible with the use of a script.
 
 ### Responsiveness
+
 The UI is responsive, meaning it offers optimal viewing experience across a wide range of devices (Desktop, Tablet, Mobile).
+
+The forms and interactions with the page will utilize the asynchronous properties of web-development languages, so that time-consuming tasks can run in the background without making the page unresponsive.
