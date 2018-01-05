@@ -42,8 +42,9 @@
 	<!-- /Footer -->
 
 	<script>
+		/* FIXME: This function doesn't work, to redirect and search with predefined filters it need support from the backend */
 		function search() {
-			/* $.get({
+			$.get({
 				url: 'api/events',
 				data: {
 					price: 1000,
@@ -54,7 +55,7 @@
 				success:  function (resp) {
 					window.location = '/events';
 				}
-			}); */
+			});
 		}
 	</script>
 	
