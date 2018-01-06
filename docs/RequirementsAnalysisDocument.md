@@ -1,42 +1,52 @@
-# 'Pleisure' Requirements Analysis Document
-
+﻿# 'Pleisure' Requirements Analysis Document
 ## Software Description
-Pleisure is a web platform which connects parents with activities providers for their children. It aims to offer parents the capability of finding high quality activities for their kids via a simple and easy to use user interface, and at the same time, provide a handy environment for corresponding services and businesses for advertising and reaching out to more potential customers.
-
+Pleisure is a web platform which connects parents with activities providers for their children. It aims to offer parents the capability of finding high quality activities for their kids via a simple and easy to use user interface. At the same time, it provides a handy environment for corresponding services and businesses for advertising and reaching out to more potential customers.
 ## Functional Requirements
 ### User Groups and corresponding operations
 The users of the platform can belong to one of the following groups:
-
 1. Guest users
 2. Parents
 3. Organizers
 4. Administrators
+#### Guest users
+Permissions: Guest users have access to most of the content of the platform. They can search and view available events as well as apply filters, to limit the displayed results to their preferences. 
+Restrictions: Guest users do not have a profile, as a result they are not allowed to have a wallet or buy coins. Guest users cannot create or book events and send reports. They also do not have any administrator privilage.
+#### Parents
+Permissions: Users signed up as Parents can perform all the actions that a Guest user can. Additionally, they have access to a private profile page where they have their personal and contact information, photos, booking history and wallet with their credits  (see [Monetization](#monetization)). Parents can buy credits with any of the given payment methods, and they can use those credits to book events. In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as date of birth and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization. At last they can use the "report" function to mark any inappropriate activity.
+Restrictions: Parents cannot create events and they do not have any administrator privilage.
+#### Organizers
+Permissions: Organizers are the activities/events providers. They can perform all the actions that Guest users can. In addition, they have a public "profile page" in which they have the "add event" option, where they can create an event, by supplying the necessary information. These information include the exact time and date of the event, info about it being reccuring or not, its pricing, address (geolocation), photos etc. Like parents they can use the "report" function to mark any inappropriate activity. 
+Restrictions: Organizers do not use the credits system, so they do not have a wallet. As a result cannot book other events. They also do not have any administrator privilage.
 
-Guest users have access to most of the content of the platform. They can view, without the need to login, all the events that are available, with priority to those hosted near them by submitting their area of interest. They can also apply filters, to limit the events displayed and adjust the search to their preferences. However, they cannot book events.
-
-Parents are the users that are logged in as such. They can perform all the actions that a Guest user can, plus they have access to a private profile page where they can add information and photos, and can also buy credits (see [Monetization](#monetization)). In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as date of birth and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization.
-
-Organizers are the activity/events providers. They can perform all the actions that Guest users can too, and also create events. Their "profile page" is similar to this of the "parent" user, but instead of "add child" option, they have the "add event" option, where they can fill out a special form with details to publish the event. These details include the exact time and date of the event, info about it being reccuring or not, its pricing, address (geolocation), photos etc.
-
-Both of the two aforementioned users (Parent and Organizers) can use the "report" function to mark any inappropriate activity.
-
-Administrators are special users that can manage the registered users (Parents and Organizers). They can:
+#### Administrators
+Permissions: Administrators are special users that can manage the registered users (Parents and Organizers). They can:
 - Review the reports of the users
 - Ban users, if they notice any violation of the Terms of Usage
 - Restrict user functionality (such as event creation for an Organizer)
 - Reset passwords
+Restrictions: They do not have access to any private information of the users, such as passwords, billing information etc.
 
-Authentication of the users (belonging to the groups Parents/Organizers/Administrators) is performed with the use of  passwords that are set on each respective signup.
+Authentication of the users (belonging to the groups Parents/Organizers/ ??? Administrators) is performed with the use of  passwords that are set on each respective signup.
+Organizers should be oblidged to provide a bank account or an IBAN since they are not using the credits system, in order to get paid for their services.
+
 ### Entry Points
-All the users visiting the web platform, can immediately utilise the functionality of the service by entering their location of interest in the main textfield. The nearby events are then displayed on another page, to which the user is redirected after performing the query action.
+All the users visiting the web platform, can immediately utilise the functionality of the service by typing in the type of activity in the main textfield.The nearby events with matching tags are then displayed on another page, to which the user is redirected after performing the query action. 
+Else, by clicking the “Events” tab on the navbar they are getting redirected directly to the event page, where they can browse events and apply filters.
+
 ### Monetization
-The platform uses an internal currency system. 
+The platform uses an internal currency system regarding Parents and the booking of the event. More specifically, Parent users can buy credits from the website using their PayPal account or Bitcoin Portfollio. Those credits are secured in their account wallet, and can be used for booking events. The credits cannot be refunded back to the parents as real money, once they purchased them. The amount of credits is bound to the user's account, and no kind of transactions between users are supported.
+Organizers, are paid via bank transfer or PayPal transaction since they are not using the credits system. All used credits for event booking are simply dismissed and their EUR value is paid to the event holder, minus the website’s standard commission (e.g. 100 credits). Therefore Organizers must provide to the website the necessary billing information in order to get paid for their services.
 
-More specifically, different types of users can interact financially with each other by using "credits". "Parents" can buy credits via PayPal, and use these tokens to pay the "Organizers" for the chosen activities. The amount of credits is bound to the user's account, and no further kind of transactions are supported.
+### Event Search and Results Filtering
+As mentioned before, 'Pleisure' offers a simple search engine on the website's main page. This aims to enable every user, to narrow the list of given events, so that it matches their needs and prefernces. The user types in an activity and the corresponding events are shown immeditely without having to browse through all website's events.
+'Pleisure' provides further result filtering on the Events page. In order to use the filtering tool a location must be provided by the user. Given that, the user limits  theevent shown results by adjusting:
+-Distance from the given location
+-Maximum Price of the event
+-Age Range of the participants
+-Activity Category
+-Date of the event
 
-Moreover, the website's owner can profit by keeping a commission for every transaction fulfilled.
-
-Another way of monetization is "sponsored events". Specifically, an organizer can choose to spend credits to advertise an event of his. Sponsored events appear first on the events display list.
+## Non-functional Requirements
 ### Legal
 #### Software license
 The software is licensed under the MIT License:
@@ -64,7 +74,6 @@ The software is licensed under the MIT License:
 #### Cookies Policy
 Users can instruct their browsers to refuse all cookies or to indicate when a cookie is being sent. However, if they do not accept cookies, they will not be able to use some portions of the service.
 ***
-## Non-functional Requirements
 ### Security
 The software implements all the security standards to prevent SQL injection attacks, XSS, and user accounts leak from the database.
 Sessions are over TLS so all communication with the server is encrypted.
