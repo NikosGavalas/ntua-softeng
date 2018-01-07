@@ -27,11 +27,9 @@ Organizers are the activity/events providers. They can perform all the actions t
 
 Organizers should be oblidged to provide a bank account or an IBAN since they are not using the credits system, in order to get paid for their services.
 
-<!-- Both of the two aforementioned users (Parent and Organizers) can use the "report" function to mark any inappropriate activity. -->
 
 Administrators are special users that can manage the registered users (Parents and Organizers). They can:
 
-<!-- - Review the reports of the users -->
 - Ban users, if they notice any violation of the Terms of Usage
 - Restrict user functionality (such as event creation for an Organizer)
 - Edit passwords
@@ -191,6 +189,7 @@ Profile Page:
 ![profile.html](profile.png)
 
 Admin Panel:
+
 ![admin.html](admin.png)
 
 For other functionalities (LogIn/SignUp, Add Event, Add Kid, Add Funds etc.) we use modals (popup dialog boxes), and not dedicated pages in order to avoid many redirections and keep the UI simple.
