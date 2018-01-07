@@ -19,20 +19,33 @@ The users of the platform can belong to one of the following groups:
 3. Organizers
 4. Administrators
 
-Guest users have access to most of the content of the platform. They can view, without the need to login, all the events that are available, with priority to those hosted near them by submitting their area of interest. They can also apply filters, to limit the events displayed and adjust the search to their preferences. However, they cannot book events.
+##### Guest users
 
-Parents are the users that are logged in as such. They can perform all the actions that a Guest user can, plus they have access to a private profile page where they can add information and photos, and can also buy credits (see [Monetization](#monetization)). In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as date of birth and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization.
+Permissions: Guest users have access to most of the content of the platform. They can search and view available events as well as apply filters, to limit the displayed results to their preferences. 
 
-Organizers are the activity/events providers. They can perform all the actions that Guest users can too, and also create events. Their "profile page" is similar to this of the "parent" user, but instead of "add child" option, they have the "add event" option, where they can fill out a special form with details to publish the event. These details include the exact time and date of the event, info about it being reccuring or not, its pricing, address (geolocation), photos etc. They can also view monthly reports in their profile page, with all the completed events, total respective number of tickets sold and total income for each event in EUR. 
+Restrictions: Guest users do not have a profile, as a result they are not allowed to have a wallet or buy credits. Guest users cannot create or book events. They also do not have any administrator priviledges.
 
-Organizers should be oblidged to provide a bank account or an IBAN since they are not using the credits system, in order to get paid for their services.
+##### Parents
 
+Permissions: Users signed up as Parents can perform all the actions that a Guest user can. Additionally, they have access to a private profile page where they have their personal and contact information, photos, booking history and wallet with their credits  (see [Monetization](#monetization)). Parents can buy credits with any of the given payment methods, and they can use those credits to book events. In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as date of birth and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization.
 
-Administrators are special users that can manage the registered users (Parents and Organizers). They can:
+Restrictions: Parents cannot create events and they do not have any administrator priviledges.
+
+##### Organizers
+
+Permissions: Organizers are the activities/events providers. They can perform all the actions that Guest users can. In addition, they have a public "profile page" in which they have the "add event" option, where they can create an event, by supplying the necessary information. These information include the exact time and date of the event, info about it being reccuring or not, its pricing, address (geolocation), photos etc. Like parents they can use the "report" function to mark any inappropriate activity. Finally, they can also view monthly reports in their profile page, with all the completed events, total respective number of tickets sold and total income for each event in EUR.  
+
+Restrictions: Organizers do not use the credits system, so they do not have a wallet. As a result cannot book other events. They also do not have any administrator priviledges.
+
+##### Administrators
+
+Permissions: Administrators are special users that can manage the registered users (Parents and Organizers). They can:
 
 - Ban users, if they notice any violation of the Terms of Usage
 - Restrict user functionality (such as event creation for an Organizer)
 - Edit passwords
+
+Restrictions: They do not have access to any private information of the users, such as passwords, billing information etc.
 
 Authentication of all users (belonging to the groups Parents/Organizers/Administrators) is performed with the use of passwords that are set on each respective signup.
 
