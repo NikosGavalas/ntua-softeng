@@ -32,14 +32,14 @@
 		- [Business Model](#business-model)
 		- [Interfacing](#interfacing)
 		- [Creating and booking events](#creating-and-booking-events)
-		- [Frameworks / Libraries](#frameworks--libraries)
+		- [Frameworks / Libraries](#frameworks-libraries)
 			- [Back-End](#back-end)
 			- [Front-End](#front-end)
 		- [Wireframes](#wireframes)
 		- [System Requirements](#system-requirements)
 			- [Environment](#environment)
 			- [Hardware requirements](#hardware-requirements)
-		- [Build & Deployment](#build--deployment)
+		- [Build & Deployment](#build-deployment)
 			- [Monitoring](#monitoring)
 			- [Notes on security](#notes-on-security)
 
@@ -309,9 +309,26 @@ Home Page:
 
 ![index.html](index.png)
 
+The home page is the main page of the app, the first page that the end-user sees when he enters the visits the webpage. 
+It consists of the main searchbar, placed in the center of the page as the central element, a LogIn/SignUp button, a footer, and a link to the *Events page*. 
+
+In the central textfield the user types keywords that represent the type of event he is looking for (e.g. football). These keywords are then used to find matching events, which are displayed to the user in the *Events page* after redirecting him there.
+
+By clicking the LogIn/SignUp button, a modal pops up with two tabs, corresponding to two choices. He can either login using his login credentials, or create a new account (as a parent or an organizer) if he doesn't already have one.
+
+The footer holds basic information about the platform (social media etc), a contact form, also implemented as a button that pops up a modal, and quick links to buy credits.
+
 Events Page:
 
 ![events.html](events.png)
+
+The events page is the events are displayed. The user can visit this page either by getting redirected here from the *Home Page* after sumbitting some keywords or by clicking the direct link present in the navbar. 
+
+The page consists of two parts; the filters, to the left, and the events array in the middle and right. 
+
+The events can either appear as a list, or as markers in a map. The user can select the view mode he prefers by chosing the corresponding tab (as seen in the wireframe). In both views, each events is nicely placed in a "panel", presenting basic information about the event (title, price, place, description, photo) and of course the title redirects the user accordingly when clicked upon, to the *Event Page* (for more details).
+
+The filters on the left use slidebars, simple textfields, datepicker, and dropdown lists to offer great customization capabilities while being as simple and usable as possible
 
 Event Page:
 
