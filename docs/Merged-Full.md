@@ -159,6 +159,77 @@ The development stack has been arranged as follows:
 - Front-End: **HTML, CSS, Javascript**
 	- As this is a web application, the default W3C set of languages has been chosen to both design and render the application. Any alternatives would involve the use of specialized front-end rendering frameworks, which were deemed to be beyond the scope of the project. Describing the application natively in the web languages also ensures abstraction, making the front-end of the project not have any major dependency on any other parts of stack.
 
+### Interfacing
+
+For static information, the server will use session variables to properly render an html page. For example, the following HTML snippet will adjust what is displayed in a particular part depending on whether the user is currently logged in or not.
+
+```html
+@if{is_loggedin}
+    <h4>Hello user!</h4>
+@else{}
+    <h4>Hello guest!</h4>
+@endif{}
+```
+
+And the following snippet will display a greeting to the user, as well as their avatarw.
+
+```html
+<span>Hello @{user.name}!</span>
+<img src="@{user.avatar}">
+```
+
+For data that is either not part of the page itself or that needs to be dynamically fetched and displayed, a private HTTP API will be queried by the front-end using AJAX. The server's API will respond to the following URLs:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/login` | `POST` | Attempt to login a user |
+| `/register` | `POST` | Attempt to register a user |
+| `/signout` | `POST` | Sign out the user and destroy his session |
+| `/api/events` | `GET` | Get a list of all events matching certain criteria |
+| `/api/kids` | `GET` | Get a list of the kids of the currently logged in user. |
+| `/api/email_available` | `GET` | Check to see if an email is available for registration |
+| `/api/user_update` | `POST` | Update a user's info. |
+| `/api/event_create` | `POST` | Called by an organizer to create a new event. |
+| `/api/book_event` | `POST` | Called by a parent to book an event for one of their kids. |
+
+Additional endpoints will most likely be added during the rest of the development for other minor functions.
+
+### Creating and booking events
+
+The primary function of the application will be booking spots at events. As such, the system will be designed as follows:
+
+Organizers will create `Events`, which will be defined by the following:
+
+- Title
+- Location
+- Duration
+- Minimum and maximum age
+- Price
+- Maximum number of attendees <small>*(optional)*</small>
+- Accepted genders <small>*(optional)*</small>
+
+An organizer will then have to `Schedule` their events through their private profile, by specifying:
+
+- Date
+- Time
+- Recurrence <small>*(optional)*</small>
+
+As such, an `Event` will remain in the database even after it has been concluded and can be scheduled again, or even multiple times.
+
+An `Event` that has no upcoming scheduled date will not appear in search results.
+
+Aa `Event` can be cancelled by the organizer. In such cases the parents will be notified via e-mail and the event's price in credits will be immediately refunded in full.
+
+Parents will *have* to add their `Kids` to their private profile by defining:
+
+- Name
+- Age
+- Gender
+
+Therefore, a parent booking an event for one of their kids will add the kid to the list of attendees for that `Event`. Obviously, in order for a kid to attend an event, it needs to comply with the age and gender requirements of the event.
+
+The parent will be allowed to choose which scheduled date and time of an event they are booking for. In the case of recurring events, only the immediate occurance can be booked.
+
 ### Frameworks / Libraries
 
 #### Back-End
@@ -235,7 +306,9 @@ The application also requires a stable connection to a `MySql server`.
 
 #### Hardware requirements
 
-The application itself has a small memory footprint and is linearly scalable. The application has to store the high-resolution images that the organizers will upload and thus has a significant requirement for storage.
+The application itself has a small memory footprint and is linearly scalable. The application has to store the high-resolution images that the organizers will upload and thus has a significant requirement for storage. 
+
+To ensure better scalability, events that have concluded will be deleted from storage if they are not scheduled again after a certain amount of time.
 
 ### Build & Deployment
 
