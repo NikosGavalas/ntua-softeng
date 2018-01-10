@@ -29,13 +29,18 @@
 			- [Responsiveness](#responsiveness)
 	- [Technical Specifications](#technical-specifications)
 		- [Architecture and Design](#architecture-and-design)
-		- [Business Model](#business-model)
 		- [Interfacing](#interfacing)
 		- [Creating and booking events](#creating-and-booking-events)
+			- [Payments to the organizers](#payments-to-the-organizers)
 		- [Frameworks / Libraries](#frameworks--libraries)
 			- [Back-End](#back-end)
 			- [Front-End](#front-end)
 		- [Wireframes](#wireframes)
+			- [Home Page](#home-page)
+			- [Events Page](#events-page)
+			- [Event Page](#event-page)
+			- [Profile Page](#profile-page)
+			- [Admin Panel](#admin-panel)
 		- [System Requirements](#system-requirements)
 			- [Environment](#environment)
 			- [Hardware requirements](#hardware-requirements)
@@ -204,10 +209,6 @@ The development stack has been arranged as follows:
 - Front-End: **HTML, CSS, JavaScript**
 	- As this is a web application, the default W3C set of languages has been chosen to both design and render the application. Any alternatives would involve the use of specialized front-end rendering frameworks, which were deemed to be beyond the scope of the project. Describing the application natively in the web languages also ensures abstraction, making the front-end of the project not have any major dependency on any other parts of stack.
 
-### Business Model
-
-
-
 ### Interfacing
 
 For static information, the server will use session variables to properly render an html page. For example, the following HTML snippet will adjust what is displayed in a particular part depending on whether the user is currently logged in or not.
@@ -279,6 +280,10 @@ Therefore, a parent booking an event for one of their kids will add the kid to t
 
 The parent will be allowed to choose which scheduled date and time of an event they are booking for. In the case of recurring events, only the immediate occurrence can be booked.
 
+#### Payments to the organizers
+
+While in the database and in the server, all user accounts are almost entirely similar, organizer accounts function very differently. To finalize and submit any booking
+
 ### Frameworks / Libraries
 
 #### Back-End
@@ -305,23 +310,46 @@ The parent will be allowed to choose which scheduled date and time of an event t
 
 The wireframes describing the user interface, for the most basic pages of the platform are shown below:
 
-Home Page:
+#### Home Page
 
 ![index.html](index.png)
 
-Events Page:
+The home page is pretty straight forward. The user is immediately greeted with a compelling logo and a text-box. This will be a clear prompt that all the user needs to do in order to use the application is enter their address (or describe their location in a way that is understood by Google Maps). Upon submitting, the user is then taken to the `Events` page.
+
+#### Events Page
 
 ![events.html](events.png)
 
-Event Page:
+This page is the primary interface with the application, and is comprised of two distinct sections.
+
+- Filters
+	- On the left, the user sees a set of filters. Through these, the user will be able to limit his search by applying one or more of the following filters:
+		- The kid's age
+		- Maximum distance from location
+		- Maximum price
+		- Minimum and maximum duration of the event
+		- Categories
+- Events list
+	- On the right, the results of the current search will be displayed. There are two ways that the list of events is being displayed, which can be selected by tabs.
+		- **List View:** The events appear in a list, where each row is a bubble that contains a brief description of the event, like a thumbnail, its title and its price. Clicking on one of these events takes you to its page.
+		- **Map View:** An embedded Google Maps JavaScript map, which is centered on the user's location and contains each event as a separate marker. Clicking on a marker will then bring up information about the event - similar to the bubbles in the list view - which can then be clicked again in order to proceed to the event's page.
+
+#### Event Page
 
 ![event.html](event.png)
 
-Profile Page:
+This page will contain all the information of the event. This page will be primarily split into three distinct sections.
+
+- **Top Section:**: Photograph
+	- A watermark photograph, relevant to the event, that the organizer has uploaded.
+- **Bottom-Left Section:** Description
+	- The description of the event 
+
+#### Profile Page
 
 ![profile.html](profile.png)
 
-Admin Panel:
+#### Admin Panel
 
 ![admin.html](admin.png)
 
@@ -344,11 +372,11 @@ The web server can be built in either one of the following environments with the
 
 - Microsoft Windows
 	- NuGet
-	- MSbuild
-- Any unix distribution
+	- MSBuild
+- Any Unix distribution
 	- NuGet
 	- xBuild
-- Any unix distribution
+- Any Unix distribution
 	- Docker
 
 The application also requires a stable connection to a `MySql server`.
@@ -406,6 +434,7 @@ pleisure           0.00%               95.36MiB / 923.4MiB   10.33%             
 
 - Storage of the passwords in the database is done after hashing them with 'salt' to prevent any leak (in case of database attack)
 - The server can run over TLS and a certificate can be provided.
+- While the server handles all requests asynchronously, by heavily utilizing the .NET `Tasks` namespace as well as the `async/await` operators, any and all important submissions to the database - such as the booking of an event and the transfer of credits - will be executed under a common software lock. This will ensure data coherency as long as no external factors alter the database, for example by another `Pleisure` instance running on the same MySql instance or by human interference.
 
 
 

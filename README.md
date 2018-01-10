@@ -4,10 +4,10 @@
 
 |Member|AM|Development|Secondary Task|
 |---|---|---|---|
-|[Grigoris Mantaos](https://git.gmantaos.com/Haath)|03113171|Back-End||
-|[Gavalas Nikos](https://git.gmantaos.com/nik)|03113121|Front-End Scripting|Reports|
+|[Mantaos Grigoris](https://bitbucket.org/gmantaos/)|03113171|Back-End||
+|[Gavalas Nikos](https://bitbucket.org/nickgavalas/)|03113121|Front-End Scripting|Reports|
 |[Karameris markos](https://git.gmantaos.com/MarkosK)|03113148|Font-End Interface|Wireframes|
-|[Tsoulias Kostas](https://git.gmantaos.com/Proteas94)|03112043|Module|QA|
+|[Tsoulias Kostas](https://bitbucket.org/Proteas94/)|03112043|Module|QA|
 |[Karteris Antonis](https://git.gmantaos.com/UphillD)|03112076|Module| |
 
 ## Reports
@@ -37,3 +37,11 @@ Add the following to your NuGet sources: `https://nuget.gmantaos.com/api/v2/`
 	- Random data generation for populating the database and running tests
 - [Watermark](https://bitbucket.org/teamdroptabel/watermark)
 	- Library for watermarking the photos of organizers
+
+## Installation
+
+```bash
+git clone https://gmantaos@bitbucket.org/teamdroptabel/pleisure.git
+cd pleisure
+make
+```
