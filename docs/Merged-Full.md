@@ -36,7 +36,7 @@
 			- [Back-End](#back-end)
 			- [Front-End](#front-end)
 		- [Wireframes](#wireframes)
-		- [Watermark Module](#watermark)
+		- [Watermark Module](#watermark-module)
 		- [System Requirements](#system-requirements)
 			- [Environment](#environment)
 			- [Hardware requirements](#hardware-requirements)
