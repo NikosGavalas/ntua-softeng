@@ -2,8 +2,6 @@
 
 ## Table Of Contents
 
-<!-- TOC -->
-
 - ['Pleisure' Platform](#pleisure-platform)
 	- [Table Of Contents](#table-of-contents)
 	- [Software Description](#software-description)
@@ -47,8 +45,6 @@
 		- [Build & Deployment](#build--deployment)
 			- [Monitoring](#monitoring)
 			- [Notes on security](#notes-on-security)
-
-<!-- /TOC -->
 
 ## Software Description
 

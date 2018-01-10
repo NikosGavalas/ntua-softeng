@@ -1,5 +1,7 @@
 # Pleisure
 
+[Final Analysis Document](https://bitbucket.org/teamdroptabel/pleisure/src/a93fde787eea86eb9c4efa71511edc8cd2b43ab6/docs/Merged-Full.md?at=master&fileviewer=file-view-default)
+
 ## Team
 
 |Member|AM|Development|Secondary Task|
