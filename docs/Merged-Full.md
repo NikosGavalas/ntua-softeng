@@ -36,6 +36,7 @@
 			- [Back-End](#back-end)
 			- [Front-End](#front-end)
 		- [Wireframes](#wireframes)
+		- [Watermark Module](#watermark)
 		- [System Requirements](#system-requirements)
 			- [Environment](#environment)
 			- [Hardware requirements](#hardware-requirements)
@@ -203,6 +204,8 @@ The development stack has been arranged as follows:
 	- For any interaction between the web server and the application, the former will provide a JSON API for data retrieval, as well as any operation the user might intend to perform through the application, for example booking an event or changing their password.
 - Front-End: **HTML, CSS, JavaScript**
 	- As this is a web application, the default W3C set of languages has been chosen to both design and render the application. Any alternatives would involve the use of specialized front-end rendering frameworks, which were deemed to be beyond the scope of the project. Describing the application natively in the web languages also ensures abstraction, making the front-end of the project not have any major dependency on any other parts of stack.
+- Watermark Module: **C#**
+	- Aside from the very strong points in favor of the language made above, there were special considerations regarding the implementation of the module that led to the usage of this language for the task at hand, including (but not limited to) the capability of the language to provide an API that can be used "out of the box" from the main application, along with the elaborate image editing libraries that are provided and that made the work of customizing and editing an image extremely straightforward.
 
 ### Business Model
 
@@ -343,6 +346,16 @@ Admin Panel:
 ![admin.html](admin.png)
 
 For other functionalities (LogIn/SignUp, Add Event, Add Kid, Add Funds etc.) we use modals (popup dialog boxes), and not dedicated pages in order to avoid many redirections and keep the UI simple.
+
+### Watermark Module
+
+A separate module written in C# that accomplishes the task of watermarking images provided by the main application. It serves the purpose of copyrighting said images, herebi protecting from theft and other unwarranted usage from unrelated third parties.
+
+- **Function**: The module receives the image in bitstream form along with the string required to be watermarked and some parameters regarding the appearance of the watermark. It then proceeds to apply the watermark to the image according to the given parameters, resizes it appropriately and returns it in bitstream form to be used as required by the main application.
+
+- **Parameters**: The module grants the option for the customization of the appearance of the watermark before its final application. Along with specifying the color and the opacity of the watermark, the module picks a true type font (*.ttf) from an internal library, and is also able to rotate the watermark, as well as apply a shadow. 
+
+- **Requirements**: The module is able to perform its purpose without any additional requirements, aside from the standard libraries provided with C#.
 
 ### System Requirements
 
