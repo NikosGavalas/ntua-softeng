@@ -38,9 +38,9 @@
 		- [Wireframes](#wireframes)
 			- [Home Page](#home-page)
 			- [Events Page](#events-page)
-			- [Event Page](#event-page)
 			- [Profile Page](#profile-page)
 			- [Admin Panel](#admin-panel)
+		- [Watermark Module](#watermark-module)
 		- [System Requirements](#system-requirements)
 			- [Environment](#environment)
 			- [Hardware requirements](#hardware-requirements)
@@ -208,6 +208,8 @@ The development stack has been arranged as follows:
 	- For any interaction between the web server and the application, the former will provide a JSON API for data retrieval, as well as any operation the user might intend to perform through the application, for example booking an event or changing their password.
 - Front-End: **HTML, CSS, JavaScript**
 	- As this is a web application, the default W3C set of languages has been chosen to both design and render the application. Any alternatives would involve the use of specialized front-end rendering frameworks, which were deemed to be beyond the scope of the project. Describing the application natively in the web languages also ensures abstraction, making the front-end of the project not have any major dependency on any other parts of stack.
+- Watermark Module: **C#**
+	- Aside from the very strong points in favor of the language made above, there were special considerations regarding the implementation of the module that led to the usage of this language for the task at hand, including (but not limited to) the capability of the language to provide an API that can be used "out of the box" from the main application, along with the elaborate image editing libraries that are provided and that made the work of customizing and editing an image extremely straightforward.
 
 ### Interfacing
 
@@ -282,7 +284,9 @@ The parent will be allowed to choose which scheduled date and time of an event t
 
 #### Payments to the organizers
 
-While in the database and in the server, all user accounts are almost entirely similar, organizer accounts function very differently. To finalize and submit any booking
+While in the database and in the server, all user accounts are almost entirely similar, organizer accounts function very differently. To finalize and submit any booking, credits are transferred from the user to the organizer.
+
+Once a month, each organizer's credits are withdrawn and their nominal value in the local currency is then transferred to their designated bank account.
 
 ### Frameworks / Libraries
 
@@ -310,6 +314,10 @@ While in the database and in the server, all user accounts are almost entirely s
 
 The wireframes describing the user interface, for the most basic pages of the platform are shown below:
 
+By clicking the LogIn/SignUp button, a modal pops up with two tabs, corresponding to two choices. He can either login using his login credentials, or create a new account (as a parent or an organizer) if they don't already have one.
+
+The footer holds basic information about the platform (social media etc), a contact form, also implemented as a button that pops up a modal, and quick links to buy credits.
+
 #### Home Page
 
 ![index.html](index.png)
@@ -334,8 +342,6 @@ This page is the primary interface with the application, and is comprised of two
 		- **List View:** The events appear in a list, where each row is a bubble that contains a brief description of the event, like a thumbnail, its title and its price. Clicking on one of these events takes you to its page.
 		- **Map View:** An embedded Google Maps JavaScript map, which is centered on the user's location and contains each event as a separate marker. Clicking on a marker will then bring up information about the event - similar to the bubbles in the list view - which can then be clicked again in order to proceed to the event's page.
 
-#### Event Page
-
 ![event.html](event.png)
 
 This page will contain all the information of the event. This page will be primarily split into three distinct sections.
@@ -344,16 +350,51 @@ This page will contain all the information of the event. This page will be prima
 	- A watermark photograph, relevant to the event, that the organizer has uploaded.
 - **Bottom-Left Section:** Description
 	- The description of the event 
+	- The price
+	- The duration
+	- The address
+	- Age/gender limitation of the attendees
+	- Booking button
+		- Pressing this button will bring forward a pop-up window, with which the user can select a scheduled date and time of the event to book and finalize his purchase.
+- **Bottom-Right Section:** Map
+	- A simple Google Maps embedded map, with a marker at the location of the event.
 
 #### Profile Page
 
 ![profile.html](profile.png)
 
+- **Top-Left Section:**: Details
+	- This section will serve as a basic display of the user's information.
+- **Top-Right Section:**: Kids / Events
+	- This section will differ according to the type of the user
+	- **Parent:** List of kids
+		- Will display a list of the user's submitted kids, along with a button to submit additional.
+	- **Organizer:** List of kids
+		- Will display a list of the user's hosted events, along with a button to create additional.
+- **Bottom Section:**: Events
+	- This section will differ according to the type of the user
+	- **Parent:** List of booked events
+		- Will display a descriptive list of upcoming and/or past events the user has booked for their kids.
+	- **Organizer:** List of completed events
+		- Will display a list of the user's completed events, along with the organizer's revenue from each event.
+
 #### Admin Panel
 
 ![admin.html](admin.png)
 
+The administrator's panel provides access to the user base. By providing the ability to edit, ban or delete users, the goal of this page is to enable the application to be maintained with very little additional technical skills.
+
 For other functionalities (LogIn/SignUp, Add Event, Add Kid, Add Funds etc.) we use modals (popup dialog boxes), and not dedicated pages in order to avoid many redirections and keep the UI simple.
+
+### Watermark Module
+
+A separate module written in C# that accomplishes the task of watermarking images provided by the main application. It serves the purpose of copyrighting said images, hereby protecting from theft and other unwarranted usage from unrelated third parties.
+
+- **Function**: The module receives the image in bit-stream form along with the string required to be watermarked and some parameters regarding the appearance of the watermark. It then proceeds to apply the watermark to the image according to the given parameters, resizes it appropriately and returns it in bit-stream form to be used as required by the main application.
+
+- **Parameters**: The module grants the option for the customization of the appearance of the watermark before its final application. Along with specifying the color and the opacity of the watermark, the module picks a true type font (*.ttf) from an internal library, and is also able to rotate the watermark, as well as apply a shadow. 
+
+- **Requirements**: The module is able to perform its purpose without any additional requirements, aside from the standard libraries provided with C#.
 
 ### System Requirements
 
