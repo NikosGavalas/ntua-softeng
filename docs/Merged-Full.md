@@ -1,5 +1,50 @@
 # 'Pleisure' Platform
 
+## Table Of Contents
+
+<!-- TOC -->
+
+- ['Pleisure' Platform](#pleisure-platform)
+	- [Table Of Contents](#table-of-contents)
+	- [Software Description](#software-description)
+	- [Requirements Analysis](#requirements-analysis)
+		- [Functional Requirements](#functional-requirements)
+			- [User Groups and corresponding operations](#user-groups-and-corresponding-operations)
+				- [Guest users](#guest-users)
+				- [Parents](#parents)
+				- [Organizers](#organizers)
+				- [Administrators](#administrators)
+			- [Entry Points](#entry-points)
+			- [Monetization](#monetization)
+			- [Booking events](#booking-events)
+		- [Event Search and Results Filtering](#event-search-and-results-filtering)
+		- [Non-functional Requirements](#non-functional-requirements)
+			- [Legal](#legal)
+				- [Software license](#software-license)
+				- [Cookies Policy](#cookies-policy)
+			- [Security](#security)
+			- [Usability](#usability)
+			- [Flexibility](#flexibility)
+			- [Deployment](#deployment)
+			- [Responsiveness](#responsiveness)
+	- [Technical Specifications](#technical-specifications)
+		- [Architecture and Design](#architecture-and-design)
+		- [Business Model](#business-model)
+		- [Interfacing](#interfacing)
+		- [Creating and booking events](#creating-and-booking-events)
+		- [Frameworks / Libraries](#frameworks--libraries)
+			- [Back-End](#back-end)
+			- [Front-End](#front-end)
+		- [Wireframes](#wireframes)
+		- [System Requirements](#system-requirements)
+			- [Environment](#environment)
+			- [Hardware requirements](#hardware-requirements)
+		- [Build & Deployment](#build--deployment)
+			- [Monitoring](#monitoring)
+			- [Notes on security](#notes-on-security)
+
+<!-- /TOC -->
+
 ## Software Description
 
 Pleisure is a web platform which connects parents with activities providers for their children. It aims to offer parents the capability of finding high quality activities for their kids via a simple and easy to use user interface. 
@@ -23,19 +68,19 @@ The users of the platform can belong to one of the following groups:
 
 Permissions: Guest users have access to most of the content of the platform. They can search and view available events as well as apply filters, to limit the displayed results to their preferences. 
 
-Restrictions: Guest users do not have a profile, as a result they are not allowed to have a wallet or buy credits. Guest users cannot create or book events. They also do not have any administrator priviledges.
+Restrictions: Guest users do not have a profile, as a result they are not allowed to have a wallet or buy credits. Guest users cannot create or book events. They also do not have any administrator privileges.
 
 ##### Parents
 
 Permissions: Users signed up as Parents can perform all the actions that a Guest user can. Additionally, they have access to a private profile page where they have their personal and contact information, photos, booking history and wallet with their credits  (see [Monetization](#monetization)). Parents can buy credits with any of the given payment methods, and they can use those credits to book events. In this personal page there is also an option to "add child", via which, a parent can add information about his children (such as date of birth and prefered activity), so that the events displayed in the search results will have pre-applied filters accordingly for quicker personalization.
 
-Restrictions: Parents cannot create events and they do not have any administrator priviledges.
+Restrictions: Parents cannot create events and they do not have any administrator privileges.
 
 ##### Organizers
 
-Permissions: Organizers are the activities/events providers. They can perform all the actions that Guest users can. In addition, they have a public "profile page" in which they have the "add event" option, where they can create an event, by supplying the necessary information. These information include the exact time and date of the event, info about it being reccuring or not, its pricing, address (geolocation), photos etc. Like parents they can use the "report" function to mark any inappropriate activity. Finally, they can also view monthly reports in their profile page, with all the completed events, total respective number of tickets sold and total income for each event in EUR.  
+Permissions: Organizers are the activities/events providers. They can perform all the actions that Guest users can. In addition, they have a public "profile page" in which they have the "add event" option, where they can create an event, by supplying the necessary information. These information include the exact time and date of the event, info about it being recurring or not, its pricing, address (geolocation), photos etc. Like parents they can use the "report" function to mark any inappropriate activity. Finally, they can also view monthly reports in their profile page, with all the completed events, total respective number of tickets sold and total income for each event in EUR.  
 
-Restrictions: Organizers do not use the credits system, so they do not have a wallet. As a result cannot book other events. They also do not have any administrator priviledges.
+Restrictions: Organizers do not use the credits system, so they do not have a wallet. As a result cannot book other events. They also do not have any administrator privileges.
 
 ##### Administrators
 
@@ -51,11 +96,11 @@ Authentication of all users (belonging to the groups Parents/Organizers/Administ
 
 #### Entry Points
 
-All the users visiting the web platform, can immediately utilise the functionality of the service by typing in the type of activity in the main textfield. 
+All the users visiting the web platform, can immediately utilize the functionality of the service by typing in the type of activity in the main text-field. 
 
 The nearby events with matching tags are then displayed on another page, to which the user is redirected after performing the query action.
 
-Else, by clicking the “Events” tab on the navbar they are getting redirected directly to the event page, where they can browse events and apply filters.
+Else, by clicking the “Events” tab on the navigation bar they are getting redirected directly to the event page, where they can browse events and apply filters.
 
 #### Monetization
 
@@ -73,7 +118,7 @@ Events can be booked by parents with the use of 'credits'. Upon booking the even
 
 ### Event Search and Results Filtering
 
-As mentioned before, 'Pleisure' offers a simple search engine on the website's main page. This aims to enable every user, to narrow the list of given events, so that it matches their needs and prefernces. The user types in an activity and the corresponding events are shown immeditely without having to browse through all website's events.
+As mentioned before, 'Pleisure' offers a simple search engine on the website's main page. This aims to enable every user, to narrow the list of given events, so that it matches their needs and preferences. The user types in an activity and the corresponding events are shown immediately without having to browse through all website's events.
 
 'Pleisure' provides further result filtering on the Events page. In order to use the filtering tool a location must be provided by the user. Given that, the user limits  the event shown results by adjusting:
 
@@ -156,8 +201,12 @@ The development stack has been arranged as follows:
 - Web-Server: **C#**
 	- Although the choice here was mostly preferential, it is a strong one, as the .NET Framework is very versatile, robust and agile in development. This language is further supported by Microsoft's own Visual Studio, which makes any workflow effortlessly streamlined and optimized.
 	- For any interaction between the web server and the application, the former will provide a JSON API for data retrieval, as well as any operation the user might intend to perform through the application, for example booking an event or changing their password.
-- Front-End: **HTML, CSS, Javascript**
+- Front-End: **HTML, CSS, JavaScript**
 	- As this is a web application, the default W3C set of languages has been chosen to both design and render the application. Any alternatives would involve the use of specialized front-end rendering frameworks, which were deemed to be beyond the scope of the project. Describing the application natively in the web languages also ensures abstraction, making the front-end of the project not have any major dependency on any other parts of stack.
+
+### Business Model
+
+
 
 ### Interfacing
 
@@ -171,7 +220,7 @@ For static information, the server will use session variables to properly render
 @endif{}
 ```
 
-And the following snippet will display a greeting to the user, as well as their avatarw.
+And the following snippet will display a greeting to the user, as well as their avatar.
 
 ```html
 <span>Hello @{user.name}!</span>
@@ -228,7 +277,7 @@ Parents will *have* to add their `Kids` to their private profile by defining:
 
 Therefore, a parent booking an event for one of their kids will add the kid to the list of attendees for that `Event`. Obviously, in order for a kid to attend an event, it needs to comply with the age and gender requirements of the event.
 
-The parent will be allowed to choose which scheduled date and time of an event they are booking for. In the case of recurring events, only the immediate occurance can be booked.
+The parent will be allowed to choose which scheduled date and time of an event they are booking for. In the case of recurring events, only the immediate occurrence can be booked.
 
 ### Frameworks / Libraries
 
@@ -286,12 +335,12 @@ The web server can run in either one of the following environments with their re
 
 - Microsoft Windows
 	- .NET Framework 4.6 or higher
-- Any unix distribution
+- Any Unix distribution
 	- Mono Framework 5.4 or higher
-- Any unix distribution
+- Any Unix distribution
 	- Docker
 
-The web server can be built in either one of the following environments with their respective dendencies
+The web server can be built in either one of the following environments with their respective dependencies
 
 - Microsoft Windows
 	- NuGet
@@ -312,16 +361,18 @@ To ensure better scalability, events that have concluded will be deleted from st
 
 ### Build & Deployment
 
-The project's deployment will revolve around [Docker](https://www.docker.com/). A linux bash script will be used to automate the process, which will do the following:
+The project's deployment will revolve around [Docker](https://www.docker.com/). A Linux bash script will be used to automate the process, which will do the following:
 
 1. Pull the source code from the repository.
 2. Build the project using a Makefile which in summary does the following
-	1. Use `nuget restore`, which will download all the dependencies of the solution.
-	2. Use `xbuild`, which is a clone of the official `MSBuild`, to build all projects in the solution in the correct order using the *Release* configuration.
-3. Build the docker image from the `Dockerfile` which in summary does the following
+	1. Add `https://nuget.gmantaos.com/api/v2/` to a temporary NuGet source, since some of the dependencies are hosted there.
+	2. Use `nuget restore`, which will download all the dependencies of the solution.
+	3. Remove the above temporary source.
+	4. Use `xbuild`, which is a clone of the official `MSBuild`, to build all projects in the solution in the correct order using the *Release* configuration.
+3. Build the Docker image from the `Dockerfile` which in summary does the following
 	1. Use an image that has `mono-complete` installed.
 	2. Copies the build folder `Pleisure/bin/Release/` to `/opt/Pleisure` inside the container
-	3. Runs the web server as the image's entrypoint using the command `mono /opt/Pleisure/Pleisure.exe`
+	3. Runs the web server as the image's entry-point using the command `mono /opt/Pleisure/Pleisure.exe`
 
 Additionally, any options that need to be passed to the application, such as the credentials for the MySql server for example, will be passed when running the container in the form of environment variables, like the following example
 
