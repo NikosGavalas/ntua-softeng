@@ -103,7 +103,7 @@ namespace Pleisure
 				byte[] buffer = new byte[imgStream.Length];
 				await imgStream.ReadAsync(buffer, 0, buffer.Length);
 
-				FileStream writer = File.OpenRead(filePath);
+				FileStream writer = File.OpenWrite(filePath);
 				await writer.WriteAsync(buffer, 0, buffer.Length);
 
 				req.SetContentTypeByExtension(ContentType.Image, "png");
