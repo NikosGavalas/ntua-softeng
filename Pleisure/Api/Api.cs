@@ -26,9 +26,9 @@ namespace Pleisure
 			apiRouter.Add("/events", Events);
 			apiRouter.Add("/email_available", EmailAvailable);
 
-			apiRouter.Add("/api/add_kid", AddKid);
-			apiRouter.Add("/api/create_event", CreateEvent);
-			apiRouter.Add("/api/schedule_event", ScheduleEvent);
+			apiRouter.Add("/add_kid", AddKid);
+			apiRouter.Add("/create_event", CreateEvent);
+			apiRouter.Add("/schedule_event", ScheduleEvent);
 		}
 
 		public async Task AddKid(HttpRequest req)
