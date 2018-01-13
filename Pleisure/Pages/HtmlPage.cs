@@ -56,10 +56,11 @@ namespace Pleisure
 			get { return user != null ? user.Credits : 0; }
 		}
 
+		public string Address = null;
 		[HtmlVariable("user.address")]
 		public string UserAddress
 		{
-			get { return user != null ? user.Address : ""; }
+			get { return Address ?? (user?.Address ?? ""); }
 		}
 
 		[HtmlVariable("user.avatar")]
