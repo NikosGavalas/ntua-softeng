@@ -9,9 +9,9 @@ namespace Pleisure
 {
 	public static class Options
 	{
-		public static string Host 
+		public static string Host
 		{
-			get 
+			get
 			{
 				return Environment.GetEnvironmentVariable("HTTP_HOST") ?? "*";
 			}
@@ -70,6 +70,22 @@ namespace Pleisure
 			get
 			{
 				return Environment.GetEnvironmentVariable("MYSQL_DB") ?? "pleisure";
+			}
+		}
+
+		public static bool Randomized
+		{
+			get
+			{
+				if (Environment.GetEnvironmentVariable("RANDOMIZED") == null)
+				{
+					return bool.Parse(Environment.GetEnvironmentVariable("RANDOMIZED"));
+				}
+
+#if DEBUG
+				return true;
+#endif
+				return false;
 			}
 		}
 
