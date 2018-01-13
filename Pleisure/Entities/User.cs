@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using HaathDB;
+using ChanceNET;
 
 namespace Pleisure
 {
@@ -57,6 +58,18 @@ namespace Pleisure
 			query.Where("organizer_id", ID);
 
 			return Program.MySql().Execute(query);
+		}
+
+		public static User Random(Chance chance, UserRole? role = null)
+		{
+			return new User()
+			{
+				ID			= (uint)chance.Natural(),
+				Email		= chance.Email(),
+				FullName	= chance.FullName(prefix: true, middle: true, middleInitial: true),
+				Role		= role ?? chance.PickEnum<UserRole>(),
+
+			};
 		}
 	}
 

@@ -38,27 +38,32 @@ namespace Pleisure
 			await request.Close();
 		}
 
-		public async Task Events(HttpRequest request)
+		public async Task Events(HttpRequest req)
 		{
-			UserSession session = request.Session as UserSession;
+			UserSession session = req.Session as UserSession;
 			User user = await session.GetUser();
 			
 			string html = await GetHtml("events");
 			if (html == null)
 			{
-				await request.SetStatusCode(HttpStatusCode.NotFound).Close();
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
 				return;
 			}
 
-			request.SetStatusCode(HttpStatusCode.OK);
-			request.SetContentType(ContentType.Html);
+			if (req.HasGET("address"))
+			{
+				user.Address = req.GET("address", user.Address);
+			}
+
+			req.SetStatusCode(HttpStatusCode.OK);
+			req.SetContentType(ContentType.Html);
 
 			HtmlPage page = new HtmlPage(html, user);
 
 			string rendered = await page.Render();
-			await request.Write(rendered);
+			await req.Write(rendered);
 
-			await request.Close();
+			await req.Close();
 		}
 
 		public async Task Event(HttpRequest request)
