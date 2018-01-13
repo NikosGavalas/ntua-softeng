@@ -143,8 +143,11 @@ namespace Pleisure
 				byte[] buffer = new byte[imgStream.Length];
 				await imgStream.ReadAsync(buffer, 0, buffer.Length);
 
-				FileStream writer = File.OpenWrite(filePath);
-				await writer.WriteAsync(buffer, 0, buffer.Length);
+				using (FileStream writer = File.OpenWrite(filePath))
+				{
+					await writer.WriteAsync(buffer, 0, buffer.Length);
+					await writer.FlushAsync();
+				}
 			}
 
 			InsertQuery query = new InsertQuery("events");
