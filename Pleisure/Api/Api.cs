@@ -95,6 +95,8 @@ namespace Pleisure
 
 			if (await req.HasPOST("image"))
 			{
+				Console.WriteLine(req.POST("title"));
+
 				MemoryStream imgStream = await req.GetContentData("image");
 				string filePath = Options.StoragePath(string.Format("eventimg/{0}.png", eventId));
 
