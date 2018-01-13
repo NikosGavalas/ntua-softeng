@@ -86,6 +86,18 @@ namespace Pleisure
 			get { return "/eventimg/" + evt.ID; }
 		}
 
+		[HtmlVariable("event.duration")]
+		public int EventDuration
+		{
+			get { return evt.Duration; }
+		}
+
+		[HtmlVariable("event.genders")]
+		public string EventGenders
+		{
+			get { return evt.Genders.ToString(); }
+		}
+
 		public EventPage(string html, User user, Event evt) : base(html, user)
 		{
 			this.evt = evt;
