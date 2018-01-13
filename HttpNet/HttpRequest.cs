@@ -226,7 +226,6 @@ namespace HttpNet
 			{
 				string reqBody = await RequestBodyString();
 				Dictionary<string, string> postParams = Utils.GetUrlParams("x?" + reqBody);
-				Console.WriteLine(reqBody);
 
 				if (postParams.ContainsKey(key))
 				{
@@ -266,6 +265,12 @@ namespace HttpNet
 
 		public async Task<T> GetContentData<T>(string key) where T : Stream, new()
 		{
+			Console.WriteLine(key);
+
+			if (Request.ContentType.Split(';').Length < 2
+			    || Request.ContentType.Split(';')[1].Split('=').Length < 2)
+				return null;
+
 			string boundary = "--" + Request.ContentType.Split(';')[1].Split('=')[1];
 			BinaryReader input = new BinaryReader(await RequestStream(), Request.ContentEncoding);
 

@@ -58,6 +58,7 @@ namespace Pleisure
 			if (req.HasGET("address"))
 			{
 				page.Address = req.GET("address", "");
+				Console.WriteLine(page.Address + " " + req.GET("address"));
 			}
 
 			string rendered = await page.Render();
