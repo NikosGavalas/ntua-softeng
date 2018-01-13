@@ -53,7 +53,7 @@ namespace Pleisure
 			if (req.HasGET("address"))
 			{
 				user.Address = req.GET("address", user.Address);
-			}
+			} 
 
 			req.SetStatusCode(HttpStatusCode.OK);
 			req.SetContentType(ContentType.Html);
