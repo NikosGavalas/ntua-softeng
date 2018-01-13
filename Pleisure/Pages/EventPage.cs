@@ -32,7 +32,7 @@ namespace Pleisure
 			get { return evt?.Address; }
 		}
 
-		[HtmlVariable("event.lat ")]
+		[HtmlVariable("event.lat")]
 		public double EventLatitude
 		{
 			get { return evt.Latitude; }
