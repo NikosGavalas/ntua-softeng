@@ -94,7 +94,8 @@ namespace Pleisure
 
 			int eventId = Program.Chance().Natural();
 
-			if (!await req.HasPOST("title", "description", "price", "duration", "address"))
+			if (!await req.HasPOST("title", "description", "price", "duration", "address",
+			                       "datetime", "recurrence"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -112,6 +113,10 @@ namespace Pleisure
 			int age_max = 17;
 
 
+			string scheduledTime = await req.POST("datetime");
+			string recurrence = await req.POST("recurrence");
+
+
 			int.TryParse(await req.POST("genders"), out genders);
 			int.TryParse(await req.POST("age_min"), out age_min);
 			int.TryParse(await req.POST("age_max"), out age_max);
@@ -125,12 +130,15 @@ namespace Pleisure
 				return;
 			}
 
-			if (location == null)
+			// First try scheduling
+			if (location == null
+			    || !await ScheduleEvent(eventId, scheduledTime, recurrence))
 			{
 				req.SetStatusCode(HttpStatusCode.NotAcceptable);
 				await req.Close();
 				return;
 			}
+
 
 			if (await req.HasPOST("image"))
 			{
@@ -165,10 +173,6 @@ namespace Pleisure
 			     .Value("genders", genders);
 
 			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
-
-
-			// Also schedule
-
 
 			await req.Redirect("/event/" + eventId);
 		}
@@ -462,7 +466,7 @@ namespace Pleisure
 				{
 					int id = c.Natural();
 					Event evt = Event.Random(id, location.Latitude, location.Longitude, distance);
-					arr.Add(evt.Serialize());
+					arr.Add(evt.SerializeWithScheduled());
 				}
 			}
 
