@@ -163,6 +163,8 @@ namespace Pleisure
 			     .Value("age_max", age_max)
 			     .Value("genders", genders);
 
+			Console.WriteLine(query.QueryString());
+
 			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
 
 			await req.Redirect("/event/" + eventId);
@@ -474,7 +476,30 @@ namespace Pleisure
 
 		public async Task OwnEvents(HttpRequest req)
 		{
-			
+			req.SetContentType(ContentType.Json);
+
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+			}
+
+			SelectQuery<Event> query = new SelectQuery<Event>();
+			query.Where("organizer_id", user.ID);
+
+			JArray arr = new JArray();
+			List<Event> events = await Program.MySql().Execute(query);
+			foreach (Event evt in events)
+			{
+				arr.Add(await evt.SerializeWithScheduled());
+			}
+
+			await req.Write(arr.ToString());
+
+			await req.Close();
 		}
 	}
 }
