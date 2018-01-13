@@ -50,15 +50,15 @@ namespace Pleisure
 				return;
 			}
 
-			if (req.HasGET("address"))
-			{
-				user.Address = req.GET("address", user.Address);
-			} 
-
 			req.SetStatusCode(HttpStatusCode.OK);
 			req.SetContentType(ContentType.Html);
 
 			HtmlPage page = new HtmlPage(html, user);
+
+			if (req.HasGET("address"))
+			{
+				page.Address = req.GET("address", "");
+			}
 
 			string rendered = await page.Render();
 			await req.Write(rendered);

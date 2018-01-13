@@ -226,6 +226,7 @@ namespace HttpNet
 			{
 				string reqBody = await RequestBodyString();
 				Dictionary<string, string> postParams = Utils.GetUrlParams("x?" + reqBody);
+				Console.WriteLine(reqBody);
 
 				if (postParams.ContainsKey(key))
 				{
