@@ -25,12 +25,49 @@ namespace Pleisure
 			apiRouter.Add("/kids", Kids);
 			apiRouter.Add("/events", Events);
 			apiRouter.Add("/email_available", EmailAvailable);
+
+			apiRouter.Add("/api/add_kid", AddKid);
 			apiRouter.Add("/create_event", CreateEvent);
+		}
+
+		public async Task AddKid(HttpRequest req)
+		{
+			
 		}
 
 		public async Task CreateEvent(HttpRequest req)
 		{
-			
+			int eventId = Program.Chance().Natural();
+
+			if (await req.HasPOST("image"))
+			{
+				MemoryStream imgStream = await req.GetContentData("image");
+				string filePath = Options.StoragePath(string.Format("eventimg/{0}.png", eventId));
+
+				byte[] buffer = new byte[imgStream.Length];
+				await imgStream.ReadAsync(buffer, 0, buffer.Length);
+
+				FileStream writer = File.OpenRead(filePath);
+				await writer.WriteAsync(buffer, 0, buffer.Length);
+			}
+
+			if (!await req.HasPOST("title", "description", "price", "duration", "address"))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			string title = await req.POST("title");
+			string description = await req.POST("description");
+			int price;
+
+			if (!int.TryParse(await req.POST("price", null), out price))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
 
 			await req.Close();
 		}

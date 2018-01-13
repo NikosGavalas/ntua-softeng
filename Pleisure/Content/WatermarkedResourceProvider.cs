@@ -35,6 +35,12 @@ namespace Pleisure
 			Event evt = (await Program.MySql().Execute(query)).FirstOrDefault();
 
 			byte[] data = await ReadFile(request, requestedFile + ".png");
+
+			if (data == null)
+			{
+				request.SetStatusCode(HttpStatusCode.NotFound);
+				return;
+			}
 			
 			MemoryStream imageStream = new MemoryStream(data);
 

@@ -58,7 +58,7 @@ namespace Pleisure
 			return new Event()
 			{
 				ID =			id,
-				Title =			c.Sentence(capitalize: true),
+				Title =			c.Sentence(words: 6, capitalize: true),
 				Description =	c.Paragraph(),
 				Price =			c.Natural(100),
 				Latitude =		loc.Latitude,

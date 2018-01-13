@@ -13,15 +13,19 @@ using HttpNet;
 using UnixSignalWaiter;
 
 using HaathDB;
+using ChanceNET;
 
 namespace Pleisure
 {
 	class Program
 	{
 		static WebServer server;
+		static ConcurrentChance chance;
 
 		static void Main(string[] args)
 		{
+			chance = new ConcurrentChance();
+
 			server = WebServer.Create<UserSession>(Options.Host, Options.Port, Options.SessionLifetime);
 			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
@@ -104,6 +108,11 @@ namespace Pleisure
 		{
 			return new MySqlConn(Options.MysqlHost, Options.MysqlUser, Options.MysqlPass, 
 			                     Options.MysqlDb, Options.MysqlPort);
+		}
+
+		public static ConcurrentChance Chance()
+		{
+			return chance;
 		}
 	}
 }
