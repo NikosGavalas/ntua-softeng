@@ -45,6 +45,11 @@ namespace Pleisure
 			WatermarkedResourceProvider evtImg = new WatermarkedResourceProvider(Options.StoragePath("eventimg"), "/eventimg");
 			server.Add("/eventimg/*", evtImg.OnRequest);
 
+			ResizedResourceProvider evtThumb = new ResizedResourceProvider(Options.StoragePath("eventimg"), "/eventthumb",
+			                                                               Options.EventThumbnailWidth, Options.EventThumbnailHeight);
+			server.Add("/eventthumb/*", evtThumb.OnRequest);
+
+
 			/*
 			 * Register API
 			 */

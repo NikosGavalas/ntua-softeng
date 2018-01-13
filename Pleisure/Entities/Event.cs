@@ -51,7 +51,10 @@ namespace Pleisure
 		[DBColumn("genders")]
 		public Gender Genders;
 
-		public string Thumbnail = "http://via.placeholder.com/128x128";
+		public string Thumbnail 
+		{
+			get { return "/eventthumb/" + ID; }
+		}
 
 		public static Event Random(int id, double centerLat, double centerLng, double range)
 		{
@@ -67,7 +70,6 @@ namespace Pleisure
 				Longitude =		c.Longitude(),
 				Address =		c.Address(numberFirst: false),
 				Duration =		c.PickOne(new int[] { 30, 45, 60, 75, 90, 120, 180 }),
-				Thumbnail =		c.Avatar(GravatarDefaults.Identicon),
 				AgeMin =		ageMin,
 				AgeMax =		c.Integer(ageMin, 18),
 				Organizer =		User.Random(c, UserRole.Organizer),

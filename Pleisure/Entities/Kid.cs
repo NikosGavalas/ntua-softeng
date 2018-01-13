@@ -34,7 +34,7 @@ namespace Pleisure
 			get
 			{
 				int age = DateTime.Now.Year - Birthday.Year;
-				if (DateTime.Now.DayOfYear < Birthday.DayOfYear)
+				if (DateTime.Now.DayOfYear < Birthday.DayOfYear && age > 0)
 					age--;
 				return age;
 			}

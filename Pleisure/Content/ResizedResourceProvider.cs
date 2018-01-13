@@ -12,10 +12,16 @@ using HaathDB;
 
 namespace Pleisure
 {
-	public class WatermarkedResourceProvider : StaticResourceProvider
+	public class ResizedResourceProvider : StaticResourceProvider
 	{
-		public WatermarkedResourceProvider(string resourceRoot, string virtualRoot) : base(resourceRoot, virtualRoot, ContentType.Image)
+		int width;
+		int height;
+
+		public ResizedResourceProvider(string resourceRoot, string virtualRoot,
+		                              int width, int height) : base(resourceRoot, virtualRoot, ContentType.Image)
 		{
+			this.width = width;
+			this.height = height;
 		}
 
 		protected override async Task ServeFile(HttpRequest request)
@@ -29,11 +35,6 @@ namespace Pleisure
 				return;
 			}
 
-			SelectQuery<Event> query = new SelectQuery<Event>()
-				.Where<SelectQuery<Event>>("event_id", eventId);
-
-			Event evt = (await Program.MySql().Execute(query)).FirstOrDefault();
-
 			byte[] data = await ReadFile(request, requestedFile + ".png");
 
 			if (data == null)
@@ -41,20 +42,13 @@ namespace Pleisure
 				request.SetStatusCode(HttpStatusCode.NotFound);
 				return;
 			}
-			
+
 			MemoryStream imageStream = new MemoryStream(data);
 
+			Stream resized = MyStamp.ResizeImage(imageStream, width, height);
 
-			MyStamp stamp = new MyStamp()
-			{
-				Opacity		= 100,
-				Shadow		= true
-			};
-
-			Stream watermarked = stamp.ApplyStamp(imageStream, evt.Organizer.FullName);
-
-			byte[] watermarkedData = new byte[watermarked.Length];
-			watermarked.Read(watermarkedData, 0, (int)watermarked.Length);
+			byte[] watermarkedData = new byte[resized.Length];
+			resized.Read(watermarkedData, 0, (int)resized.Length);
 
 			// Set the appropriate Content-Type
 			request.SetContentTypeByExtension(ContentType.Image, "png");
