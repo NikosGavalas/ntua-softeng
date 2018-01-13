@@ -29,6 +29,7 @@ namespace Pleisure
 			apiRouter.Add("/add_kid", AddKid);
 			apiRouter.Add("/create_event", CreateEvent);
 			apiRouter.Add("/schedule_event", ScheduleEvent);
+			apiRouter.Add("/own_events", OwnEvents);
 		}
 
 		public async Task AddKid(HttpRequest req)
@@ -93,26 +94,6 @@ namespace Pleisure
 
 			int eventId = Program.Chance().Natural();
 
-			if (await req.HasPOST("image"))
-			{
-				Console.WriteLine(req.POST("title"));
-
-				MemoryStream imgStream = await req.GetContentData("image");
-				string filePath = Options.StoragePath(string.Format("eventimg/{0}.png", eventId));
-
-				byte[] buffer = new byte[imgStream.Length];
-				await imgStream.ReadAsync(buffer, 0, buffer.Length);
-
-				FileStream writer = File.OpenWrite(filePath);
-				await writer.WriteAsync(buffer, 0, buffer.Length);
-
-				req.SetContentTypeByExtension(ContentType.Image, "png");
-				req.SetStatusCode(HttpStatusCode.OK);
-				await req.Write(buffer);
-				await req.Close();
-				return;
-			}
-
 			if (!await req.HasPOST("title", "description", "price", "duration", "address"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
@@ -125,6 +106,16 @@ namespace Pleisure
 			int price;
 			int duration;
 			string address = await req.POST("address");
+			int genders = 2;
+			Location location = await Google.Geocode(address);
+			int age_min = 1;
+			int age_max = 17;
+
+
+			int.TryParse(await req.POST("genders"), out genders);
+			int.TryParse(await req.POST("age_min"), out age_min);
+			int.TryParse(await req.POST("age_max"), out age_max);
+
 
 			if (!int.TryParse(await req.POST("price"), out price)
 			   || !int.TryParse(await req.POST("duration"), out duration))
@@ -134,9 +125,47 @@ namespace Pleisure
 				return;
 			}
 
-			req.SetContentType(ContentType.Json);
+			if (location == null)
+			{
+				req.SetStatusCode(HttpStatusCode.NotAcceptable);
+				await req.Close();
+				return;
+			}
 
-			await req.Close();
+			if (await req.HasPOST("image"))
+			{
+				Console.WriteLine(await req.POST("title"));
+
+				MemoryStream imgStream = await req.GetContentData("image");
+
+				string directory = Options.StoragePath("eventimg");
+				string filePath = Options.StoragePath(string.Format("{0}/{1}.png", directory, eventId));
+				Directory.CreateDirectory(directory);
+
+				byte[] buffer = new byte[imgStream.Length];
+				await imgStream.ReadAsync(buffer, 0, buffer.Length);
+
+				FileStream writer = File.OpenWrite(filePath);
+				await writer.WriteAsync(buffer, 0, buffer.Length);
+			}
+
+			InsertQuery query = new InsertQuery("events");
+			query.Value("organizer_id", user.ID)
+			     .Value("event_id", eventId)
+			     .Value("title", title)
+			     .Value("description", description)
+			     .Value("price", price)
+			     .Value("lat", location.Latitude)
+			     .Value("lng", location.Longitude)
+				 .Value("address", address)
+				 .Value("duration", duration)
+			     .Value("age_min", age_min)
+			     .Value("age_max", age_max)
+			     .Value("genders", genders);
+
+			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+			await req.Redirect("/event/" + eventId);
 		}
 
 		public async Task ScheduleEvent(HttpRequest req)
@@ -378,10 +407,11 @@ namespace Pleisure
 			}
 
 			// Filter by age
-			if (req.HasGET("age"))
+			int age = 0;
+			if (req.HasGET("age") && int.TryParse(req.GET("age"), out age))
 			{
-				query.Where("age_min", WhereRelation.UpTo, req.GET("age"))
-					.Where("age_max", WhereRelation.AtLeast, req.GET("age"));
+				query.Where("age_min", WhereRelation.UpTo, age)
+					.Where("age_max", WhereRelation.AtLeast, age);
 			}
 
 			// Filter by duration
@@ -394,6 +424,15 @@ namespace Pleisure
 				query.Where("duration", WhereRelation.UpTo, req.GET("duration_max"));
 			}
 
+			// Filter by gender
+			if (req.HasGET("gender") && (req.GET("gender") == "male" || req.GET("gender") == "female"))
+			{
+				query.Where(
+					new WhereClause("genders", req.GET("gender"))
+	                | new WhereClause("genders", 2)
+				);
+			}
+
 			// Perform query and build the response object
 			JArray arr = new JArray();
 			List<Event> events = await Program.MySql().Execute(query);
@@ -402,8 +441,8 @@ namespace Pleisure
 				DateTime minDate = DateTime.Now;
 				DateTime maxDate = DateTime.MaxValue;
 
-				DateTime.TryParse(await req.POST("min_date"), out minDate);
-				DateTime.TryParse(await req.POST("max_date"), out maxDate);
+				DateTime.TryParse(req.GET("min_date"), out minDate);
+				DateTime.TryParse(req.GET("max_date"), out maxDate);
 
 				if (await evt.HappensBetween(minDate, maxDate))
 				{
@@ -422,7 +461,6 @@ namespace Pleisure
 				}
 			}
 
-
 			JToken response = JToken.FromObject(new
 			{
 				center = location.Serialize(),
@@ -434,6 +472,9 @@ namespace Pleisure
 			await req.Close();
 		}
 
-
+		public async Task OwnEvents(HttpRequest req)
+		{
+			
+		}
 	}
 }

@@ -77,15 +77,10 @@ namespace Pleisure
 		{
 			get
 			{
-				if (Environment.GetEnvironmentVariable("RANDOMIZED") == null)
-				{
-					return bool.Parse(Environment.GetEnvironmentVariable("RANDOMIZED"));
-				}
-
 #if DEBUG
 				return true;
 #endif
-				return false;
+				return bool.Parse(Environment.GetEnvironmentVariable("RANDOMIZED") ?? "false");
 			}
 		}
 
