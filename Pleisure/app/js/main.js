@@ -44,6 +44,6 @@ $('#signupForm').submit(function (event) {
 });
 
 $(document).ready(function () {
-	$('#datetimepicker1').datetimepicker();
+	$('.datetimepicker').datetimepicker();
 });
 

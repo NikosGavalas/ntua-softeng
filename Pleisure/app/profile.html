@@ -15,6 +15,12 @@
 		@{html.navbar}
 		<!-- /Navbar -->
 
+		@if{is_parent}
+			@{modal.add_kid}
+		@else{}
+			@{modal.add_event}
+		@endif{}
+
 		<div class="container space-with-navbar">
 			<div class="row">
 				<div class="col-md-4">	
@@ -24,15 +30,31 @@
 							<!-- http://via.placeholder.com/256x256 -->
 							<img src="@{user.avatar}&s=256" class="img-rounded center-block img-responsive">
 						</div>
+
 						<div class="panel-body">
-							Email: @{user.email}
+							<table class="table">
+								<tr>
+									<td>Email:&nbsp;</td>
+									<td>
+										@{user.email}
+									</td>
+								</tr>
+								<tr>
+									<td>Address:&nbsp;</td>
+									<td>
+										@{user.address}
+									</td>
+								</tr>
+								<tr>
+									<td>Account Balance:&nbsp;</td>
+									<td>
+										@{user.credits} <i class="fa fa-money" aria-hidden="true"></i>
+									</td>
+								</tr>
+							</table>
 						</div>
-						<div class="panel-body">
-							Address: @{user.address}
-						</div>
-						<div class="panel-body">
-							Account Balance: @{user.credits} <i class="fa fa-money" aria-hidden="true"></i>
-						</div>
+
+
 					</div>
 					<!-- <a href="#TODOeditProfileModal" style="width:100%;" class="btn btn-success btn-lg">Edit Profile</a> -->
 				</div>
@@ -41,7 +63,12 @@
 						<div class="panel-heading clearfix">
 							<div class="row">
 								<div class="col-md-6">
-									<h4>My children</h4>
+									@if{is_parent} 
+										<h4>My children</h4>
+									@else{}
+										<h4>My Events</h4>
+									@endif{}
+
 								</div>
 								<div class="col-md-6">
 									<div class="btn-group pull-right inline">
@@ -79,5 +106,6 @@
 		<!-- /Footer -->
 
 		<script src="js/fetchkids.js"></script>
+		<script src="js/fetchevents.js"></script>
 	</body>
 </html>

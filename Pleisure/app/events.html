@@ -76,21 +76,32 @@
 								Age
 							</h4>
 							<select class="form-control" id="age" name="age">
-								<option>Any</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-								<option>7</option>
-								<option>8</option>
-								<option>9</option>
-								<option>10</option>
-								<option>11</option>
-								<option>12</option>
-								<option>13</option>
-								<option>14</option>
-								<option>15</option>
-								<option>16</option>
-								<option>17</option>
+								<option value="any">Any</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+							</select>
+						</div>
+
+						<div>
+							<h4>
+								Gender
+							</h4>
+							<select class="form-control" id="gender" name="gender">
+								<option value="any">Any</option>
+								<option value="male">Male</option>
+								<option value="female">Female</option>
 							</select>
 						</div>
 			
@@ -112,12 +123,13 @@
 						</div>
 
 						<hr>
+
 						<div>
 							<h4>
 								Min Date
 							</h4>
 							<div class="form-group">
-								<div class='input-group date' id='datetimepicker1'>
+								<div class='input-group date datetimepicker'>
 									<input name="min_date" type='text' class="form-control" />
 									<span class="input-group-addon">
 										<i class="fa fa-calendar" aria-hidden="true"></i>
@@ -131,7 +143,7 @@
 								Max Date
 							</h4>
 							<div class="form-group">
-								<div class='input-group date' id='datetimepicker1'>
+								<div class='input-group date datetimepicker'>
 									<input name="max_date" type='text' class="form-control" />
 									<span class="input-group-addon">
 										<i class="fa fa-calendar" aria-hidden="true"></i>
@@ -181,37 +193,6 @@
 
 						<!-- Items ListView -->
 						<div class="tab-pane fade active in" id="listview">
-
-							<!-- Pagination -->
-							<!-- <div class="container-fluid">
-								<div class="row">
-									<div class="col-md-12">
-										<ul class="pagination">
-											<li>
-												<a href="#">Prev</a>
-											</li>
-											<li class="active">
-												<a id="takis" href="#">1</a>
-											</li>
-											<li>
-												<a href="#">2</a>
-											</li>
-											<li>
-												<a href="#">3</a>
-											</li>
-											<li>
-												<a href="#">4</a>
-											</li>
-											<li>
-												<a href="#">5</a>
-											</li>
-											<li>
-												<a href="#">Next</a>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div> --><!-- /Pagination -->
 							
 						</div><!-- /Items ListView -->
 						
@@ -262,6 +243,8 @@
 									$("<p>").append("<b>Address:</b>&nbsp;").append(event.address)
 								).append(
 									$("<p>").append("<b>Price:</b>&nbsp;").append(event.price).append("&nbsp;").append("<i class='fa fa-money'>")
+								).append(
+									$("<p>").append("<b>Next Time:</b>&nbsp;").append(event.scheduled[0].next_time).append("&nbsp;")
 								)
 							)
 						)
