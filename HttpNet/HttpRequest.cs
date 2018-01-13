@@ -234,7 +234,7 @@ namespace HttpNet
 			}
 			catch (Exception) {}
 
-			if (GetContentData(key) != null)
+			if (await GetContentData(key) != null)
 			{
 				StreamReader r = new StreamReader(await GetContentData(key), Request.ContentEncoding);
 				return await r.ReadToEndAsync();
