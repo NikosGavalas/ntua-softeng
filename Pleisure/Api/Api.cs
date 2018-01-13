@@ -51,7 +51,6 @@ namespace Pleisure
 
 			if (!await req.HasPOST("name", "birthday", "gender"))
 			{
-				Console.WriteLine(1);
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
 				return;
@@ -62,10 +61,9 @@ namespace Pleisure
 			int gender;
 
 			if (!DateTime.TryParse(await req.POST("birthday"), out birthday)
-			    || !int.TryParse("gender", out gender)
+			    || !int.TryParse(await req.POST("gender"), out gender)
 			   || (gender != 0 && gender != 1))
 			{
-				Console.WriteLine(2);
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
 				return;
