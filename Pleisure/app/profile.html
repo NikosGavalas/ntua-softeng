@@ -45,8 +45,13 @@
 								</div>
 								<div class="col-md-6">
 									<div class="btn-group pull-right inline">
-										<a href="#TODOeditProfileModal" class="btn btn-primary pull-right">
+										@if{is_parent}
+											<a data-toggle="modal" data-target="#addKidModal" href="#" class="btn btn-primary pull-right">
 											<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add Kid</a>
+										@else{}
+											<a data-toggle="modal" data-target="#addEventModal" href="#" class="btn btn-primary pull-right">											
+											<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;New Event</a>												
+										@endif{}
 									</div>
 								</div>
 							</div>

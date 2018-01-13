@@ -37,7 +37,7 @@
 				btnContainer.hide();
 				loadingContainer.show();
 
-				if (args.onSubmit && !args.onSubmit(thisForm))
+				if (args.onSubmit && (args.onSubmit(thisForm) === false))
 				{
 					return;
 				}

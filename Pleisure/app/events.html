@@ -26,127 +26,142 @@
 					</div>
 				</div>
 
-				<div id="filter-sidebar" class="col-xs-12 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar" >
-					<h3>Filters</h3>
+				<form id="filtersForm" action="/api/events" method="GET">
+					<div id="filter-sidebar" class="col-xs-12 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar" >
+						<h3>Filters</h3>
 
-					<div>
-						<h4>
-							Address
-						</h4>
-						<div id="group-1" class="list-group collapse in">
-							<div class="input-group">
-								<span class="input-group-addon fa fa-map-marker"></span>
-								@if{is_loggedin}
-								<input type="text" id="address" class="form-control" value="@{user.address}">
-								@else{}
-								<input type="text" id="address" class="form-control" placeholder="Enter your location">								
-								@endif{}
+						<div>
+							<h4>
+								Address
+							</h4>
+							<div id="group-1" class="list-group collapse in">
+								<div class="input-group">
+									<span class="input-group-addon fa fa-map-marker"></span>
+									<input name="address" type="text" id="address" class="form-control" placeholder="Enter your location" value="@{user.address}">
+								</div>
 							</div>
 						</div>
-					</div>
-					
-					<div>
-						<h4>
-							Distance
-						</h4>
-						<div id="distance_slider" data-role="rangeslider">
-							<span>
-								<label class="slider-value"></label>
-								&nbsp;km
-							</span>
-							<input class="my-slider" type="range" name="distance" id="distance" value="100" min="0" max="50">
+
+						<hr>
+						
+						<div>
+							<h4>
+								Distance
+							</h4>
+							<div id="distance_slider" data-role="rangeslider">
+								<span>
+									<label class="slider-value"></label>
+									&nbsp;km
+								</span>
+								<input class="my-slider" type="range" name="distance" id="distance" value="100" min="0" max="50">
+							</div>
 						</div>
-					</div>
-		
-					<div>
-						<h4>
-							Maximum Price
-						</h4>
-						<div id="group-2" data-role="rangeslider">
-							<span>
-								<label class="slider-value"></label>
-								&nbsp;
-								<span class="fa fa-money"></span>
-							</span>
-							<input class="my-slider" type="range" name="max-price" id="max-price" value="1000" min="0" max="1000">
+			
+						<div>
+							<h4>
+								Maximum Price
+							</h4>
+							<div id="group-2" data-role="rangeslider">
+								<span>
+									<label class="slider-value"></label>
+									&nbsp;
+									<span class="fa fa-money"></span>
+								</span>
+								<input class="my-slider" type="range" name="price" id="max-price" value="1000" min="0" max="1000">
+							</div>
 						</div>
-					</div>
-		
-					<div>
-						<h4>
-							Age Range
-						</h4>
-						<select class="form-control" id="age" name="age">
-							<option>Any</option>
-							<option>4</option>
-							<option>5</option>
-							<option>6</option>
-							<option>7</option>
-							<option>8</option>
-							<option>9</option>
-							<option>10</option>
-							<option>11</option>
-							<option>12</option>
-							<option>13</option>
-							<option>14</option>
-							<option>15</option>
-							<option>16</option>
-							<option>17</option>
-						</select>
-					</div>
-		
-					<div>
-						<h4>
-							Categories
-						</h4>
-						<div id="group-4">
-							<select id="category-selector" class="form-control">
-								<option value="all">All</option>								
-								<option value="sports">Sports</option>
-								<option value="playground">Playground</option>
-								<option value="party">Party</option>
-								<option value="excursion">Excursion</option>
-								<option value="outdoor">Outdoor</option>
-								<option value="inquisition">Spanish Inquisition</option>
+			
+						<div>
+							<h4>
+								Age
+							</h4>
+							<select class="form-control" id="age" name="age">
+								<option>Any</option>
+								<option>4</option>
+								<option>5</option>
+								<option>6</option>
+								<option>7</option>
+								<option>8</option>
+								<option>9</option>
+								<option>10</option>
+								<option>11</option>
+								<option>12</option>
+								<option>13</option>
+								<option>14</option>
+								<option>15</option>
+								<option>16</option>
+								<option>17</option>
 							</select>
 						</div>
-					</div>
-
-					<div>
-						<h4>
-							Date
-						</h4>
-						<div class="form-group">
-							<div class='input-group date' id='datetimepicker1'>
-								<input type='text' class="form-control" />
-								<span class="input-group-addon">
-									<i class="fa fa-calendar" aria-hidden="true"></i>
-								</span>
+			
+						<div>
+							<h4>
+								Categories
+							</h4>
+							<div id="group-4">
+								<select name="category" id="category-selector" class="form-control">
+									<option value="all">All</option>								
+									<option value="sports">Sports</option>
+									<option value="playground">Playground</option>
+									<option value="party">Party</option>
+									<option value="excursion">Excursion</option>
+									<option value="outdoor">Outdoor</option>
+									<option value="inquisition">Spanish Inquisition</option>
+								</select>
 							</div>
 						</div>
-					</div>
 
-					<!-- <div>
-						<h4>
-							Recurring
-						</h4>
-						<form id="group-5">
-							<div class="radio">
-								<label><input id="optionsRadios1" name="optradio" type="radio" checked="">Yes</label>
+						<hr>
+						<div>
+							<h4>
+								Min Date
+							</h4>
+							<div class="form-group">
+								<div class='input-group date' id='datetimepicker1'>
+									<input name="min_date" type='text' class="form-control" />
+									<span class="input-group-addon">
+										<i class="fa fa-calendar" aria-hidden="true"></i>
+									</span>
+								</div>
 							</div>
-							<div class="radio">
-								<label><input id="optionsRadios2" name="optradio" type="radio" checked="">No</label>
-							</div>
-							<div class="radio">
-								<label><input id="optionsRadios3" name="optradio" type="radio" checked="">Display All</label>
-							</div>
-						</form>
-					</div> -->
+						</div>
 
-					<div>
-						<input id="filterSubmit" type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;" value="Search" onclick="getEvents()"/>
-					</div>
-				</div> 
+						<div>
+							<h4>
+								Max Date
+							</h4>
+							<div class="form-group">
+								<div class='input-group date' id='datetimepicker1'>
+									<input name="max_date" type='text' class="form-control" />
+									<span class="input-group-addon">
+										<i class="fa fa-calendar" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- <div>
+							<h4>
+								Recurring
+							</h4>
+							<form id="group-5">
+								<div class="radio">
+									<label><input id="optionsRadios1" name="optradio" type="radio" checked="">Yes</label>
+								</div>
+								<div class="radio">
+									<label><input id="optionsRadios2" name="optradio" type="radio" checked="">No</label>
+								</div>
+								<div class="radio">
+									<label><input id="optionsRadios3" name="optradio" type="radio" checked="">Display All</label>
+								</div>
+							</form>
+						</div> -->
+
+						<div>
+							<input form="filtersForm" id="filterSubmit" type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;" value="Search"/>
+						</div>
+					</div> 
+				</form>	
 				<!-- Filter Sidebar -->
 		
 				<!-- EventsView -->
@@ -281,28 +296,6 @@
 				}
 			}
 
-			function getEvents()
-			{
-				console.log(filters());
-				if (!$('#address').val())
-				{
-					// Address has not been set yet.
-					return;
-				}
-
-				waitingDialog.show("Loading...");
-				$.get({
-					url: 'api/events',
-					data: filters(),
-					success: function (resp, satus, xhr) {
-						currentEvents = resp.results;
-						refreshEventList(currentEvents);
-
-						waitingDialog.hide();
-					}
-				});
-			}
-
 			function updateMap()
 			{
 				// Update the map view
@@ -351,7 +344,29 @@
 
 			$(document).ready(function()
 			{
-				getEvents();
+				$("#filtersForm").ajaxForm({
+					onResponse: function (resp, satus, xhr) {
+						currentEvents = resp.results;
+						refreshEventList(currentEvents);
+
+						waitingDialog.hide();
+					},
+					onError: function (xhr, status, error) {
+						waitingDialog.hide();
+						refreshEventList([]);
+						console.log(xhr);
+					},
+					method: 'GET',
+					onSubmit: function () {
+						waitingDialog.show("Loading...");
+						return true;
+					}
+				});
+
+				if ($('#address').val()) {
+					// Address has been set yet.
+					$("#filtersForm").submit();
+				}
 
 				$('a[href="#mapview"]').on('shown.bs.tab', function (e)
 				{
