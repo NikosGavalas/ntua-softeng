@@ -466,7 +466,7 @@ namespace Pleisure
 				{
 					int id = c.Natural();
 					Event evt = Event.Random(id, location.Latitude, location.Longitude, distance);
-					arr.Add(evt.SerializeWithScheduled());
+					arr.Add(await evt.SerializeWithScheduled());
 				}
 			}
 
