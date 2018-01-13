@@ -108,7 +108,7 @@ namespace Pleisure
 			string address = await req.POST("address");
 			int genders = 2;
 			Location location = await Google.Geocode(address);
-			int age_min = 1;
+			int age_min = 4;
 			int age_max = 17;
 
 
@@ -134,13 +134,12 @@ namespace Pleisure
 
 			if (await req.HasPOST("image"))
 			{
-				Console.WriteLine(await req.POST("title"));
-
 				MemoryStream imgStream = await req.GetContentData("image");
 
 				string directory = Options.StoragePath("eventimg");
 				string filePath = Options.StoragePath(string.Format("{0}/{1}.png", directory, eventId));
 				Directory.CreateDirectory(directory);
+				Console.WriteLine(directory + " " + filePath);
 
 				byte[] buffer = new byte[imgStream.Length];
 				await imgStream.ReadAsync(buffer, 0, buffer.Length);
@@ -166,6 +165,10 @@ namespace Pleisure
 			Console.WriteLine(query.QueryString());
 
 			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+
+			// Also schedule
+
 
 			await req.Redirect("/event/" + eventId);
 		}
