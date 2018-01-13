@@ -28,6 +28,7 @@ namespace Pleisure
 
 			apiRouter.Add("/api/add_kid", AddKid);
 			apiRouter.Add("/api/create_event", CreateEvent);
+			apiRouter.Add("/api/schedule_event", ScheduleEvent);
 		}
 
 		public async Task AddKid(HttpRequest req)
@@ -79,6 +80,17 @@ namespace Pleisure
 
 		public async Task CreateEvent(HttpRequest req)
 		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
 			int eventId = Program.Chance().Natural();
 
 			if (await req.HasPOST("image"))
@@ -91,6 +103,12 @@ namespace Pleisure
 
 				FileStream writer = File.OpenRead(filePath);
 				await writer.WriteAsync(buffer, 0, buffer.Length);
+
+				req.SetContentTypeByExtension(ContentType.Image, "png");
+				req.SetStatusCode(HttpStatusCode.OK);
+				await req.Write(buffer);
+				await req.Close();
+				return;
 			}
 
 			if (!await req.HasPOST("title", "description", "price", "duration", "address"))
@@ -103,15 +121,73 @@ namespace Pleisure
 			string title = await req.POST("title");
 			string description = await req.POST("description");
 			int price;
+			int duration;
+			string address = await req.POST("address");
 
-			if (!int.TryParse(await req.POST("price", null), out price))
+			if (!int.TryParse(await req.POST("price"), out price)
+			   || !int.TryParse(await req.POST("duration"), out duration))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
 				return;
 			}
 
+			req.SetContentType(ContentType.Json);
+
 			await req.Close();
+		}
+
+		public async Task ScheduleEvent(HttpRequest req)
+		{
+			req.SetContentType(ContentType.Json);
+
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
+			int eventId;
+			string recurrence = await req.POST("recurrence", "once");
+
+			if (!await req.HasPOST("event_id", "datetime")
+			    || !int.TryParse(await req.POST("event_id"), out eventId))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			bool status = await ScheduleEvent(eventId, await req.POST("datetime"), recurrence);
+
+			req.SetStatusCode(status ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
+			await req.Close();
+		}
+
+		async Task<bool> ScheduleEvent(int eventId, string dateTime, string recurrence)
+		{
+			DateTime date;
+			EventRecurrence rec;
+
+			if (!DateTime.TryParse(dateTime, out date)
+				|| !Enum.TryParse(recurrence, true, out rec))
+			{
+				return false;
+			}
+
+			InsertQuery query = new InsertQuery("scheduled_events");
+			query.Value("event_id", eventId)
+			     .Value("next_time", date)
+			     .Value("recurrence", rec.ToString().ToLower());
+
+			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+			return result.RowsAffected == 1;
 		}
 
 		public async Task Login(HttpRequest req)
@@ -321,20 +397,28 @@ namespace Pleisure
 			List<Event> events = await Program.MySql().Execute(query);
 			foreach (Event evt in events)
 			{
-				arr.Add(await evt.SerializeWithScheduled());
+				DateTime minDate = DateTime.Now;
+				DateTime maxDate = DateTime.MaxValue;
+
+				DateTime.TryParse(await req.POST("min_date"), out minDate);
+				DateTime.TryParse(await req.POST("max_date"), out maxDate);
+
+				if (await evt.HappensBetween(minDate, maxDate))
+				{
+					arr.Add(await evt.SerializeWithScheduled());
+				}
 			}
 
-
-
-#if DEBUG
-			Chance c = new Chance(); 
-			for (int i = 0; i < 50; i++)
+			if (Options.Randomized)
 			{
-				int id = c.Natural();
-				Event evt = Event.Random(id, location.Latitude, location.Longitude, distance);
-				arr.Add(evt.Serialize());
+				Chance c = new Chance(); 
+				for (int i = 0; i < 50; i++)
+				{
+					int id = c.Natural();
+					Event evt = Event.Random(id, location.Latitude, location.Longitude, distance);
+					arr.Add(evt.Serialize());
+				}
 			}
-#endif
 
 
 			JToken response = JToken.FromObject(new

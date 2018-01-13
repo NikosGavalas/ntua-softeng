@@ -107,12 +107,32 @@ namespace Pleisure
 			return obj;
 		}
 
-		public Task<List<ScheduledEvent>> GetScheduled()
+		public async Task<List<ScheduledEvent>> GetScheduled()
 		{
 			SelectQuery<ScheduledEvent> query = new SelectQuery<ScheduledEvent>()
 				.Where<SelectQuery<ScheduledEvent>>("event_id", ID);
 
-			return Program.MySql().Execute(query);
+			List<ScheduledEvent> scheduled = await Program.MySql().Execute(query);
+
+			if (Options.Randomized)
+			{
+				Chance c = new Chance(ID);
+				scheduled.Add(ScheduledEvent.Random(c, this));
+			}
+
+			return scheduled;
+		}
+
+		public async Task<bool> HappensBetween(DateTime fromDate, DateTime toDate)
+		{
+			foreach (ScheduledEvent scheduled in await GetScheduled())
+			{
+				if (scheduled.NextTime >= fromDate && scheduled.NextTime <= toDate)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

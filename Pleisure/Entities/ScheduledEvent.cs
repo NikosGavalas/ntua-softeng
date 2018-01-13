@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using HaathDB;
+using ChanceNET;
 using Newtonsoft.Json.Linq;
 
 namespace Pleisure
@@ -23,6 +24,19 @@ namespace Pleisure
 		[DBReference("event_id", "event_id")]
 		public Event Event;
 		
+		public static ScheduledEvent Random(Chance chance, Event evt)
+		{
+			DateTime n = DateTime.Now;
+
+			return new ScheduledEvent()
+			{
+				ID			= chance.Natural(),
+				NextTime	= new DateTime(n.Year, n.Month, chance.Integer(n.Day, DateTime.DaysInMonth(n.Year, n.Month)),
+										   chance.Hour(true), chance.Minute(), 0),
+				Recurrence	= chance.PickEnum<EventRecurrence>(),
+				Event 		= evt
+			};
+		}
 
 		public async Task<JToken> Serialize(bool includeAttendees)
 		{
@@ -69,7 +83,6 @@ namespace Pleisure
 
 			return kids;
 		}
-
 
 
 

@@ -14,6 +14,13 @@ namespace Pleisure
 {
 	public static class Auth
 	{
+		static object coherenceLock;
+
+		static Auth()
+		{
+			coherenceLock = new object();
+		}
+
 		private static string Hash(string plain)
 		{
 			ulong hash = XXHash64.Hash(plain);
@@ -75,8 +82,11 @@ namespace Pleisure
 		public static async Task<long> RegisterUser(string email, string password, string fullName, 
 		                                            int role, string address = "", int credits = 0)
 		{
+			Monitor.Enter(coherenceLock);
+
 			if (await EmailTaken(email))
 			{
+				Monitor.Exit(coherenceLock);
 				return -1;
 			}
 
@@ -99,6 +109,8 @@ namespace Pleisure
 				Console.WriteLine("Tried to register user and got rows affected: " + result.RowsAffected);
 				Console.WriteLine(query.QueryString());
 			}
+
+			Monitor.Exit(coherenceLock);
 
 			return result.LastInsertedId;
 		}
