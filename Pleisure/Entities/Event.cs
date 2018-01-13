@@ -48,6 +48,9 @@ namespace Pleisure
 		[DBColumn("age_max")]
 		public int AgeMax;
 
+		[DBColumn("genders")]
+		public Gender Genders;
+
 		public string Thumbnail = "http://via.placeholder.com/128x128";
 
 		public static Event Random(int id, double centerLat, double centerLng, double range)
@@ -67,7 +70,8 @@ namespace Pleisure
 				Thumbnail =		c.Avatar(GravatarDefaults.Identicon),
 				AgeMin =		ageMin,
 				AgeMax =		c.Integer(ageMin, 18),
-				Organizer =		User.Random(c, UserRole.Organizer)
+				Organizer =		User.Random(c, UserRole.Organizer),
+				Genders	=		c.PickEnum<Gender>()
 			};
 		}
 
@@ -86,7 +90,8 @@ namespace Pleisure
 				description = Description,
 				duration = Duration,
 				address = Address,
-				thumbnail = Thumbnail
+				thumbnail = Thumbnail,
+				gender = Genders.ToString().ToLower()
 			});
 
 			return obj;
