@@ -201,7 +201,8 @@ namespace HttpNet
 
 		static async Task<object> GetAsync(object obj)
 		{
-			if (obj.GetType().IsGenericType
+			if (obj != null 
+			    && obj.GetType().IsGenericType
 				&& obj.GetType().GetGenericTypeDefinition() == typeof(Task<>))
 			{
 				try

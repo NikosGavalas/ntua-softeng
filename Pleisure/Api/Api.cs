@@ -25,22 +25,30 @@ namespace Pleisure
 			apiRouter.Add("/kids", Kids);
 			apiRouter.Add("/events", Events);
 			apiRouter.Add("/email_available", EmailAvailable);
+			apiRouter.Add("/create_event", CreateEvent);
+		}
+
+		public async Task CreateEvent(HttpRequest req)
+		{
+			
+
+			await req.Close();
 		}
 
 		public async Task Login(HttpRequest req)
 		{
-			if (!req.HasPOST("email", "password"))
+			if (!await req.HasPOST("email", "password"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
 				return;
 			}
 
-			string onSuccess = req.POST("on_success", "/");
-			string onFail = req.POST("on_failure", "/?loginfail=1");
+			string onSuccess = await req.POST("on_success", "/");
+			string onFail = await req.POST("on_failure", "/?loginfail=1");
 
 
-			User user = await Auth.Authenticate(req.POST("email"), req.POST("password"));
+			User user = await Auth.Authenticate(await req.POST("email"), await req.POST("password"));
 
 			if (user == null)
 			{
@@ -90,26 +98,26 @@ namespace Pleisure
 
 		public async Task Register(HttpRequest req)
 		{
-			if (!req.HasPOST("email", "password", "password2", "full_name", "role"))
+			if (!await req.HasPOST("email", "password", "password2", "full_name", "role"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
 				return;
 			}
 
-			string onSuccess = req.POST("on_success", "/");
-			string onFail = req.POST("on_failure", "/?registerfail=1");
+			string onSuccess = await req.POST("on_success", "/");
+			string onFail = await req.POST("on_failure", "/?registerfail=1");
 
-			string email = req.POST("email");
-			string password = req.POST("password");
-			string password2 = req.POST("password2");
-			string fullName = req.POST("full_name");
-			string address = req.POST("address");
+			string email = await req.POST("email");
+			string password = await req.POST("password");
+			string password2 = await req.POST("password2");
+			string fullName = await req.POST("full_name");
+			string address = await req.POST("address");
 
 			int role;
 
 			if (password != password2 							// Check if passwords match
-			    || !int.TryParse(req.POST("role"), out role) 	// Check if the POSTed role is an integer
+			    || !int.TryParse(await req.POST("role"), out role) 	// Check if the POSTed role is an integer
 			    || !(role == (int)UserRole.Parent 
 			         || role == (int)UserRole.Organizer)		// Check if the user isn't trying to bamboozle us
 			    || !Auth.ValidateEmail(email)					// Check if the email address is valid
@@ -133,7 +141,7 @@ namespace Pleisure
 
 		public async Task SignOut(HttpRequest req)
 		{
-			string redirect = req.POST("redirect") ?? req.GET("redirect", "/");
+			string redirect = await req.POST("redirect") ?? req.GET("redirect", "/");
 
 			req.Session.Destroy();
 

@@ -59,7 +59,7 @@ namespace Pleisure
 		[HtmlVariable("event.organizer_avatar")]
 		public string EventOrganizerAvatar
 		{
-			get { return "ttp://via.placeholder.com/128x128"; }
+			get { return evt?.Organizer.Avatar; }
 		}
 
 		[HtmlVariable("event.organizer_id")]

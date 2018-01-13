@@ -67,7 +67,8 @@ namespace Pleisure
 				Duration =		c.PickOne(new int[] { 30, 45, 60, 75, 90, 120, 180 }),
 				Thumbnail =		c.Avatar(GravatarDefaults.Identicon),
 				AgeMin =		ageMin,
-				AgeMax =		c.Integer(ageMin, 18)
+				AgeMax =		c.Integer(ageMin, 18),
+				Organizer =		User.Random(c, UserRole.Organizer)
 			};
 		}
 

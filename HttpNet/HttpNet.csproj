@@ -56,6 +56,7 @@
     <Compile Include="Sessions\SessionManager.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WebServer.cs" />
+    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

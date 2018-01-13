@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,15 @@ namespace Pleisure
 		{
 			get
 			{
-				return int.Parse(Environment.GetEnvironmentVariable("HTTP_PORT") ?? "80");
+				return int.Parse(Environment.GetEnvironmentVariable("HTTP_PORT") ?? "8080");
+			}
+		}
+
+		public static int SessionLifetime
+		{
+			get
+			{
+				return int.Parse(Environment.GetEnvironmentVariable("SESSION_LIFETIME") ?? "1800");
 			}
 		}
 
@@ -62,6 +71,17 @@ namespace Pleisure
 			{
 				return Environment.GetEnvironmentVariable("MYSQL_DB") ?? "pleisure";
 			}
+		}
+
+		public static string StoragePath(string relative)
+		{
+			string root = Environment.GetEnvironmentVariable("STORAGE_PATH") ?? "data";
+			return Path.Combine(root, relative);
+		}
+
+		public static string Gravatar(string email)
+		{
+			return string.Format("https://www.gravatar.com/avatar/{0}?d=retro", Auth.MD5(email));
 		}
 	}
 }

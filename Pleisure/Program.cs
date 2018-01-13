@@ -22,11 +22,9 @@ namespace Pleisure
 
 		static void Main(string[] args)
 		{
-			server = WebServer.Create<UserSession>(Options.Host, Options.Port, sessionLifetime: 300);
+			server = WebServer.Create<UserSession>(Options.Host, Options.Port, Options.SessionLifetime);
 			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
-			
-
 
 			/*
 			 * Register content providers
@@ -40,7 +38,7 @@ namespace Pleisure
 			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
 			server.Add("/img/*", png.OnRequest);
 
-			WatermarkedResourceProvider evtImg = new WatermarkedResourceProvider(GetPath("app/eventimg"), "/eventimg");
+			WatermarkedResourceProvider evtImg = new WatermarkedResourceProvider(Options.StoragePath("eventimg"), "/eventimg");
 			server.Add("/eventimg/*", evtImg.OnRequest);
 
 			/*
@@ -58,6 +56,8 @@ namespace Pleisure
 
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
+
+
 
 			/*
              * Main thread now awaits SIGTERM

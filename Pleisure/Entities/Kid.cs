@@ -42,7 +42,6 @@ namespace Pleisure
 
 		public JToken Serialize()
 		{
-			Chance c = new Chance(ID);
 			return JToken.FromObject(new
 			{
 				kid_id = ID,
@@ -52,9 +51,10 @@ namespace Pleisure
 				parent = new
 				{
 					id = Parent.ID,
-					name = Parent.FullName
+					name = Parent.FullName,
+					avatar = Parent.Avatar
 				},
-				avatar = c.Avatar(GravatarDefaults.Identicon)
+				avatar = Options.Gravatar(ID.ToString())
 			});
 		}
 	}
