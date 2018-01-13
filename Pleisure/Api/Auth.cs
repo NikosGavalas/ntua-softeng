@@ -192,5 +192,10 @@ namespace Pleisure
 		{
 			return MD5(text, Encoding.ASCII);
 		}
+
+		public static async Task<bool> BookEvent(User user, Kid kid, ScheduledEvent evt)
+		{
+			return false;
+		}
 	}
 }
