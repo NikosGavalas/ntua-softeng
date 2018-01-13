@@ -30,6 +30,8 @@ namespace Pleisure
 			apiRouter.Add("/create_event", CreateEvent);
 			apiRouter.Add("/schedule_event", ScheduleEvent);
 			apiRouter.Add("/own_events", OwnEvents);
+
+			apiRouter.Add("/book_event", BookEvent);
 		}
 
 		public async Task AddKid(HttpRequest req)
@@ -49,6 +51,7 @@ namespace Pleisure
 
 			if (!await req.HasPOST("name", "birthday", "gender"))
 			{
+				Console.WriteLine(1);
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
 				return;
@@ -62,6 +65,7 @@ namespace Pleisure
 			    || !int.TryParse("gender", out gender)
 			   || (gender != 0 && gender != 1))
 			{
+				Console.WriteLine(2);
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
 				return;
@@ -354,6 +358,8 @@ namespace Pleisure
 			if (user == null)
 			{
 				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
 			}
 			else
 			{
@@ -489,9 +495,11 @@ namespace Pleisure
 
 			User user = await session.GetUser();
 
-			if (user == null)
+			if (user == null || user.Role != UserRole.Organizer)
 			{
 				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
 			}
 
 			SelectQuery<Event> query = new SelectQuery<Event>();
@@ -507,6 +515,46 @@ namespace Pleisure
 			await req.Write(arr.ToString());
 
 			await req.Close();
+		}
+
+		public async Task BookEvent(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+
+			if (!await req.HasPOST("scheduled_id", "kid_id"))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+
+			SelectQuery<ScheduledEvent> query = new SelectQuery<ScheduledEvent>();
+			query.Where("scheduled_event_id", await req.POST("scheduled_id"));
+
+
+			ScheduledEvent scheduled = (await Program.MySql().Execute(query)).FirstOrDefault();
+
+
+			if (scheduled == null)
+			{
+				req.SetStatusCode(HttpStatusCode.NotFound);
+				await req.Close();
+				return;
+			}
+
+
+
 		}
 	}
 }
