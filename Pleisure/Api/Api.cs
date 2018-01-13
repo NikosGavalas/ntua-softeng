@@ -27,12 +27,54 @@ namespace Pleisure
 			apiRouter.Add("/email_available", EmailAvailable);
 
 			apiRouter.Add("/api/add_kid", AddKid);
-			apiRouter.Add("/create_event", CreateEvent);
+			apiRouter.Add("/api/create_event", CreateEvent);
 		}
 
 		public async Task AddKid(HttpRequest req)
 		{
-			
+			req.SetContentType(ContentType.Json);
+
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
+			if (!await req.HasPOST("name", "birthday", "gender"))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			string name = await req.POST("name");
+			DateTime birthday;
+			int gender;
+
+			if (!DateTime.TryParse(await req.POST("birthday"), out birthday)
+			    || !int.TryParse("gender", out gender)
+			   || (gender != 0 && gender != 1))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			InsertQuery query = new InsertQuery("kids");
+			query.Value("name", name)
+			     .Value("birthday", birthday)
+			     .Value("gender", gender)
+			     .Value("parent_id", user.ID);
+
+			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+			req.SetStatusCode(result.RowsAffected > 0 ? HttpStatusCode.OK : HttpStatusCode.InternalServerError);
+			await req.Close();
 		}
 
 		public async Task CreateEvent(HttpRequest req)
