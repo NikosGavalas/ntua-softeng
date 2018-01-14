@@ -47,3 +47,7 @@ $(document).ready(function () {
 	$('.datetimepicker').datetimepicker();
 });
 
+$('.full-height-modal').on('show.bs.modal', function () {
+	$('.modal-body').css('height', $(window).height() * 0.7);
+	$('.modal .modal-body').css('overflow', 'auto');
+});
