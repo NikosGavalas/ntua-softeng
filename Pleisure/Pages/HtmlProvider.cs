@@ -137,6 +137,36 @@ namespace Pleisure
 			await request.Close();
 		}
 
+		public async Task Admin(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+			User user = await session.GetUser();
+
+			// Redirect non-admins to the index
+			if (!session.LoggedIn || user == null || user.Role != UserRole.Admin)
+			{
+				await req.Redirect("/");
+				return;
+			}
+
+			string html = await GetHtml("admin");
+			if (html == null)
+			{
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
+			req.SetStatusCode(HttpStatusCode.OK);
+			req.SetContentType(ContentType.Html);
+
+			HtmlPage page = new HtmlPage(html, user);
+
+			string rendered = await page.Render();
+			await req.Write(rendered);
+
+			await req.Close();
+		}
+
 		int GetEventId(string requestUrl)
 		{
 			int id = -1;
