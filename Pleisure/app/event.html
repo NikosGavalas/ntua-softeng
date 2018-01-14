@@ -39,8 +39,6 @@
 		</div>
 	</div>
 
-	<!-- @{event.image} doesn't work currently so I use this placeholder -->
-	<!-- https://d3uf2ssic990td.cloudfront.net/images/5031/413b4a3e-5bf8-494b-bfda-ed9488ca3b0d/kids.jpg -->
 	<div style="background-image:url('@{event.image}');" class="parallax">
 	</div>
 
@@ -90,7 +88,7 @@
 			/* @{event.lat} and @{event.lng} don't work here.. */
 			var pos = { lat: @{event.lat}, lng: @{event.lng} };
 			var map = new google.maps.Map(document.getElementById('map'), {
-				zoom: 4,
+				zoom: 15,
 				center: pos
 			});
 			var marker = new google.maps.Marker({
