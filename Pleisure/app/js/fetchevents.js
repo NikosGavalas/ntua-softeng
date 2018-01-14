@@ -7,7 +7,9 @@ function createEvent(event) {
 			)
 		).append(
 			$('<div>').addClass('media-body').append(
-				$('<h4>').addClass('media-heading').append(event.title)
+				$('<h4>').addClass('media-heading').append(
+					$('<a>').attr('href', '/event/' + event.id).append(event.title)
+				)
 			).append(
 				$('<p>').append('Duration: ' + event.duration)
 			).append(
