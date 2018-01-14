@@ -32,6 +32,11 @@ namespace Pleisure
 			apiRouter.Add("/own_events", OwnEvents);
 
 			apiRouter.Add("/book_event", BookEvent);
+
+			/*
+			 * Admin APIs
+			 */
+			apiRouter.Add("/users", Users);
 		}
 
 		public async Task AddKid(HttpRequest req)
@@ -554,6 +559,46 @@ namespace Pleisure
 
 
 
+		}
+
+		public async Task Users(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null || user.Role != UserRole.Admin)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+			SelectQuery<User> query = new SelectQuery<User>();
+
+
+			int role;
+			if (req.HasGET("role") && int.TryParse(req.GET("role"), out role))
+			{
+				query.Where("role", role);
+			}
+			
+
+			List<User> users = await Program.MySql().Execute(query);
+
+			JArray response = new JArray();
+
+			foreach (User u in users)
+			{
+				response.Add(await u.Serialize());
+			}
+
+
+			await req.SetContentType(ContentType.Json)
+				.SetStatusCode(HttpStatusCode.OK)
+				.Write(response.ToString());
+
+			await req.Close();
 		}
 	}
 }
