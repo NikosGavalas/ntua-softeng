@@ -29,11 +29,20 @@
 							<a href="/profile">My Profile</a>
 						</li>
 						<li>
-							<a href="/settings">Add  <i class="fa fa-money" aria-hidden="true"></i></a>
+							<a href="#">Add  <i class="fa fa-money" aria-hidden="true"></i></a>
 						</li>
 						<li>
 							<a href="#" data-toggle="modal" data-target="#editProfileModal">Edit Profile</a>
 						</li>
+				@endif{}
+				@if{is_admin}
+						<li class="divider"></li>
+						<li>
+							<a href="/admin">Admin Panel
+							</a>
+						</li>
+				@endif{}
+				@if{is_loggedin}
 						<li class="divider"></li>
 						<li>
 							<a href="/signout">Log Out</a>
