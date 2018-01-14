@@ -84,6 +84,9 @@ namespace Pleisure
 			}
 		}
 
+		public static int EventThumbnailWidth = 128;
+		public static int EventThumbnailHeight = 128;
+
 		public static string StoragePath(string relative)
 		{
 			string root = Environment.GetEnvironmentVariable("STORAGE_PATH") ?? "data";

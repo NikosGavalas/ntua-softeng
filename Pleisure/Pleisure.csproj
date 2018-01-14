@@ -60,13 +60,12 @@
       <HintPath>..\packages\UnixSignalWaiter.0.0.1\lib\UnixSignalWaiter.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Watermark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ProgTech.Watermak.1.0.0\lib\Watermark.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="XXHash, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\XXHash.1.0.0\lib\net46\x86\XXHash.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Watermark">
+      <HintPath>..\packages\ProgTech.Watermak.1.1.1\lib\Watermark.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +87,7 @@
     <Compile Include="Content\StaticResourceProvider.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Pages\EventPage.cs" />
+    <Compile Include="Content\ResizedResourceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

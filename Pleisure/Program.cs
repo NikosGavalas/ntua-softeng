@@ -45,6 +45,11 @@ namespace Pleisure
 			WatermarkedResourceProvider evtImg = new WatermarkedResourceProvider(Options.StoragePath("eventimg"), "/eventimg");
 			server.Add("/eventimg/*", evtImg.OnRequest);
 
+			ResizedResourceProvider evtThumb = new ResizedResourceProvider(Options.StoragePath("eventimg"), "/eventthumb",
+			                                                               Options.EventThumbnailWidth, Options.EventThumbnailHeight);
+			server.Add("/eventthumb/*", evtThumb.OnRequest);
+
+
 			/*
 			 * Register API
 			 */
@@ -53,9 +58,11 @@ namespace Pleisure
 
 			HtmlProvider pages = new HtmlProvider();
 			server.Add("/", pages.Index);
+			server.Add("/index", pages.Index);
 			server.Add("/events", pages.Events);
 			server.Add("/event/*", pages.Event);
 			server.Add("/profile", pages.Profile);
+			server.Add("/admin", pages.Admin);
 
 
 			server.Start();

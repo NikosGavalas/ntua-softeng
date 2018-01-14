@@ -77,8 +77,9 @@ namespace Pleisure
 
 			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
 
-			req.SetStatusCode(result.RowsAffected > 0 ? HttpStatusCode.OK : HttpStatusCode.InternalServerError);
-			await req.Close();
+			string url = await req.POST("redirect", "/profile");
+
+			await req.Redirect(url);
 		}
 
 		public async Task CreateEvent(HttpRequest req)
