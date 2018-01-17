@@ -195,9 +195,7 @@ namespace Pleisure
 
 		public static async Task<bool> BookEvent(User user, Kid kid, ScheduledEvent evt)
 		{
-			
-			
-			return false;
+			throw new NotImplementedException();
 		}
 	}
 }

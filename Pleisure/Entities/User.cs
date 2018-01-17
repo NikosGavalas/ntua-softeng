@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using HaathDB;
 using ChanceNET;
+using Newtonsoft.Json.Linq;
 
 namespace Pleisure
 {
@@ -58,6 +59,43 @@ namespace Pleisure
 			query.Where("organizer_id", ID);
 
 			return Program.MySql().Execute(query);
+		}
+
+		public async Task<JToken> Serialize()
+		{
+			JToken token = JToken.FromObject(new {
+				id			= ID,
+				email		= Email,
+				fullname	= FullName,
+				role		= new
+				{
+					code	= (int)Role,
+					title	= Role.ToString().ToLower()
+				},
+				credits		= Credits,
+				address		= Address
+			});
+
+			switch (Role)
+			{
+				case UserRole.Parent:
+					token["kids"] = new JArray();
+					foreach (Kid kid in await GetKids())
+					{
+						(token["kids"] as JArray).Add(kid.Serialize());
+					}
+					break;
+
+				case UserRole.Organizer:
+					token["events"] = new JArray();
+					foreach (Event evt in await GetEvents())
+					{
+						(token["events"] as JArray).Add(evt.Serialize());
+					}
+					break;
+			}
+
+			return token;
 		}
 
 		public static User Random(Chance chance, UserRole? role = null)
