@@ -9,7 +9,23 @@ function createEvent(event) {
 			$('<div>').addClass('media-body').append(
 				$('<h4>').addClass('media-heading').append(
 					$('<a>').attr('href', '/event/' + event.id).append(event.title)
-				)
+				).append(
+					$('<div>').addClass('btn-group inline pull-right').append(
+						$('<a>').attr({ 'data-toggle': 'modal', 'data-target': '#scheduleModal', 'data-id': event.id, 'href': '#' }).addClass('btn btn-success btn-sm').append(
+							$('<i>').addClass('fa fa-refresh').attr('aria-hidden', 'true')
+						).append(
+							' Re-Schedule'
+						)
+					)
+				)/* .append(
+					$('<div>').addClass('btn-group inline pull-right').append(
+						$('<a>').addClass('btn btn-danger btn-sm').append(
+							$('<i>').addClass('fa fa-trash-o').attr('aria-hidden', 'true')
+						).append(
+							' Delete'
+							)
+					)
+				) */
 			).append(
 				$('<p>').append('Duration: ' + event.duration)
 			).append(
@@ -22,6 +38,8 @@ function createEvent(event) {
 				$('<p>').append('Next Occurence: ' + event.scheduled[0].next_time)
 			)
 		)
+	).append(
+		$('<hr>')
 	)
 }
 
@@ -34,3 +52,7 @@ $(document).ready(function () {
 	);
 });
 
+$('#scheduleModal').on('show.bs.modal', function (e) {
+	var eventId = $(e.relatedTarget).data('id');
+	$(e.currentTarget).find('input[name="id"]').val(eventId);
+});

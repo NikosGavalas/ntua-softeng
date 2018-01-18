@@ -20,6 +20,14 @@ function spawnModal(modal) {
 	}
 }
 
+// Payment Modal: construct options
+var year = new Date().getFullYear();
+
+for(var i = 0; i < 10; i++) {
+	$('#expDateYear').append(
+		$('<option>').text(year + i).attr('value', year + i)
+	)
+}
 
 $('#signupForm').submit(function (event) {
 	var inp = $('#signupForm').serializeArray();
