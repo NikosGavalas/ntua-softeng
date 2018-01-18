@@ -20,7 +20,7 @@ function spawnModal(modal) {
 	}
 }
 
-// Payment Modal: construct options
+// Payment Modal: construct options for cc exp year field
 var year = new Date().getFullYear();
 
 for(var i = 0; i < 10; i++) {
@@ -59,3 +59,7 @@ $('.full-height-modal').on('show.bs.modal', function () {
 	$('.modal-body').css('height', $(window).height() * 0.7);
 	$('.modal .modal-body').css('overflow', 'auto');
 });
+
+function infoRequireLogin(params) {
+	$('#requireLoginAlertBox').show();
+}

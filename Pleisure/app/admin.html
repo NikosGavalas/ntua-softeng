@@ -29,16 +29,23 @@
 					</div>
 
 					<div class="panel panel-body">
-						<form>
+						<form id="fetchUsersForm" method="get" action="/api/users">
 							<div class="input-group">
-								<input class="form-control" type="text" >
+								<!-- <input class="form-control" type="text"> -->
+								<select class="form-control" name="role">
+									<option value="-1">Banned</option>
+									<option value="1" selected>Parent</option>
+									<option value="2">Organizer</option>
+									<option value="3">Admin</option>
+								</select>
 								<span class="input-group-btn">
 									<button class="btn btn-primary" type="submit">
-										<span class="fa fa-search" aria-hidden="true"></span>
+										<span id="searchStatus" class="fa fa-search" aria-hidden="true"></span>
 										<b>&nbsp;Search Userbase</b>
 									</button>
 								</span>
 							</div>
+							
 						</form>
 
 						<br>
@@ -54,19 +61,8 @@
 									<th scope="col">Edit</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td>
-										<input class="form-check-input" type="checkbox" value="" checked="">
-									</td>
-									<td>makis</td>
-									<td>makis@makis.com</td>
-									<td>parent</td>
-									<td>
-										<a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#editProfileModal">Edit Profile</a>
-									</td>
-								</tr>
+							<tbody id="userList" >
+
 							</tbody>
 						</table>
 					</div>
@@ -81,6 +77,64 @@
 	<!-- Footer -->
 	@{html.footer}
 	<!-- /Footer -->
+
+	<script>
+		$('#editProfileModal').on('show.bs.modal', function (e) {
+			var eventId = $(e.relatedTarget).data('id');
+			$(e.currentTarget).find('input[name="id"]').val(eventId);
+		})
+
+		$(document).ready(function() {
+			$('#fetchUsersForm').ajaxForm({
+				onSubmit: function () {
+					$('#searchStatus').removeClass('fa-search').addClass('fa-spinner fa-spin fa-fw');
+				},
+				onResponse: function (response, status, xhr) {
+					$('#searchStatus').removeClass('fa-spinner fa-spin fa-fw').addClass('fa-search');
+					$('#userList').empty();		
+					populateUsers(response);
+				},
+				method: 'GET'
+			});
+
+			$('#fetchUsersForm').submit();
+		});
+
+		function populateUsers(users) {
+			users.forEach(user => {
+				$('#userList').append(createUserEntry(user));
+			});
+		}
+
+		function createUserEntry(user) {
+			return $('<tr>').append(
+				$('<th>').attr('scope', 'row').text()
+			).append(
+				$('<td>').text(user.id)
+			).append(
+				$('<td>').append(
+					// TODO: make this checkbox functional (ban/unban user)
+					$('<input>').addClass('form-check-input').attr({ 'type':"checkbox", 'checked': ''})
+				)
+			).append(
+				$('<td>').text(user.fullname)
+			).append(
+				$('<td>').text(user.email)
+			).append(
+				$('<td>').text(user.role.title)
+			).append(
+				$('<td>').append(
+					$('<a>').addClass('btn btn-success btn-sm')
+						.attr({ 'href':"#", 'data-id':user.id, 'data-toggle':"modal", 'data-target':"#editProfileModal"})
+						.append(
+							$('<i>').addClass('fa fa-pencil-square-o').attr('aria-hidden', 'true')
+						).append(
+							'&nbsp;Edit User'
+						)
+				)
+			)
+		}
+	</script>
 
 </body>
 

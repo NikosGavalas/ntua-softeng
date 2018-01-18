@@ -45,11 +45,12 @@ function createEvent(event) {
 
 $(document).ready(function () {
 	$.get('/api/own_events', function (data) {
+		$('.loading').remove();
+		
 		data.forEach(event => {
-			$('#users_kids').append(createEvent(event));
+			$('#kids-events').append(createEvent(event));
 		});
-	}
-	);
+	});
 });
 
 $('#scheduleModal').on('show.bs.modal', function (e) {

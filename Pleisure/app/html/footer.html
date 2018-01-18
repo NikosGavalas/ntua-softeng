@@ -3,6 +3,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-4">
+
 				<h3 class="title">Social</h3>
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin suscipit, libero a molestie consectetur, sapien elit lacinia
 					mi.</p>
@@ -21,31 +22,29 @@
 					</a>
 				</ul>
 			</div>
+
 			<div class="col-sm-4">
 				<h3 class="title">Contact</h3>
 				<p><span class="fa fa-map-marker"></span> Odos lorem 12, Athina</p>
 				<p><span class="fa fa-phone"></span> +30 1234512345</p>
 				<p><span class="fa fa-envelope"></span> info@pleisure.gr</p>
-				<button class="btn btn-default" href="/about#contact">
+				<button class="btn btn-default" href="#">
 					Contact form
 				</button>
 			</div>
+
 			<div class="col-sm-4">
 				<h3 class="title">Payment</h3>
 				<p>We accept paypal and bitcoin as methods of payment.</p>
-				<p>Buy <i class="fa fa-money" aria-hidden="true"></i>:</p>
-				<ul class="payment">
-					<li>
-						<a href="#">
-							<i class="fa fa-bitcoin" aria-hidden="true"></i>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<i class="fa fa-paypal" aria-hidden="true"></i>
-						</a>
-					</li>
-				</ul>
+				@if{is_loggedin}
+				<a class="btn btn-default" data-toggle="modal" data-target="#paymentModal" href="#">
+					Buy <i class="fa fa-money" aria-hidden="true"></i>
+				</a>
+				@else{}
+				<a class="btn btn-default" data-toggle="modal" data-target="#signupModal" href="#" onclick="infoRequireLogin();">
+					Buy <i class="fa fa-money" aria-hidden="true"></i>
+				</a>
+				@endif{}	
 			</div>
 		</div>
 	</div>
