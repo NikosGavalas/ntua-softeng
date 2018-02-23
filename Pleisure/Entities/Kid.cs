@@ -40,7 +40,7 @@ namespace Pleisure
 			}
 		}
 
-		public JToken Serialize()
+		public async Task<JToken> Serialize()
 		{
 			return JToken.FromObject(new
 			{
@@ -54,8 +54,34 @@ namespace Pleisure
 					name = Parent.FullName,
 					avatar = Parent.Avatar
 				},
-				avatar = Options.Gravatar(ID.ToString())
+				avatar = Options.Gravatar(ID.ToString()),
+				attending = (await AttendingEvents()).Select(e => e.Serialize(false).Result)
 			});
+		}
+
+		public async Task<List<ScheduledEvent>> AttendingEvents()
+		{
+			SelectQuery<EventAttendance> query = new SelectQuery<EventAttendance>();
+			query.Where("kid_id", ID);
+
+			List<EventAttendance> attendances = await Program.MySql().Execute(query);
+
+			if (attendances.Count == 0)
+				return new List<ScheduledEvent>();
+
+			SelectQuery<ScheduledEvent> eventsQuery = new SelectQuery<ScheduledEvent>();
+			WhereClause clause = null;
+
+			attendances.ForEach(a => 
+			{
+				clause |= new WhereClause("scheduled_event_id", a.ScheduledID);
+			});
+
+			eventsQuery.Where(clause);
+
+			List<ScheduledEvent> events = await Program.MySql().Execute(eventsQuery);
+
+			return events;
 		}
 	}
 

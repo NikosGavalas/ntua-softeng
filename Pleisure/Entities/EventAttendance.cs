@@ -7,7 +7,7 @@ namespace Pleisure
 	[DBTable("event_attendance")]
 	public class EventAttendance
 	{
-		[DBColumn("scheduled_id")]
+		[DBColumn("scheduled_event_id")]
 		public int ScheduledID;
 
 		[DBColumn("kid_id")]

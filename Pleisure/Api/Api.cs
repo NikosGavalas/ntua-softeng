@@ -371,7 +371,7 @@ namespace Pleisure
 
 				foreach (Kid kid in await user.GetKids())
 				{
-					response.Add(kid.Serialize());
+					response.Add(await kid.Serialize());
 				}
 
 				await req.Write(response.ToString());
