@@ -162,5 +162,16 @@ namespace Pleisure
 
 			return await Program.MySql().Execute(categoriesQuery);
 		}
+
+		public async Task<bool> HasCategories(params int[] categoryIds)
+		{
+			List<Category> categories = await Categories();
+			foreach (int id in categoryIds)
+			{
+				if (!categories.Any(c => c.ID == id))
+					return false;
+			}
+			return true;
+		}
 	}
 }

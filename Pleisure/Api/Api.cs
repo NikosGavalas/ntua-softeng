@@ -93,9 +93,11 @@ namespace Pleisure
 
 			JArray response = JArray.FromObject(categories.Select(c => c.Serialize()));
 
+			req.SetStatusCode(HttpStatusCode.OK)
+			   .SetContentType(ContentType.Json);
 			await req.Write(response.ToString());
 
-			await req.SetStatusCode(HttpStatusCode.OK).Close();
+			await req.Close();
 		}
 
 		public async Task CreateEvent(HttpRequest req)
@@ -474,7 +476,12 @@ namespace Pleisure
 				DateTime.TryParse(req.GET("min_date"), out minDate);
 				DateTime.TryParse(req.GET("max_date"), out maxDate);
 
-				if (await evt.HappensBetween(minDate, maxDate))
+				int categoryId = -1;
+
+				int.TryParse(req.GET("category"), out categoryId);
+
+				if (await evt.HappensBetween(minDate, maxDate)
+				    && (categoryId < 0 || await evt.HasCategories(categoryId)))
 				{
 					arr.Add(await evt.SerializeWithScheduled());
 				}
