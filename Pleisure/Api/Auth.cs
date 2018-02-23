@@ -193,9 +193,41 @@ namespace Pleisure
 			return MD5(text, Encoding.ASCII);
 		}
 
-		public static async Task<bool> BookEvent(User user, Kid kid, ScheduledEvent evt)
+		public static async Task<bool> BookEvent(User user, Kid kid, ScheduledEvent scheduled)
 		{
-			throw new NotImplementedException();
+			Monitor.Enter(coherenceLock);
+
+			bool success = false;
+
+			Event evt = scheduled.Event;
+			User organizer = evt.Organizer;
+
+			if (user.Credits > evt.Price)
+			{
+				/*
+				 * Transfer funds
+				 */
+				await Program.MySql().Update(user, u =>
+				{
+					u.Credits -= evt.Price;
+				});
+				await Program.MySql().Update(organizer, u =>
+				{
+					u.Credits += evt.Price;
+				});
+
+				/*
+				 * Add attendance
+				 */
+				EventAttendance attendance = new EventAttendance(scheduled, kid);
+				await Program.MySql().Insert(attendance);
+
+				success = true;
+			}
+
+			Monitor.Exit(coherenceLock);
+
+			return success;
 		}
 	}
 }

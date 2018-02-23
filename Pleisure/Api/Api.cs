@@ -543,22 +543,46 @@ namespace Pleisure
 			}
 
 
-			SelectQuery<ScheduledEvent> query = new SelectQuery<ScheduledEvent>();
-			query.Where("scheduled_event_id", await req.POST("scheduled_id"));
+			SelectQuery<ScheduledEvent> scheduledQuery = new SelectQuery<ScheduledEvent>();
+			scheduledQuery.Where("scheduled_event_id", await req.POST("scheduled_id"));
+
+			SelectQuery<Kid> kidQuery = new SelectQuery<Kid>();
+			kidQuery.Where("kid_id", await req.POST("kid_id"));
 
 
-			ScheduledEvent scheduled = (await Program.MySql().Execute(query)).FirstOrDefault();
+			ScheduledEvent scheduled = (await Program.MySql().Execute(scheduledQuery)).FirstOrDefault();
+			Kid kid = (await Program.MySql().Execute(kidQuery)).FirstOrDefault();
 
-
-			if (scheduled == null)
+			if (scheduled == null || kid == null)
 			{
-				req.SetStatusCode(HttpStatusCode.NotFound);
-				await req.Close();
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
 				return;
 			}
 
+			Event evt = scheduled.Event;
 
+			if (user.Credits < evt.Price)
+			{
+				await req.SetStatusCode(HttpStatusCode.PaymentRequired).Close();
+				return;				
+			}
 
+			if (evt.Organizer.Role != UserRole.Organizer
+				|| kid.Age > evt.AgeMax || kid.Age < evt.AgeMin
+			    || !evt.Genders.HasFlag(kid.Gender))
+			{
+				await req.SetStatusCode(HttpStatusCode.ExpectationFailed).Close();
+				return;
+			}
+
+			SelectQuery<EventAttendance> existingAttendance = new SelectQuery<EventAttendance>();
+			existingAttendance.Where("scheduled_id", scheduled.ID)
+			                  .Where("kid_id", kid.ID);
+
+			bool success = await Auth.BookEvent(user, kid, scheduled);
+
+			await req.SetStatusCode(success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError)
+			         .Close();
 		}
 
 		public async Task Users(HttpRequest req)

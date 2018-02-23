@@ -32,14 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChanceNET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Chance.NET.1.1.3\lib\ChanceNET.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="HaathDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Haath.HaathDB.1.0.8\lib\HaathDB.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MySql.Data, Version=6.10.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.10.4\lib\net452\MySql.Data.dll</HintPath>
       <Private>True</Private>
@@ -67,6 +59,12 @@
     <Reference Include="Watermark">
       <HintPath>..\packages\ProgTech.Watermak.1.1.1\lib\Watermark.dll</HintPath>
     </Reference>
+    <Reference Include="ChanceNET">
+      <HintPath>..\packages\Chance.NET.1.2.0\lib\ChanceNET.dll</HintPath>
+    </Reference>
+    <Reference Include="HaathDB">
+      <HintPath>..\packages\Haath.HaathDB.1.0.10\lib\HaathDB.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Api.cs" />
@@ -88,6 +86,7 @@
     <Compile Include="UserSession.cs" />
     <Compile Include="Pages\EventPage.cs" />
     <Compile Include="Content\ResizedResourceProvider.cs" />
+    <Compile Include="Entities\EventAttendance.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

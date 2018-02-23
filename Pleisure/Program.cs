@@ -68,7 +68,8 @@ namespace Pleisure
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
 
-
+			Event evt = Event.Random(123, 35, 54, 100);
+			Console.WriteLine(evt.Serialize().ToString());
 
 			/*
              * Main thread now awaits SIGTERM

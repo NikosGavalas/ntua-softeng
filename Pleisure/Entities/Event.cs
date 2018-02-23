@@ -60,14 +60,15 @@ namespace Pleisure
 		{
 			Chance c = new Chance(id);
 			int ageMin = c.Integer(4, 18);
+			ChanceNET.Location loc = c.Location(centerLat, centerLng, range);
 			return new Event()
 			{
 				ID =			id,
 				Title =			c.Sentence(words: 6, capitalize: true),
 				Description =	c.Paragraph(),
 				Price =			c.Natural(100),
-				Latitude =		c.Latitude(),
-				Longitude =		c.Longitude(),
+				Latitude =		loc.Latitude,
+				Longitude =		loc.Longitude,
 				Address =		c.Address(numberFirst: false),
 				Duration =		c.PickOne(new int[] { 30, 45, 60, 75, 90, 120, 180 }),
 				AgeMin =		ageMin,
