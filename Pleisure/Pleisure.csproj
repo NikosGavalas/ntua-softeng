@@ -87,6 +87,7 @@
     <Compile Include="Pages\EventPage.cs" />
     <Compile Include="Content\ResizedResourceProvider.cs" />
     <Compile Include="Entities\EventAttendance.cs" />
+    <Compile Include="Entities\Category.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

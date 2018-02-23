@@ -90,7 +90,7 @@ namespace Pleisure
 					token["events"] = new JArray();
 					foreach (Event evt in await GetEvents())
 					{
-						(token["events"] as JArray).Add(evt.Serialize());
+						(token["events"] as JArray).Add(await evt.Serialize());
 					}
 					break;
 			}

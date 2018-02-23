@@ -68,9 +68,9 @@ namespace Pleisure
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
 
-			List<Kid> kids = MySql().Select<Kid>().Result;
+			List<Event> kids = MySql().Select<Event>().Result;
 
-			foreach (Kid kid in kids){
+			foreach (Event kid in kids){
 				Console.WriteLine(kid.Serialize().Result);
 			}
 

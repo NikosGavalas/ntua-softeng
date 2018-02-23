@@ -29,7 +29,8 @@ namespace Pleisure
 			         .Add("/create_event", CreateEvent)
 			         .Add("/schedule_event", ScheduleEvent)
 			         .Add("/own_events", OwnEvents)
-			         .Add("/book_event", BookEvent);
+			         .Add("/book_event", BookEvent)
+			         .Add("/categories", Categories);
 
 			/*
 			 * Admin APIs
@@ -84,6 +85,17 @@ namespace Pleisure
 			string url = await req.POST("redirect", "/profile");
 
 			await req.Redirect(url);
+		}
+
+		public async Task Categories(HttpRequest req)
+		{
+			List<Category> categories = await Program.MySql().Select<Category>();
+
+			JArray response = JArray.FromObject(categories.Select(c => c.Serialize()));
+
+			await req.Write(response.ToString());
+
+			await req.SetStatusCode(HttpStatusCode.OK).Close();
 		}
 
 		public async Task CreateEvent(HttpRequest req)
@@ -658,7 +670,7 @@ namespace Pleisure
 
 			await Auth.BanUser(userToBan);
 
-			await req.Close();
+			await req.SetStatusCode(HttpStatusCode.OK).Close();
 		}
 	}
 }

@@ -78,8 +78,9 @@ namespace Pleisure
 			};
 		}
 
-		public JToken Serialize()
+		public async Task<JToken> Serialize()
 		{
+			List<Category> categories = await Categories();
 			JToken obj = JToken.FromObject(new
 			{
 				id = ID,
@@ -94,7 +95,8 @@ namespace Pleisure
 				duration = Duration,
 				address = Address,
 				thumbnail = Thumbnail,
-				gender = Genders.ToString().ToLower()
+				gender = Genders.ToString().ToLower(),
+				categories = categories.Select(c => c.Serialize())
 			});
 
 			return obj;
@@ -102,7 +104,7 @@ namespace Pleisure
 
 		public async Task<JToken> SerializeWithScheduled(bool includeAttendance = false)
 		{
-			JToken obj = Serialize();
+			JToken obj = await Serialize();
 			obj["scheduled"] = new JArray();
 			 
 			foreach (ScheduledEvent scheduled in await GetScheduled())
@@ -141,6 +143,24 @@ namespace Pleisure
 				}
 			}
 			return false;
+		}
+
+		public async Task<List<Category>> Categories()
+		{
+			Query matchQuery = new Query("SELECT category_id FROM event_categories WHERE event_id=@eid");
+			matchQuery.AddParameter("@eid", ID);
+
+			SelectQuery<Category> categoriesQuery = new SelectQuery<Category>();
+			WhereClause clause = new WhereClause("1 = 2");
+
+			ResultSet matches = await Program.MySql().Execute(matchQuery);
+			foreach (ResultRow match in matches)
+			{
+				clause |= new WhereClause("category_id", match.GetInteger("category_id"));
+			}
+			categoriesQuery.Where(clause);
+
+			return await Program.MySql().Execute(categoriesQuery);
 		}
 	}
 }

@@ -42,7 +42,7 @@ namespace Pleisure
 
 		public async Task<JToken> Serialize()
 		{
-			return JToken.FromObject(new
+			JToken token = JToken.FromObject(new
 			{
 				kid_id = ID,
 				name = Name,
@@ -55,13 +55,16 @@ namespace Pleisure
 					avatar = Parent.Avatar
 				},
 				avatar = Options.Gravatar(ID.ToString()),
-				attending = (await AttendingEvents()).Select(e => 
-				{
-					JToken evt = e.Serialize(false).Result;
-					evt["event"] = e.Event.Serialize();
-					return evt;
-				})
+				attending = new JArray()
 			});
+			foreach (ScheduledEvent e in await AttendingEvents())
+			{
+				JToken evt = e.Serialize(false).Result;
+				evt["event"] = await e.Event.Serialize();
+
+				(token["attending"] as JArray).Add(evt);
+			}
+			return token;
 		}
 
 		public async Task<List<ScheduledEvent>> AttendingEvents()
