@@ -22,21 +22,20 @@ namespace Pleisure
 			server.Add("/signout", SignOut);
 
 			Router apiRouter = server.AddRouter("/api");
-			apiRouter.Add("/kids", Kids);
-			apiRouter.Add("/events", Events);
-			apiRouter.Add("/email_available", EmailAvailable);
-
-			apiRouter.Add("/add_kid", AddKid);
-			apiRouter.Add("/create_event", CreateEvent);
-			apiRouter.Add("/schedule_event", ScheduleEvent);
-			apiRouter.Add("/own_events", OwnEvents);
-
-			apiRouter.Add("/book_event", BookEvent);
+			apiRouter.Add("/kids", Kids)
+			         .Add("/events", Events)
+			         .Add("/email_available", EmailAvailable)
+			         .Add("/add_kid", AddKid)
+			         .Add("/create_event", CreateEvent)
+			         .Add("/schedule_event", ScheduleEvent)
+			         .Add("/own_events", OwnEvents)
+			         .Add("/book_event", BookEvent);
 
 			/*
 			 * Admin APIs
 			 */
-			apiRouter.Add("/users", Users);
+			apiRouter.Add("/users", Users)
+			         .Add("/ban_user", BanUser);
 		}
 
 		public async Task AddKid(HttpRequest req)
@@ -621,6 +620,43 @@ namespace Pleisure
 			await req.SetContentType(ContentType.Json)
 				.SetStatusCode(HttpStatusCode.OK)
 				.Write(response.ToString());
+
+			await req.Close();
+		}
+
+
+		public async Task BanUser(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null || user.Role != UserRole.Admin)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+			if (!await req.HasPOST("user_id"))
+			{
+				await req.SetStatusCode(HttpStatusCode.BadRequest).Close();
+				return;
+			}
+
+			SelectQuery<User> query = new SelectQuery<User>();
+			query.Where("user_id", await req.POST("user_id"));
+
+
+			User userToBan = (await Program.MySql().Execute(query)).FirstOrDefault();
+
+			if (userToBan == null)
+			{
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
+			await Auth.BanUser(userToBan);
 
 			await req.Close();
 		}

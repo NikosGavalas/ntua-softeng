@@ -138,7 +138,7 @@ namespace Pleisure
 
 			string givenHash = GetPasswordHash(password, user.Salt);
 
-			return user.Password == givenHash ? user : null;
+			return (user.Password == givenHash && user.Role != UserRole.Banned) ? user : null;
 		}
 
 		public static bool ValidateEmail(string email)
@@ -228,6 +228,16 @@ namespace Pleisure
 			Monitor.Exit(coherenceLock);
 
 			return success;
+		}
+
+		public static async Task BanUser(User user)
+		{
+			Monitor.Enter(coherenceLock);
+			await Program.MySql().Update(user, u =>
+			{
+				u.Role = UserRole.Banned;
+			});
+			Monitor.Exit(coherenceLock);
 		}
 	}
 }

@@ -55,7 +55,12 @@ namespace Pleisure
 					avatar = Parent.Avatar
 				},
 				avatar = Options.Gravatar(ID.ToString()),
-				attending = (await AttendingEvents()).Select(e => e.Serialize(false).Result)
+				attending = (await AttendingEvents()).Select(e => 
+				{
+					JToken evt = e.Serialize(false).Result;
+					evt["event"] = e.Event.Serialize();
+					return evt;
+				})
 			});
 		}
 

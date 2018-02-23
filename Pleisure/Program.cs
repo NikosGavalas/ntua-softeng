@@ -68,8 +68,11 @@ namespace Pleisure
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
 
+			List<Kid> kids = MySql().Select<Kid>().Result;
 
-
+			foreach (Kid kid in kids){
+				Console.WriteLine(kid.Serialize().Result);
+			}
 
 			/*
              * Main thread now awaits SIGTERM
