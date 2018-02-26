@@ -48,7 +48,13 @@ namespace Pleisure
 		[DBColumn("age_max")]
 		public int AgeMax;
 
-		public string Thumbnail = "http://via.placeholder.com/128x128";
+		[DBColumn("genders")]
+		public Gender Genders;
+
+		public string Thumbnail 
+		{
+			get { return "/eventthumb/" + ID; }
+		}
 
 		public static Event Random(int id, double centerLat, double centerLng, double range)
 		{
@@ -58,21 +64,23 @@ namespace Pleisure
 			return new Event()
 			{
 				ID =			id,
-				Title =			c.Sentence(capitalize: true),
+				Title =			c.Sentence(words: 6, capitalize: true),
 				Description =	c.Paragraph(),
 				Price =			c.Natural(100),
 				Latitude =		loc.Latitude,
 				Longitude =		loc.Longitude,
 				Address =		c.Address(numberFirst: false),
 				Duration =		c.PickOne(new int[] { 30, 45, 60, 75, 90, 120, 180 }),
-				Thumbnail =		c.Avatar(GravatarDefaults.Identicon),
 				AgeMin =		ageMin,
-				AgeMax =		c.Integer(ageMin, 18)
+				AgeMax =		c.Integer(ageMin, 18),
+				Organizer =		User.Random(c, UserRole.Organizer),
+				Genders	=		c.PickEnum<Gender>()
 			};
 		}
 
-		public JToken Serialize()
+		public async Task<JToken> Serialize()
 		{
+			List<Category> categories = await Categories();
 			JToken obj = JToken.FromObject(new
 			{
 				id = ID,
@@ -86,7 +94,9 @@ namespace Pleisure
 				description = Description,
 				duration = Duration,
 				address = Address,
-				thumbnail = Thumbnail
+				thumbnail = Thumbnail,
+				gender = Genders.ToString().ToLower(),
+				categories = categories.Select(c => c.Serialize())
 			});
 
 			return obj;
@@ -94,7 +104,7 @@ namespace Pleisure
 
 		public async Task<JToken> SerializeWithScheduled(bool includeAttendance = false)
 		{
-			JToken obj = Serialize();
+			JToken obj = await Serialize();
 			obj["scheduled"] = new JArray();
 			 
 			foreach (ScheduledEvent scheduled in await GetScheduled())
@@ -107,12 +117,61 @@ namespace Pleisure
 			return obj;
 		}
 
-		public Task<List<ScheduledEvent>> GetScheduled()
+		public async Task<List<ScheduledEvent>> GetScheduled()
 		{
 			SelectQuery<ScheduledEvent> query = new SelectQuery<ScheduledEvent>()
 				.Where<SelectQuery<ScheduledEvent>>("event_id", ID);
 
-			return Program.MySql().Execute(query);
+			List<ScheduledEvent> scheduled = await Program.MySql().Execute(query);
+
+			if (Options.Randomized)
+			{
+				Chance c = new Chance(ID);
+				scheduled.Add(ScheduledEvent.Random(c, this));
+			}
+
+			return scheduled;
+		}
+
+		public async Task<bool> HappensBetween(DateTime fromDate, DateTime toDate)
+		{
+			foreach (ScheduledEvent scheduled in await GetScheduled())
+			{
+				if (scheduled.NextTime >= fromDate && scheduled.NextTime <= toDate)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public async Task<List<Category>> Categories()
+		{
+			Query matchQuery = new Query("SELECT category_id FROM event_categories WHERE event_id=@eid");
+			matchQuery.AddParameter("@eid", ID);
+
+			SelectQuery<Category> categoriesQuery = new SelectQuery<Category>();
+			WhereClause clause = new WhereClause("1 = 2");
+
+			ResultSet matches = await Program.MySql().Execute(matchQuery);
+			foreach (ResultRow match in matches)
+			{
+				clause |= new WhereClause("category_id", match.GetInteger("category_id"));
+			}
+			categoriesQuery.Where(clause);
+
+			return await Program.MySql().Execute(categoriesQuery);
+		}
+
+		public async Task<bool> HasCategories(params int[] categoryIds)
+		{
+			List<Category> categories = await Categories();
+			foreach (int id in categoryIds)
+			{
+				if (!categories.Any(c => c.ID == id))
+					return false;
+			}
+			return true;
 		}
 	}
 }

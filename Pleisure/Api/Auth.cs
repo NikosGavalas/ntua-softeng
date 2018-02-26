@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 using XXHash;
 using HaathDB;
@@ -13,6 +14,13 @@ namespace Pleisure
 {
 	public static class Auth
 	{
+		static object coherenceLock;
+
+		static Auth()
+		{
+			coherenceLock = new object();
+		}
+
 		private static string Hash(string plain)
 		{
 			ulong hash = XXHash64.Hash(plain);
@@ -74,8 +82,11 @@ namespace Pleisure
 		public static async Task<long> RegisterUser(string email, string password, string fullName, 
 		                                            int role, string address = "", int credits = 0)
 		{
+			Monitor.Enter(coherenceLock);
+
 			if (await EmailTaken(email))
 			{
+				Monitor.Exit(coherenceLock);
 				return -1;
 			}
 
@@ -98,6 +109,8 @@ namespace Pleisure
 				Console.WriteLine("Tried to register user and got rows affected: " + result.RowsAffected);
 				Console.WriteLine(query.QueryString());
 			}
+
+			Monitor.Exit(coherenceLock);
 
 			return result.LastInsertedId;
 		}
@@ -125,7 +138,7 @@ namespace Pleisure
 
 			string givenHash = GetPasswordHash(password, user.Salt);
 
-			return user.Password == givenHash ? user : null;
+			return (user.Password == givenHash && user.Role != UserRole.Banned) ? user : null;
 		}
 
 		public static bool ValidateEmail(string email)
@@ -152,6 +165,79 @@ namespace Pleisure
 			{
 				return random.Value.Next(min, max);
 			}
+		}
+
+		public static byte[] MD5(byte[] text)
+		{
+			MD5 md5 = System.Security.Cryptography.MD5.Create();
+			return md5.ComputeHash(text);
+		}
+
+		public static string MD5(string text, Encoding encoding)
+		{
+			byte[] input = encoding.GetBytes(text);
+			byte[] hash = MD5(input);
+
+			StringBuilder hex = new StringBuilder();
+
+			for (int i = 0; i < hash.Length; i++)
+			{
+				hex.Append(hash[i].ToString("x2"));
+			}
+
+			return hex.ToString();
+		}
+
+		public static string MD5(string text)
+		{
+			return MD5(text, Encoding.ASCII);
+		}
+
+		public static async Task<bool> BookEvent(User user, Kid kid, ScheduledEvent scheduled)
+		{
+			Monitor.Enter(coherenceLock);
+
+			bool success = false;
+
+			Event evt = scheduled.Event;
+			User organizer = evt.Organizer;
+
+			if (user.Credits > evt.Price)
+			{
+				/*
+				 * Transfer funds
+				 */
+				await Program.MySql().Update(user, u =>
+				{
+					u.Credits -= evt.Price;
+				});
+				await Program.MySql().Update(organizer, u =>
+				{
+					u.Credits += evt.Price;
+				});
+
+				/*
+				 * Add attendance
+				 */
+				EventAttendance attendance = new EventAttendance(scheduled, kid);
+				await Program.MySql().Insert(attendance);
+
+				success = true;
+			}
+
+			Monitor.Exit(coherenceLock);
+
+			return success;
+		}
+
+		public static async Task BanUser(User user)
+		{
+			Monitor.Enter(coherenceLock);
+			await Program.MySql().Update(user, u =>
+			{
+				u.Role = UserRole.Banned;
+			});
+			Monitor.Exit(coherenceLock);
 		}
 	}
 }

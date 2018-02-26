@@ -13,20 +13,22 @@ using HttpNet;
 using UnixSignalWaiter;
 
 using HaathDB;
+using ChanceNET;
 
 namespace Pleisure
 {
 	class Program
 	{
 		static WebServer server;
+		static ConcurrentChance chance;
 
 		static void Main(string[] args)
 		{
-			server = WebServer.Create<UserSession>(Options.Host, Options.Port, sessionLifetime: 300);
+			chance = new ConcurrentChance();
+
+			server = WebServer.Create<UserSession>(Options.Host, Options.Port, Options.SessionLifetime);
 			server.LogLevel = LogLevels.All;
 			server.OnLog += (s, arg) => Console.WriteLine(arg.Line);
-			
-
 
 			/*
 			 * Register content providers
@@ -40,8 +42,13 @@ namespace Pleisure
 			StaticResourceProvider png = new StaticResourceProvider(GetPath("app/img"), "/img", ContentType.Image);
 			server.Add("/img/*", png.OnRequest);
 
-			WatermarkedResourceProvider evtImg = new WatermarkedResourceProvider(GetPath("app/eventimg"), "/eventimg");
+			WatermarkedResourceProvider evtImg = new WatermarkedResourceProvider(Options.StoragePath("eventimg"), "/eventimg");
 			server.Add("/eventimg/*", evtImg.OnRequest);
+
+			ResizedResourceProvider evtThumb = new ResizedResourceProvider(Options.StoragePath("eventimg"), "/eventthumb",
+			                                                               Options.EventThumbnailWidth, Options.EventThumbnailHeight);
+			server.Add("/eventthumb/*", evtThumb.OnRequest);
+
 
 			/*
 			 * Register API
@@ -51,13 +58,21 @@ namespace Pleisure
 
 			HtmlProvider pages = new HtmlProvider();
 			server.Add("/", pages.Index);
+			server.Add("/index", pages.Index);
 			server.Add("/events", pages.Events);
 			server.Add("/event/*", pages.Event);
 			server.Add("/profile", pages.Profile);
+			server.Add("/admin", pages.Admin);
 
 
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
+
+			List<Event> kids = MySql().Select<Event>().Result;
+
+			foreach (Event kid in kids){
+				Console.WriteLine(kid.Serialize().Result);
+			}
 
 			/*
              * Main thread now awaits SIGTERM
@@ -104,6 +119,11 @@ namespace Pleisure
 		{
 			return new MySqlConn(Options.MysqlHost, Options.MysqlUser, Options.MysqlPass, 
 			                     Options.MysqlDb, Options.MysqlPort);
+		}
+
+		public static ConcurrentChance Chance()
+		{
+			return chance;
 		}
 	}
 }

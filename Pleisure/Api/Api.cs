@@ -22,25 +22,249 @@ namespace Pleisure
 			server.Add("/signout", SignOut);
 
 			Router apiRouter = server.AddRouter("/api");
-			apiRouter.Add("/kids", Kids);
-			apiRouter.Add("/events", Events);
-			apiRouter.Add("/email_available", EmailAvailable);
+			apiRouter.Add("/kids", Kids)
+			         .Add("/events", Events)
+			         .Add("/email_available", EmailAvailable)
+			         .Add("/add_kid", AddKid)
+			         .Add("/create_event", CreateEvent)
+			         .Add("/schedule_event", ScheduleEvent)
+			         .Add("/own_events", OwnEvents)
+			         .Add("/book_event", BookEvent)
+			         .Add("/categories", Categories);
+
+			/*
+			 * Admin APIs
+			 */
+			apiRouter.Add("/users", Users)
+			         .Add("/ban_user", BanUser);
 		}
 
-		public async Task Login(HttpRequest req)
+		public async Task AddKid(HttpRequest req)
 		{
-			if (!req.HasPOST("email", "password"))
+			req.SetContentType(ContentType.Json);
+
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
+			if (!await req.HasPOST("name", "birthday", "gender"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
 				return;
 			}
 
-			string onSuccess = req.POST("on_success", "/");
-			string onFail = req.POST("on_failure", "/?loginfail=1");
+			string name = await req.POST("name");
+			DateTime birthday;
+			int gender;
+
+			if (!DateTime.TryParse(await req.POST("birthday"), out birthday)
+			    || !int.TryParse(await req.POST("gender"), out gender)
+			   || (gender != 0 && gender != 1))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			InsertQuery query = new InsertQuery("kids");
+			query.Value("name", name)
+			     .Value("birthday", birthday)
+			     .Value("gender", gender)
+			     .Value("parent_id", user.ID);
+
+			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+			string url = await req.POST("redirect", "/profile");
+
+			await req.Redirect(url);
+		}
+
+		public async Task Categories(HttpRequest req)
+		{
+			List<Category> categories = await Program.MySql().Select<Category>();
+
+			JArray response = JArray.FromObject(categories.Select(c => c.Serialize()));
+
+			req.SetStatusCode(HttpStatusCode.OK)
+			   .SetContentType(ContentType.Json);
+			await req.Write(response.ToString());
+
+			await req.Close();
+		}
+
+		public async Task CreateEvent(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
+			int eventId = Program.Chance().Natural();
+
+			if (!await req.HasPOST("title", "description", "price", "duration", "address",
+			                       "datetime", "recurrence"))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			string title = await req.POST("title");
+			string description = await req.POST("description");
+			int price;
+			int duration;
+			string address = await req.POST("address");
+			int genders = 2;
+			Location location = await Google.Geocode(address);
+			int age_min = 4;
+			int age_max = 17;
 
 
-			User user = await Auth.Authenticate(req.POST("email"), req.POST("password"));
+			string scheduledTime = await req.POST("datetime");
+			string recurrence = await req.POST("recurrence");
+
+
+			int.TryParse(await req.POST("genders"), out genders);
+			int.TryParse(await req.POST("age_min"), out age_min);
+			int.TryParse(await req.POST("age_max"), out age_max);
+
+
+			if (!int.TryParse(await req.POST("price"), out price)
+			   || !int.TryParse(await req.POST("duration"), out duration))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			// First try scheduling
+			if (location == null
+			    || !await ScheduleEvent(eventId, scheduledTime, recurrence))
+			{
+				req.SetStatusCode(HttpStatusCode.NotAcceptable);
+				await req.Close();
+				return;
+			}
+
+
+			if (await req.HasPOST("image"))
+			{
+				MemoryStream imgStream = await req.GetContentData("image");
+
+				string directory = Options.StoragePath("eventimg");
+				string filePath = string.Format("{0}/{1}.png", directory, eventId);
+				Directory.CreateDirectory(directory);
+
+				byte[] buffer = new byte[imgStream.Length];
+				await imgStream.ReadAsync(buffer, 0, buffer.Length);
+
+				using (FileStream writer = File.OpenWrite(filePath))
+				{
+					await writer.WriteAsync(buffer, 0, buffer.Length);
+					await writer.FlushAsync();
+				}
+			}
+
+			InsertQuery query = new InsertQuery("events");
+			query.Value("organizer_id", user.ID)
+			     .Value("event_id", eventId)
+			     .Value("title", title)
+			     .Value("description", description)
+			     .Value("price", price)
+			     .Value("lat", location.Latitude)
+			     .Value("lng", location.Longitude)
+				 .Value("address", address)
+				 .Value("duration", duration)
+			     .Value("age_min", age_min)
+			     .Value("age_max", age_max)
+			     .Value("genders", genders);
+
+			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+			await req.Redirect("/event/" + eventId);
+		}
+
+		public async Task ScheduleEvent(HttpRequest req)
+		{
+			req.SetContentType(ContentType.Json);
+
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
+			int eventId;
+			string recurrence = await req.POST("recurrence", "once");
+
+			if (!await req.HasPOST("event_id", "datetime")
+			    || !int.TryParse(await req.POST("event_id"), out eventId))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			bool status = await ScheduleEvent(eventId, await req.POST("datetime"), recurrence);
+
+			req.SetStatusCode(status ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
+			await req.Close();
+		}
+
+		async Task<bool> ScheduleEvent(int eventId, string dateTime, string recurrence)
+		{
+			DateTime date;
+			EventRecurrence rec;
+
+			if (!DateTime.TryParse(dateTime, out date)
+				|| !Enum.TryParse(recurrence, true, out rec))
+			{
+				return false;
+			}
+
+			InsertQuery query = new InsertQuery("scheduled_events");
+			query.Value("event_id", eventId)
+			     .Value("next_time", date)
+			     .Value("recurrence", rec.ToString().ToLower());
+
+			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+			return result.RowsAffected == 1;
+		}
+
+		public async Task Login(HttpRequest req)
+		{
+			if (!await req.HasPOST("email", "password"))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+			string onSuccess = await req.POST("on_success", "/");
+			string onFail = await req.POST("on_failure", "/?loginfail=1");
+
+
+			User user = await Auth.Authenticate(await req.POST("email"), await req.POST("password"));
 
 			if (user == null)
 			{
@@ -90,26 +314,26 @@ namespace Pleisure
 
 		public async Task Register(HttpRequest req)
 		{
-			if (!req.HasPOST("email", "password", "password2", "full_name", "role"))
+			if (!await req.HasPOST("email", "password", "password2", "full_name", "role"))
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
 				return;
 			}
 
-			string onSuccess = req.POST("on_success", "/");
-			string onFail = req.POST("on_failure", "/?registerfail=1");
+			string onSuccess = await req.POST("on_success", "/");
+			string onFail = await req.POST("on_failure", "/?registerfail=1");
 
-			string email = req.POST("email");
-			string password = req.POST("password");
-			string password2 = req.POST("password2");
-			string fullName = req.POST("full_name");
-			string address = req.POST("address");
+			string email = await req.POST("email");
+			string password = await req.POST("password");
+			string password2 = await req.POST("password2");
+			string fullName = await req.POST("full_name");
+			string address = await req.POST("address");
 
 			int role;
 
 			if (password != password2 							// Check if passwords match
-			    || !int.TryParse(req.POST("role"), out role) 	// Check if the POSTed role is an integer
+			    || !int.TryParse(await req.POST("role"), out role) 	// Check if the POSTed role is an integer
 			    || !(role == (int)UserRole.Parent 
 			         || role == (int)UserRole.Organizer)		// Check if the user isn't trying to bamboozle us
 			    || !Auth.ValidateEmail(email)					// Check if the email address is valid
@@ -133,7 +357,7 @@ namespace Pleisure
 
 		public async Task SignOut(HttpRequest req)
 		{
-			string redirect = req.POST("redirect") ?? req.GET("redirect", "/");
+			string redirect = await req.POST("redirect") ?? req.GET("redirect", "/");
 
 			req.Session.Destroy();
 
@@ -151,6 +375,8 @@ namespace Pleisure
 			if (user == null)
 			{
 				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
 			}
 			else
 			{
@@ -158,7 +384,7 @@ namespace Pleisure
 
 				foreach (Kid kid in await user.GetKids())
 				{
-					response.Add(kid.Serialize());
+					response.Add(await kid.Serialize());
 				}
 
 				await req.Write(response.ToString());
@@ -213,10 +439,11 @@ namespace Pleisure
 			}
 
 			// Filter by age
-			if (req.HasGET("age"))
+			int age = 0;
+			if (req.HasGET("age") && int.TryParse(req.GET("age"), out age))
 			{
-				query.Where("age_min", WhereRelation.UpTo, req.GET("age"))
-					.Where("age_max", WhereRelation.AtLeast, req.GET("age"));
+				query.Where("age_min", WhereRelation.UpTo, age)
+					.Where("age_max", WhereRelation.AtLeast, age);
 			}
 
 			// Filter by duration
@@ -229,26 +456,47 @@ namespace Pleisure
 				query.Where("duration", WhereRelation.UpTo, req.GET("duration_max"));
 			}
 
+			// Filter by gender
+			if (req.HasGET("gender") && (req.GET("gender") == "male" || req.GET("gender") == "female"))
+			{
+				query.Where(
+					new WhereClause("genders", req.GET("gender"))
+	                | new WhereClause("genders", 2)
+				);
+			}
+
 			// Perform query and build the response object
 			JArray arr = new JArray();
 			List<Event> events = await Program.MySql().Execute(query);
 			foreach (Event evt in events)
 			{
-				arr.Add(await evt.SerializeWithScheduled());
+				DateTime minDate = DateTime.Now;
+				DateTime maxDate = DateTime.MaxValue;
+
+				DateTime.TryParse(req.GET("min_date"), out minDate);
+				DateTime.TryParse(req.GET("max_date"), out maxDate);
+
+				int categoryId = -1;
+
+				int.TryParse(req.GET("category"), out categoryId);
+
+				if (await evt.HappensBetween(minDate, maxDate)
+				    && (categoryId < 0 || await evt.HasCategories(categoryId)))
+				{
+					arr.Add(await evt.SerializeWithScheduled());
+				}
 			}
 
-
-
-#if DEBUG
-			Chance c = new Chance(); 
-			for (int i = 0; i < 50; i++)
+			if (Options.Randomized)
 			{
-				int id = c.Natural();
-				Event evt = Event.Random(id, location.Latitude, location.Longitude, distance);
-				arr.Add(evt.Serialize());
+				Chance c = new Chance(); 
+				for (int i = 0; i < 50; i++)
+				{
+					int id = c.Natural();
+					Event evt = Event.Random(id, location.Latitude, location.Longitude, distance);
+					arr.Add(await evt.SerializeWithScheduled());
+				}
 			}
-#endif
-
 
 			JToken response = JToken.FromObject(new
 			{
@@ -261,6 +509,175 @@ namespace Pleisure
 			await req.Close();
 		}
 
+		public async Task OwnEvents(HttpRequest req)
+		{
+			req.SetContentType(ContentType.Json);
 
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null || user.Role != UserRole.Organizer)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+			SelectQuery<Event> query = new SelectQuery<Event>();
+			query.Where("organizer_id", user.ID);
+
+			JArray arr = new JArray();
+			List<Event> events = await Program.MySql().Execute(query);
+			foreach (Event evt in events)
+			{
+				arr.Add(await evt.SerializeWithScheduled());
+			}
+
+			await req.Write(arr.ToString());
+
+			await req.Close();
+		}
+
+		public async Task BookEvent(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+
+			if (!await req.HasPOST("scheduled_id", "kid_id"))
+			{
+				req.SetStatusCode(HttpStatusCode.BadRequest);
+				await req.Close();
+				return;
+			}
+
+
+			SelectQuery<ScheduledEvent> scheduledQuery = new SelectQuery<ScheduledEvent>();
+			scheduledQuery.Where("scheduled_event_id", await req.POST("scheduled_id"));
+
+			SelectQuery<Kid> kidQuery = new SelectQuery<Kid>();
+			kidQuery.Where("kid_id", await req.POST("kid_id"));
+
+
+			ScheduledEvent scheduled = (await Program.MySql().Execute(scheduledQuery)).FirstOrDefault();
+			Kid kid = (await Program.MySql().Execute(kidQuery)).FirstOrDefault();
+
+			if (scheduled == null || kid == null)
+			{
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
+			Event evt = scheduled.Event;
+
+			if (user.Credits < evt.Price)
+			{
+				await req.SetStatusCode(HttpStatusCode.PaymentRequired).Close();
+				return;				
+			}
+
+			if (evt.Organizer.Role != UserRole.Organizer
+				|| kid.Age > evt.AgeMax || kid.Age < evt.AgeMin
+			    || !evt.Genders.HasFlag(kid.Gender))
+			{
+				await req.SetStatusCode(HttpStatusCode.ExpectationFailed).Close();
+				return;
+			}
+
+			SelectQuery<EventAttendance> existingAttendance = new SelectQuery<EventAttendance>();
+			existingAttendance.Where("scheduled_id", scheduled.ID)
+			                  .Where("kid_id", kid.ID);
+
+			bool success = await Auth.BookEvent(user, kid, scheduled);
+
+			await req.SetStatusCode(success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError)
+			         .Close();
+		}
+
+		public async Task Users(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null || user.Role != UserRole.Admin)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+			SelectQuery<User> query = new SelectQuery<User>();
+
+
+			int role;
+			if (req.HasGET("role") && int.TryParse(req.GET("role"), out role))
+			{
+				query.Where("role", role);
+			}
+			
+
+			List<User> users = await Program.MySql().Execute(query);
+
+			JArray response = new JArray();
+
+			foreach (User u in users)
+			{
+				response.Add(await u.Serialize());
+			}
+
+
+			await req.SetContentType(ContentType.Json)
+				.SetStatusCode(HttpStatusCode.OK)
+				.Write(response.ToString());
+
+			await req.Close();
+		}
+
+
+		public async Task BanUser(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null || user.Role != UserRole.Admin)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+			if (!await req.HasPOST("user_id"))
+			{
+				await req.SetStatusCode(HttpStatusCode.BadRequest).Close();
+				return;
+			}
+
+			SelectQuery<User> query = new SelectQuery<User>();
+			query.Where("user_id", await req.POST("user_id"));
+
+
+			User userToBan = (await Program.MySql().Execute(query)).FirstOrDefault();
+
+			if (userToBan == null)
+			{
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
+			await Auth.BanUser(userToBan);
+
+			await req.SetStatusCode(HttpStatusCode.OK).Close();
+		}
 	}
 }
