@@ -254,6 +254,8 @@ namespace Pleisure
 
 			req.SetStatusCode(status ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
 			await req.Close();
+
+
 		}
 
 		async Task<bool> ScheduleEvent(int eventId, string dateTime, string recurrence)
@@ -627,6 +629,10 @@ namespace Pleisure
 
 			await req.SetStatusCode(success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError)
 			         .Close();
+
+			BookingEmail email = new BookingEmail(user);
+			await email.Body(scheduled, kid, evt.Price);
+			await email.Send();
 		}
 
 		public async Task Users(HttpRequest req)

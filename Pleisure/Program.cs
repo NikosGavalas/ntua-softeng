@@ -69,15 +69,6 @@ namespace Pleisure
 			Console.WriteLine("Press CTRL-C to shut down.");
 
 
-
-			Event evt = MySql().Select<Event>().Result.First();
-			User user = MySql().Execute(new SelectQuery<User>().Where<SelectQuery<User>>("user_id", 2)).Result.First();
-
-
-			BookingEmail email = new BookingEmail(user).Event(evt);
-			email.Send().Wait();
-
-
 			/*
              * Main thread now awaits SIGTERM
              */
