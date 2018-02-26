@@ -51,6 +51,26 @@ $('#signupForm').submit(function (event) {
 
 });
 
+
+function editProfileModal(userId)
+{
+	$.get({
+		url: '/api/user',
+		data: {
+			user_id: userId
+		},
+		success: function(user)
+		{
+			$('#editProfileEmailField').val(user.email);
+			$('#editProfileFullNameField').val(user.fullname);
+			$('#editProfileAddressField').val(user.address);
+
+			$('#editProfileModal').modal();
+		}
+	});
+}
+
+
 $(document).ready(function () {
 	$('.datetimepicker').datetimepicker();
 });

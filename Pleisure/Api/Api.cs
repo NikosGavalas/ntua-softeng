@@ -22,7 +22,8 @@ namespace Pleisure
 			server.Add("/signout", SignOut);
 
 			Router apiRouter = server.AddRouter("/api");
-			apiRouter.Add("/kids", Kids)
+			apiRouter.Add("/user", User)
+			         .Add("/kids", Kids)
 			         .Add("/events", Events)
 			         .Add("/email_available", EmailAvailable)
 			         .Add("/add_kid", AddKid)
@@ -37,6 +38,34 @@ namespace Pleisure
 			 */
 			apiRouter.Add("/users", Users)
 			         .Add("/ban_user", BanUser);
+		}
+
+		public async Task User(HttpRequest req)
+		{
+			req.SetContentType(ContentType.Json);
+
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
+			if (user.Role == UserRole.Admin && req.HasGET("user_id"))
+			{
+				SelectQuery<User> query = new SelectQuery<User>();
+				query.Where("user_id", req.GET("user_id"));
+
+				user = (await Program.MySql().Execute(query)).First();
+			}
+
+			req.SetStatusCode(HttpStatusCode.OK);
+			await req.Write((await user.Serialize()).ToString());
+			await req.Close();
 		}
 
 		public async Task AddKid(HttpRequest req)

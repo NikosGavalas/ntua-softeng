@@ -38,6 +38,12 @@ namespace Pleisure
 			get { return user != null; }
 		}
 
+		[HtmlVariable("user.id")]
+		public uint? UserId
+		{
+			get { return user?.ID; }
+		}
+
 		[HtmlVariable("user.email")]
 		public string UserEmail
 		{

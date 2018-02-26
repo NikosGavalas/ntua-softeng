@@ -32,7 +32,7 @@
 							<a href="#" data-toggle="modal" data-target="#paymentModal">Add  <i class="fa fa-money" aria-hidden="true"></i></a>
 						</li>
 						<li>
-							<a href="#" data-toggle="modal" data-target="#editProfileModal">Edit Profile</a>
+							<a href="#" onclick="editProfileModal(@{user.id})">Edit Profile</a>
 						</li>
 				@endif{}
 				@if{is_admin}
