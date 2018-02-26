@@ -1,0 +1,65 @@
+<div id="addKidModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add Kid</h4>
+			</div>
+			<div class="modal-body">
+				<form id="addKidForm" class="form-horizontal" method="post" action="/api/add_kid">
+					<fieldset>
+						<legend>Adding your kid will enhance your experience</legend>
+
+						<div class="form-group">
+							<label for="nameKidInput" class="col-lg-2 control-label">Name</label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="name" id="nameKidInput" autocomplete="off">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="birthdayKidInput" class="col-lg-2 control-label">Birthday</label>
+							<div class="col-lg-10">
+								<div class='input-group date datetimepicker'>
+									<input type="text" class="form-control datetimepicker" id="birthdayKidInput" name="birthday">
+									<span class="input-group-addon">
+										<i class="fa fa-calendar" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-lg-10">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" name="gender" value="0" checked> Male
+									<input type="radio" class="form-check-input" name="gender" value="1" > Female
+								</label>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-lg-10 col-lg-offset-2">
+								<button type="submit" class="btn btn-primary btn-lg">Add&nbsp;
+									<span class="submitAwait fa fa-plus"></span>
+								</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+
+			</div>
+
+			<!-- <div class="modal-footer">
+				<div class="pull-left">
+					
+				</div>
+			</div> -->
+
+		</div>
+		<!-- /Modal content-->
+
+	</div>
+</div>

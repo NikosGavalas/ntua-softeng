@@ -25,6 +25,8 @@
 	<!-- Navbar -->
 	@{html.navbar}
 	<!-- /Navbar -->
+
+	@{modal.book}
 	
 	<div id="event_header" class="container">
 		<div class="row">
@@ -39,8 +41,7 @@
 		</div>
 	</div>
 
-	<!-- @{event.image} doesn't work currently so I use this placeholder -->
-	<div style="background-image:url('https://d3uf2ssic990td.cloudfront.net/images/5031/413b4a3e-5bf8-494b-bfda-ed9488ca3b0d/kids.jpg');" class="parallax">
+	<div style="background-image:url('@{event.image}');" class="parallax">
 	</div>
 
 	<div class="container">
@@ -53,7 +54,7 @@
 					Age Range: @{event.age_min} - @{event.age_max}
 				</p>
 				<p>
-					Organizer: FIXME
+					Organizer: @{event.organizer_name}
 				</p>
 				<p>
 					Address: @{event.address}
@@ -61,7 +62,13 @@
 				<p>
 					Price: @{event.price} <i class="fa fa-money" aria-hidden="true"></i>
 				</p>
-				<a class="btn btn-lg btn-primary" href="#TODO">
+				<p>
+					Duration: @{event.duration}
+				</p>
+				<p>
+					Genders: @{event.genders}
+				</p>
+				<a class="btn btn-lg btn-primary" data-id="@{event.id}" data-toggle="modal" data-target="#bookModal" href="#">
 					Attend!
 				</a>
 			</div>
@@ -78,16 +85,17 @@
 
 	<!-- Google maps -->
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP7eXQB4hzRcSobhv8W5_uMAAfCv3oRDs&callback=initMap"></script>
+	
 	<script>
 		function initMap() {
 			/* @{event.lat} and @{event.lng} don't work here.. */
-			var uluru = { lat: -25.363, lng: 131.044 };
+			var pos = { lat: @{event.lat}, lng: @{event.lng} };
 			var map = new google.maps.Map(document.getElementById('map'), {
-				zoom: 4,
-				center: uluru
+				zoom: 15,
+				center: pos
 			});
 			var marker = new google.maps.Marker({
-				position: uluru,
+				position: pos,
 				map: map
 			});
 		}
@@ -95,6 +103,58 @@
 	/* 	$(window).resize(function () {
 			google.maps.event.trigger(map, 'resize');
 		}); */
+	</script>
+
+	<script>
+		// Book Modal: adding user's kids
+		$(document).ready(function () {
+			$.get('/api/kids', function (data) {
+				data.forEach(kid => {
+					$('#kidSelectField').append(
+						$('<option>').attr('value', kid.name).text(kid.name)
+					);
+				});
+			});
+
+			$.ajax({
+				url: '/api/events', 
+				data: {
+					id: '@{event.id}',
+					address: '@{user.address}'
+				},
+				success: function(resp) {
+					console.log(resp);
+					// the following line is very kek, only temp
+					event = resp.results[0];
+					
+					event.scheduled.forEach(function(date) {
+						$('#dateTimeBookField').append(
+							$('<option>').attr('value', /* date.id */ date.next_time).text(date.next_time)
+						)
+					});
+				}
+			});
+
+			var creds = @{user.credits};
+			var cost = @{event.price};
+			var diff = creds - cost;
+			var msg;
+
+			if (diff < 0) {
+				msg = $('<span>').html('You need <span style="color: red;">' + Math.abs(diff) + '</span> <i class="fa fa-money" aria-hidden="true"></i> more.');
+				$('#bookSubmit').addClass('disabled');
+			} else {
+				msg = 'Your credits after booking: ' + diff + ` <i class="fa fa-money" aria-hidden="true"></i>`;
+			}
+
+			$('#creditsCalculation').append(msg); 
+
+		});
+
+		$('#bookModal').on('show.bs.modal', function (e) {
+			var eventId = $(e.relatedTarget).data('id');
+			$(e.currentTarget).find('input[name="id"]').val(eventId);
+		});
 	</script>
 
 </body>

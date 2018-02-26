@@ -1,0 +1,138 @@
+<div id="addEventModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Create New Event</h4>
+			</div>
+			<div class="modal-body">
+				<form id="addEventForm" class="form-horizontal" method="post" action="/api/create_event" enctype="multipart/form-data">
+					<fieldset>
+						<legend>Fill in the fields</legend>
+
+						<div class="form-group">
+							<label for="eventTitleField" class="col-lg-2 control-label">Title</label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" name="title" id="eventTitleField" autocomplete="off">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="eventDescriptionField" class="col-lg-2 control-label">Description</label>
+							<div class="col-lg-10">
+								<textarea name="description" class="form-control" id="eventDescriptionField" rows="3"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="eventPriceField" class="col-lg-2 control-label">Price</label>
+							<div class="col-lg-10">
+								<input type="number" class="form-control" id="eventPriceField" name="price" min="1" max="100">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="gendersField" class="col-lg-2 control-label">Genders</label>
+							<div class="col-lg-10">
+								<select class="form-control" id="gendersField" name="genders">
+									<option value="2">Any</option>
+									<option value="1">Male</option>
+									<option value="0">Female</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="durationField" class="col-lg-2 control-label">Duration</label>
+							<div class="col-lg-10">
+								<select class="form-control" id="durationField" name="duration">
+									<option value="15">15 min</option>
+									<option value="30">30 min</option>
+									<option value="45">45 min</option>
+									<option value="60" selected >60 min</option>
+									<option value="90">90 min</option>
+									<option value="120">120 min</option>
+									<option value="180">180 min</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="eventAgesField" class="col-lg-2 control-label">Ages</label>
+							<div class="col-lg-10" id="eventAgesField">
+								<div class="col-md-6">
+									<label>Min</label>
+									<input type="number" class="form-control" name="age_min" min="4" max="17" value="4">									
+								</div>
+								<div class="col-md-6">
+									<label>Max</label>									
+									<input type="number" class="form-control"  name="age_max" min="4" max="17" value="17">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="addressField" class="col-lg-2 control-label">Address</label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" id="addressField" name="address">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="dateTimeField" class="col-lg-2 control-label">DateTime</label>
+							<div class="col-lg-10">
+								<div class='input-group date datetimepicker'>
+									<input type="text" class="form-control datetimepicker" id="dateTimeField" name="address">
+									<span class="input-group-addon">
+										<i class="fa fa-calendar" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="recurrenceField" class="col-lg-2 control-label">Recurrence</label>
+							<div class="col-lg-10">
+								<select class="form-control" id="recurrenceField" name="recurrence">
+									<option value="once">Once</option>
+									<option value="daily">Daily</option>
+									<option value="weekly">Weekly</option>
+									<option value="biweekly">Bi-Weekly</option>
+									<option value="monthly">Monthly</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="imageInputField" class="col-lg-2 control-label">Event Image</label>
+							<div class="col-lg-10">
+								<input name="image" accept="image/*" type="file" class="form-control-file" id="imageInputField" aria-describedby="fileHelp">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-lg-10 col-lg-offset-2">
+								<button type="submit" class="btn btn-primary btn-lg">Create&nbsp;
+									<span class="submitAwait fa fa-sign-in"></span>
+								</button>
+							</div>
+						</div>
+
+					</fieldset>
+				</form>
+
+			</div>
+			
+			<!-- <div class="modal-footer">
+				<div class="pull-left">
+					
+				</div>
+			</div> -->
+
+		</div>
+		<!-- /Modal content-->
+
+	</div>
+</div>

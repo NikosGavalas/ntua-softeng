@@ -10,7 +10,7 @@
 </head>
 
 <body>
-
+	
 	<!-- Navbar -->
 	@{html.navbar}
 	<!-- /Navbar -->
@@ -21,11 +21,11 @@
 				<div class="jumbotron text-center">
 					<h1 id="mainLogo">Pleisure</h1>
 					<br>
-					<form class="form-inline">
+					<form id="mainSearch" class="form-inline">
 						<div id="mainSearch" class="input-group">
 							<input id="searchInput" type="text" size="70" class="form-control" placeholder="Αναζητείστε εκδηλώσεις κοντά σας...">						
 							<div class="input-group-btn">
-								<button type="button" class="btn btn-primary" onclick="search()">
+								<button type="submit" form="mainSearch" class="btn btn-primary">
 									<span class="fa fa-search" aria-hidden="true"></span>
 									<b>&nbsp;Search</b>
 								</button>
@@ -42,21 +42,14 @@
 	<!-- /Footer -->
 
 	<script>
-		/* FIXME: This function doesn't work, to redirect and search with predefined filters it need support from the backend */
-		function search() {
-			$.get({
-				url: 'api/events',
-				data: {
-					price: 1000,
-					address: $('#searchInput').val(),
-					distance: 50000,
-					age: 17 // any when supported...
-				},
-				success:  function (resp) {
-					window.location = '/events';
-				}
+		$(document).ready(function () {
+			$('#mainSearch').ajaxForm({ 
+				onSubmit: function (params) {	
+					window.location = '/events?address=' + encodeURI($('#searchInput').val());
+					return false;
+				} 
 			});
-		}
+		});
 	</script>
 	
 </body>
