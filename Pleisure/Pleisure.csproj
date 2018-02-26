@@ -89,6 +89,9 @@
     <Compile Include="Entities\EventAttendance.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Api\BookingEmail.cs" />
+    <None Include="app\db.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

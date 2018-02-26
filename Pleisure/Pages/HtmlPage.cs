@@ -93,6 +93,10 @@ namespace Pleisure
 		[HtmlVariable("modal.add_event")]
 		public Task<string> ModalAddEvent { get { return GetHtml("modal/add_event"); } }
 
+		[HtmlVariable("modal.add_credits")]
+		public Task<string> ModalAddCredits { get { return GetHtml("modal/add_credits"); } }
+
+
 		public HtmlPage(string html, User user)
 		{
 			this.html = html;
