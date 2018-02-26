@@ -82,7 +82,7 @@ namespace Pleisure
 					token["kids"] = new JArray();
 					foreach (Kid kid in await GetKids())
 					{
-						(token["kids"] as JArray).Add(kid.Serialize());
+						(token["kids"] as JArray).Add(await kid.Serialize());
 					}
 					break;
 
