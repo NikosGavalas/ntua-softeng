@@ -132,12 +132,12 @@
 			).append(
 				$('<td>').append(
 					$('<a>').addClass('btn btn-success btn-sm')
-						.attr({ 'href':"#", 'data-id':user.id, 'data-toggle': "modal", 'data-target':"#editProfileModal"})
+						.attr({ 'href':"#" })
 						.append(
 							$('<i>').addClass('fa fa-pencil-square-o').attr('aria-hidden', 'true')
 						).append(
 							'&nbsp;Edit User'
-						)
+						).attr("onclick", "editProfileModal(" + user.id + ")")
 				)
 			)
 		}

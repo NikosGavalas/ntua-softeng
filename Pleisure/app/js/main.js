@@ -51,8 +51,45 @@ $('#signupForm').submit(function (event) {
 
 });
 
+
+function editProfileModal(userId)
+{
+	$.get({
+		url: '/api/user',
+		data: {
+			user_id: userId
+		},
+		success: function(user)
+		{
+			$('#editProfileEmailField').val(user.email);
+			$('#editProfileFullNameField').val(user.fullname);
+			$('#editProfileAddressField').val(user.address);
+
+			$('#editProfileModal').modal();
+		}
+	});
+}
+
+
 $(document).ready(function () {
 	$('.datetimepicker').datetimepicker();
+
+
+
+
+	$('#paymentForm').ajaxForm({
+		url: '/api/pay',
+		method: 'POST',
+		onSubmit: function()
+		{
+		},
+		onResponse: function(resp)
+		{
+			location.reload();
+		}
+	})
+
+
 });
 
 $('.full-height-modal').on('show.bs.modal', function () {

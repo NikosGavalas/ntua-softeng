@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-body">
 
-				<form id="paymentForm" method="post" action="#" enctype="multipart/form-data">
+				<form id="paymentForm" method="POST" action="/api/pay" enctype="multipart/form-data">
 					<fieldset>
 						<p>Choose the amount of credits you want to add and provide your credit card details</p>
 
@@ -35,7 +35,7 @@
 								Credit Card Number
 							</label>
 							<div>
-								<input type="text" class="form-control" name="ccnum" id="ccNumField" autocomplete="off">
+								<input type="text" class="form-control" name="cc_num" id="ccNumField" autocomplete="off">
 							</div>
 						</div>
 
@@ -45,7 +45,7 @@
 							</label>
 							<div class="row" id="expDateField">
 								<div class="col-md-6">
-									<select name="expDateMonth" class="form-control">
+									<select name="cc_exp_month" class="form-control">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
@@ -61,7 +61,7 @@
 									</select>
 								</div>
 								<div class="col-md-6">
-									<select id="expDateYear" name="expDateYear" class="form-control">
+									<select id="expDateYear" name="cc_exp_year" class="form-control">
 										<!-- these values here are generated, see /js/main.js -->
 									</select>
 								</div>
@@ -73,7 +73,7 @@
 								Credit Card Holder Name
 							</label>
 							<div>
-								<input type="text" class="form-control" id="ccHolderField" name="ccholder" min="1" max="100">
+								<input type="text" class="form-control" id="ccHolderField" name="cc_name" min="1" max="100">
 							</div>
 						</div>
 
