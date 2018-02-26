@@ -239,5 +239,20 @@ namespace Pleisure
 			});
 			Monitor.Exit(coherenceLock);
 		}
+
+		public static async Task<bool> VerifyPayment(string ccNum, string ccName, string ccExp, string cvv, int amount)
+		{
+			return true;
+		}
+
+		public static async Task AddCredits(User user, int amount)
+		{
+			Monitor.Enter(coherenceLock);
+			await Program.MySql().Update(user, u =>
+			{
+				u.Credits += amount;
+			});
+			Monitor.Exit(coherenceLock);
+		}
 	}
 }

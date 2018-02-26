@@ -23,20 +23,48 @@ namespace Pleisure
 
 			Router apiRouter = server.AddRouter("/api");
 			apiRouter.Add("/kids", Kids)
-			         .Add("/events", Events)
+					 .Add("/events", Events)
+					 .Add("/event", Event)
 			         .Add("/email_available", EmailAvailable)
 			         .Add("/add_kid", AddKid)
 			         .Add("/create_event", CreateEvent)
 			         .Add("/schedule_event", ScheduleEvent)
 			         .Add("/own_events", OwnEvents)
 			         .Add("/book_event", BookEvent)
-			         .Add("/categories", Categories);
+			         .Add("/categories", Categories)
+			         .Add("/pay", Pay);
 
 			/*
 			 * Admin APIs
 			 */
 			apiRouter.Add("/users", Users)
 			         .Add("/ban_user", BanUser);
+		}
+
+		public async Task Event(HttpRequest req)
+		{
+
+			int eventId = -1;
+			if (!req.HasGET("event_id") || !int.TryParse(req.GET("event_id"), out eventId))
+			{
+				await req.SetStatusCode(HttpStatusCode.BadRequest).Close();
+				return;
+			}
+
+			SelectQuery<Event> query = new SelectQuery<Pleisure.Event>();
+			query.Where("event_id", eventId);
+
+			Event evt = (await Program.MySql().Execute(query)).FirstOrDefault();
+
+			if (evt == null)
+			{
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
+			req.SetContentType(ContentType.Json).SetStatusCode(HttpStatusCode.OK);
+			await req.Write((await evt.SerializeWithScheduled()).ToString());
+			await req.Close();
 		}
 
 		public async Task AddKid(HttpRequest req)
@@ -503,7 +531,7 @@ namespace Pleisure
 				for (int i = 0; i < 50; i++)
 				{
 					int id = c.Natural();
-					Event evt = Event.Random(id, location.Latitude, location.Longitude, distance);
+					Event evt = Pleisure.Event.Random(id, location.Latitude, location.Longitude, distance);
 					arr.Add(await evt.SerializeWithScheduled());
 				}
 			}
@@ -688,6 +716,48 @@ namespace Pleisure
 			await Auth.BanUser(userToBan);
 
 			await req.SetStatusCode(HttpStatusCode.OK).Close();
+		}
+
+		public async Task Pay(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+			int amount;
+			if (!await req.HasPOST("cc_num", "cc_name", "cc_exp", "cvv", "amount")
+			   || !int.TryParse(await req.POST("amount"), out amount))
+			{
+				await req.SetStatusCode(HttpStatusCode.BadRequest)
+				         .Close();
+				return;
+			}
+
+			if (!await Auth.VerifyPayment(await req.POST("cc_num"),
+										  await req.POST("cc_name"),
+										  await req.POST("cc_exp"),
+			                              await req.POST("cvv"),
+			                             amount))
+			{
+				await req.SetStatusCode(HttpStatusCode.PaymentRequired)
+				         .Close();
+				return;
+			}
+
+			/*
+			 * Payment verified, give the user his credits
+			 */
+			await Auth.AddCredits(user, amount);
+
+			await req.SetStatusCode(HttpStatusCode.OK)
+			         .Close();
 		}
 	}
 }

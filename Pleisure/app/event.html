@@ -87,7 +87,7 @@
 	<!-- /Footer -->
 
 	<!-- Google maps -->
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key= AIzaSyCyWLrMenGVpUiC44SbWedRvsO4cinN4FU&callback=initMap"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyWLrMenGVpUiC44SbWedRvsO4cinN4FU&callback=initMap"></script>
 	
 	<script>
 		function initMap() {
@@ -159,13 +159,18 @@
 			$(e.currentTarget).find('input[name="id"]').val(eventId);
 		});
 
-		$(document).ready(function() {
-			$.get("/api/event?id=@{event.id}", function(dta) {
+		/* $(document).ready(function() {
+			$.get("/api/event?event_id=@{event.id}", function(dta) {
 				$(".result").html(data);
 			});
-		})
+		}) */
 
-		var event = @{json};
+		var event = @{event.serialized};
+
+		var categs = event.categories.toString().replace('"', '');
+	
+		if (categs != '')
+			$('#event-category').text('Categories: ' + categs);
 
 	</script>
 

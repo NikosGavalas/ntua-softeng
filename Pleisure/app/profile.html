@@ -144,5 +144,13 @@
 		@else{}
 			<script src="js/fetchevents.js"></script>
 		@endif{}
+
+		<script>
+			function rescheduleEvent(id) {
+				$('#reschedule-id').val(id);
+				console.log('a' + id);
+				$("#scheduleModal").modal();
+			}
+		</script>
 	</body>
 </html>

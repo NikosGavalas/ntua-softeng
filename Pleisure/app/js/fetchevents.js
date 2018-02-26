@@ -1,5 +1,7 @@
 
 function createEvent(event) {
+	var callstring = 'rescheduleEvent(' + event.id + ');'
+
 	return $('<div>').addClass('panel-body').append(
 		$('<div>').addClass('media').append(
 			$('<div>').addClass('media-left').append(
@@ -11,21 +13,21 @@ function createEvent(event) {
 					$('<a>').attr('href', '/event/' + event.id).append(event.title)
 				).append(
 					$('<div>').addClass('btn-group inline pull-right').append(
-						$('<a>').attr({ 'data-toggle': 'modal', 'data-target': '#scheduleModal', 'data-id': event.id, 'href': '#' }).addClass('btn btn-success btn-sm').append(
+						$('<a>').attr({ 'onclick': callstring, 'data-id': event.id, 'href': '#' }).addClass('btn btn-success btn-sm').append(
 							$('<i>').addClass('fa fa-refresh').attr('aria-hidden', 'true')
 						).append(
 							' Re-Schedule'
 						)
+					).append(
+						$('<div>').addClass('btn-group inline pull-right').append(
+							$('<a>').addClass('btn btn-success btn-sm')
+								.append(
+									' Attendees'
+								)
+						)
 					)
-				)/* .append(
-					$('<div>').addClass('btn-group inline pull-right').append(
-						$('<a>').addClass('btn btn-danger btn-sm').append(
-							$('<i>').addClass('fa fa-trash-o').attr('aria-hidden', 'true')
-						).append(
-							' Delete'
-							)
-					)
-				) */
+				)
+				
 			).append(
 				$('<p>').append('Duration: ' + event.duration)
 			).append(
