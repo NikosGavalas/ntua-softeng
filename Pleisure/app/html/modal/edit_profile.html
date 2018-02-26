@@ -82,8 +82,14 @@
 								<button type="submit" class="btn btn-primary btn-lg">Update&nbsp;
 									<span class="submitAwait fa fa-cog"></span>
 								</button>
+								@if{is_admin}
+									<button type="button" class="btn btn-danger btn-lg" >Ban&nbsp;
+										<span class="submitAwait fa fa-ban"></span>
+									</button>
+								@endif{}
 							</div>
 						</div>
+
 					</fieldset>
 				</form>
 

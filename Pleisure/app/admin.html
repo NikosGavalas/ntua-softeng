@@ -107,6 +107,12 @@
 		}
 
 		function createUserEntry(user) {
+			var checked_attr = { 'type': 'checkbox', 'disabled': '' }
+
+			if (user.role) {
+				checked_attr['checked'] = '';
+			}
+
 			return $('<tr>').append(
 				$('<th>').attr('scope', 'row').text()
 			).append(
@@ -114,7 +120,7 @@
 			).append(
 				$('<td>').append(
 					// TODO: make this checkbox functional (ban/unban user)
-					$('<input>').addClass('form-check-input').attr({ 'type':"checkbox", 'checked': ''})
+					$('<input>').addClass('form-check-input').attr(checked_attr)
 				)
 			).append(
 				$('<td>').text(user.fullname)
@@ -125,7 +131,7 @@
 			).append(
 				$('<td>').append(
 					$('<a>').addClass('btn btn-success btn-sm')
-						.attr({ 'href':"#", 'data-id':user.id, 'data-toggle':"modal", 'data-target':"#editProfileModal"})
+						.attr({ 'href':"#", 'data-id':user.id, 'data-toggle': "modal", 'data-target':"#editProfileModal"})
 						.append(
 							$('<i>').addClass('fa fa-pencil-square-o').attr('aria-hidden', 'true')
 						).append(
@@ -134,6 +140,8 @@
 				)
 			)
 		}
+
+		
 	</script>
 
 </body>
