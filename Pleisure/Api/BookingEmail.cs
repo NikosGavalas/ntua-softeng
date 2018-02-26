@@ -24,10 +24,15 @@ namespace Pleisure
 			};
 		}
 
-		public BookingEmail Event(Event evt)
+		public async Task<BookingEmail> Body(ScheduledEvent evt, Kid kid, int paid)
 		{
-			msg.Subject = "Your booking confirmation for: " + evt.Title;
-			msg.Body = "asdf";
+			msg.Subject = "Your booking confirmation for: " + evt.Event.Title;
+			string template = await Options.ConfirmationEmail();
+			msg.Body = string.Format(template,
+									 evt.Event.ID,
+									 evt.Event.Title,
+									 kid.Name,
+									 paid);
 			return this;
 		}
 

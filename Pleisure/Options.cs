@@ -98,5 +98,10 @@ namespace Pleisure
 		public static int[] PaymentAmounts = {
 			5, 10, 25, 50, 100, 250, 500
 		};
+
+		public static Task<string> ConfirmationEmail()
+		{
+			return Task.Run<string>(() => File.ReadAllText("app/booking_confirmation.html"));
+		}
 	}
 }
