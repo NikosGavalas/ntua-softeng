@@ -12,7 +12,7 @@ namespace Pleisure
 {
 	public static class Google
 	{
-		const string GEOCODE_URL = @"https://maps.googleapis.com/maps/api/geocode/json?key=%20AIzaSyCNS7KGAlnxigqmUTRwq3R60jISsKd6GoA&address=";
+		const string GEOCODE_URL = @"https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCyWLrMenGVpUiC44SbWedRvsO4cinN4FU&address=";
 
 		public static async Task<Location> Geocode(string address)
 		{

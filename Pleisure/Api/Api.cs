@@ -417,7 +417,7 @@ namespace Pleisure
 				location = await Google.Geocode(req.GET("address"));
 			}
 
-			if (location == null || distance > 50000)
+			if (location == null || distance > 50)
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -430,7 +430,7 @@ namespace Pleisure
 			query.Where("DISTANCE(lat, lng, @loc_lat, @loc_lng) < @distance")
 				.AddParameter("@loc_lat", location.Latitude)
 				.AddParameter("@loc_lng", location.Longitude)
-				.AddParameter("@distance", distance);
+				.AddParameter("@distance", distance * 1000);
 
 			// Filter by price
 			if (req.HasGET("price"))
@@ -468,17 +468,27 @@ namespace Pleisure
 			// Perform query and build the response object
 			JArray arr = new JArray();
 			List<Event> events = await Program.MySql().Execute(query);
+
 			foreach (Event evt in events)
 			{
 				DateTime minDate = DateTime.Now;
 				DateTime maxDate = DateTime.MaxValue;
 
-				DateTime.TryParse(req.GET("min_date"), out minDate);
-				DateTime.TryParse(req.GET("max_date"), out maxDate);
+				if (req.HasGET("min_date") && !string.IsNullOrWhiteSpace(req.GET("min_date")))
+					DateTime.TryParse(req.GET("min_date"), out minDate);
+
+				if (req.HasGET("max_date") && !string.IsNullOrWhiteSpace(req.GET("max_date")))
+					DateTime.TryParse(req.GET("max_date"), out maxDate);
 
 				int categoryId = -1;
 
-				int.TryParse(req.GET("category"), out categoryId);
+				if (req.HasGET("category") && !string.IsNullOrWhiteSpace(req.GET("category")))
+					int.TryParse(req.GET("category"), out categoryId);
+				
+				// DateTime.TryParse(req.GET("max_date"), out maxDate);
+
+
+				// int.TryParse(req.GET("category"), out categoryId);
 
 				if (await evt.HappensBetween(minDate, maxDate)
 				    && (categoryId < 0 || await evt.HasCategories(categoryId)))

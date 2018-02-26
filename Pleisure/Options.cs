@@ -86,7 +86,7 @@ namespace Pleisure
 
 		public static string StoragePath(string relative)
 		{
-			string root = Environment.GetEnvironmentVariable("STORAGE_PATH") ?? "data";
+			string root = Environment.GetEnvironmentVariable("STORAGE_PATH") ?? "app/";
 			return Path.Combine(root, relative);
 		}
 

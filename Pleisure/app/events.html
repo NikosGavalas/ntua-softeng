@@ -111,13 +111,14 @@
 							</h4>
 							<div id="group-4">
 								<select name="category" id="category-selector" class="form-control">
-									<option value="all">All</option>								
+									<option value=""></option>
+									<!-- <option value="all">All</option>								
 									<option value="sports">Sports</option>
 									<option value="playground">Playground</option>
 									<option value="party">Party</option>
 									<option value="excursion">Excursion</option>
 									<option value="outdoor">Outdoor</option>
-									<option value="inquisition">Spanish Inquisition</option>
+									<option value="inquisition">Spanish Inquisition</option> -->
 								</select>
 							</div>
 						</div>
@@ -356,6 +357,15 @@
 					// Update the map if it just came into view
 					updateMap();
 					google.maps.event.trigger(map, 'resize');
+				});
+
+				// fetch available categories
+				$.get("api/categories", function (categories) {
+					categories.forEach(cat => {
+						$('#category-selector').append(
+							$('<option>').attr({'value': cat.id}).text(cat.name)
+						)
+					});
 				});
 			});
 		</script>

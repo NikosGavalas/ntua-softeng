@@ -62,6 +62,9 @@
 				<p>
 					Price: @{event.price} <i class="fa fa-money" aria-hidden="true"></i>
 				</p>
+				<p id='event-category'>
+					
+				</p>
 				<p>
 					Duration: @{event.duration}
 				</p>
@@ -155,6 +158,15 @@
 			var eventId = $(e.relatedTarget).data('id');
 			$(e.currentTarget).find('input[name="id"]').val(eventId);
 		});
+
+		$(document).ready(function() {
+			$.get("/api/event?id=@{event.id}", function(dta) {
+				$(".result").html(data);
+			});
+		})
+
+		var event = @{json};
+
 	</script>
 
 </body>
