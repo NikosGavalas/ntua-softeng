@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using HttpNet;
 
@@ -48,6 +49,12 @@ namespace Pleisure
 		public int EventPrice
 		{
 			get { return evt.Price; }
+		}
+
+		[HtmlVariable("event.serialized")]
+		public Task<string> Serialized
+		{
+			get { return evt.SerializeWithScheduled().ContinueWith(s => s.ToString()); }
 		}
 
 		[HtmlVariable("event.organizer_name")]
