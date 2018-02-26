@@ -29,7 +29,8 @@ namespace Pleisure
 			         .Add("/add_kid", AddKid)
 			         .Add("/create_event", CreateEvent)
 			         .Add("/schedule_event", ScheduleEvent)
-			         .Add("/own_events", OwnEvents)
+					 .Add("/own_events", OwnEvents)
+					 .Add("/own_event", OwnEvent)
 			         .Add("/book_event", BookEvent)
 			         .Add("/categories", Categories)
 			         .Add("/pay", Pay);
@@ -253,9 +254,8 @@ namespace Pleisure
 			bool status = await ScheduleEvent(eventId, await req.POST("datetime"), recurrence);
 
 			req.SetStatusCode(status ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
-			await req.Close();
 
-
+			await req.Redirect("/profile");
 		}
 
 		async Task<bool> ScheduleEvent(int eventId, string dateTime, string recurrence)
@@ -563,6 +563,46 @@ namespace Pleisure
 			}
 
 			await req.Write(arr.ToString());
+
+			await req.Close();
+		}
+
+		public async Task OwnEvent(HttpRequest req)
+		{
+
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null || user.Role != UserRole.Organizer)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+			if (!req.HasGET("event_id"))
+			{
+				await req.SetStatusCode(HttpStatusCode.BadRequest).Close();
+				return;
+			}
+
+			SelectQuery<Event> query = new SelectQuery<Event>();
+			query.Where("organizer_id", user.ID)
+			     .Where("event_id", req.GET("event_id"));
+
+			Event evt = (await Program.MySql().Execute(query)).FirstOrDefault();
+
+			if (evt == null)
+			{
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
+			req.SetContentType(ContentType.Json)
+			   .SetStatusCode(HttpStatusCode.OK);
+
+			await req.Write((await evt.SerializeWithScheduled(true)).ToString());
 
 			await req.Close();
 		}
