@@ -30,7 +30,8 @@ namespace Pleisure
 			         .Add("/schedule_event", ScheduleEvent)
 			         .Add("/own_events", OwnEvents)
 			         .Add("/book_event", BookEvent)
-			         .Add("/categories", Categories);
+			         .Add("/categories", Categories)
+			         .Add("/pay", Pay);
 
 			/*
 			 * Admin APIs
@@ -678,6 +679,48 @@ namespace Pleisure
 			await Auth.BanUser(userToBan);
 
 			await req.SetStatusCode(HttpStatusCode.OK).Close();
+		}
+
+		public async Task Pay(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Forbidden);
+				await req.Close();
+				return;
+			}
+
+			int amount;
+			if (!await req.HasPOST("cc_num", "cc_name", "cc_exp", "cvv", "amount")
+			   || !int.TryParse(await req.POST("amount"), out amount))
+			{
+				await req.SetStatusCode(HttpStatusCode.BadRequest)
+				         .Close();
+				return;
+			}
+
+			if (!await Auth.VerifyPayment(await req.POST("cc_num"),
+										  await req.POST("cc_name"),
+										  await req.POST("cc_exp"),
+			                              await req.POST("cvv"),
+			                             amount))
+			{
+				await req.SetStatusCode(HttpStatusCode.PaymentRequired)
+				         .Close();
+				return;
+			}
+
+			/*
+			 * Payment verified, give the user his credits
+			 */
+			await Auth.AddCredits(user, amount);
+
+			await req.SetStatusCode(HttpStatusCode.OK)
+			         .Close();
 		}
 	}
 }

@@ -68,11 +68,15 @@ namespace Pleisure
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
 
-			List<Event> kids = MySql().Select<Event>().Result;
 
-			foreach (Event kid in kids){
-				Console.WriteLine(kid.Serialize().Result);
-			}
+
+			Event evt = MySql().Select<Event>().Result.First();
+			User user = MySql().Execute(new SelectQuery<User>().Where<SelectQuery<User>>("user_id", 2)).Result.First();
+
+
+			BookingEmail email = new BookingEmail(user).Event(evt);
+			email.Send().Wait();
+
 
 			/*
              * Main thread now awaits SIGTERM
