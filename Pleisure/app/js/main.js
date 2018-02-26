@@ -73,6 +73,23 @@ function editProfileModal(userId)
 
 $(document).ready(function () {
 	$('.datetimepicker').datetimepicker();
+
+
+
+
+	$('#paymentForm').ajaxForm({
+		url: '/api/pay',
+		method: 'POST',
+		onSubmit: function()
+		{
+		},
+		onResponse: function(resp)
+		{
+			location.reload();
+		}
+	})
+
+
 });
 
 $('.full-height-modal').on('show.bs.modal', function () {

@@ -724,13 +724,15 @@ namespace Pleisure
 			}
 
 			int amount;
-			if (!await req.HasPOST("cc_num", "cc_name", "cc_exp", "cvv", "amount")
+			if (!await req.HasPOST("cc_num", "cc_name", "cc_exp_month", "cc_exp_year", "cvv", "amount")
 			   || !int.TryParse(await req.POST("amount"), out amount))
 			{
 				await req.SetStatusCode(HttpStatusCode.BadRequest)
 				         .Close();
 				return;
 			}
+
+			Console.WriteLine("Processing payment of ${0} for user {1}", amount, user.FullName);
 
 			if (!await Auth.VerifyPayment(await req.POST("cc_num"),
 										  await req.POST("cc_name"),
@@ -746,7 +748,11 @@ namespace Pleisure
 			/*
 			 * Payment verified, give the user his credits
 			 */
+			Console.WriteLine("Credits before: " + user.Credits);
 			await Auth.AddCredits(user, amount);
+			Console.WriteLine("Credits after: " + user.Credits);
+			User after = Program.MySql().Select<User>().Result.Where(u => u.ID == user.ID).First();
+			Console.WriteLine("Credits after: " + after.Credits);
 
 			await req.SetStatusCode(HttpStatusCode.OK)
 			         .Close();
