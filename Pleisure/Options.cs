@@ -94,5 +94,9 @@ namespace Pleisure
 		{
 			return string.Format("https://www.gravatar.com/avatar/{0}?d=retro", Auth.MD5(email));
 		}
+
+		public static int[] PaymentAmounts = {
+			5, 10, 25, 50, 100, 250, 500
+		};
 	}
 }

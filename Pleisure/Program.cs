@@ -109,6 +109,11 @@ namespace Pleisure
 			return Path.Combine(GetPath(), relative);
 		}
 
+		public static void Install()
+		{
+			
+		}
+
 		public static MySqlConn MySql()
 		{
 			return new MySqlConn(Options.MysqlHost, Options.MysqlUser, Options.MysqlPass, 
