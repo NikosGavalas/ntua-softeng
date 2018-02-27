@@ -159,11 +159,15 @@
 			$(e.currentTarget).find('input[name="id"]').val(eventId);
 		});
 
-		/* $(document).ready(function() {
-			$.get("/api/event?event_id=@{event.id}", function(dta) {
-				$(".result").html(data);
-			});
-		}) */
+		$(document).ready(function() {
+			var ev = @{event.serialized};
+			
+			ev.scheduled.forEach(function(sched) {
+				$('#dateTimeBookField').append(
+					$('<option>').val(sched.id).append(sched.next_time)
+				)
+			})
+		})
 
 		var event = @{event.serialized};
 

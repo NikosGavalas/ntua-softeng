@@ -55,7 +55,7 @@ $('#signupForm').submit(function (event) {
 function editProfileModal(userId)
 {
 	$.get({
-		url: '/api/user',
+		url: '/api/users',
 		data: {
 			user_id: userId
 		},
