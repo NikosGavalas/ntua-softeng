@@ -48,6 +48,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Runtime"/>
     <Reference Include="UnixSignalWaiter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UnixSignalWaiter.0.0.1\lib\UnixSignalWaiter.dll</HintPath>
       <Private>True</Private>

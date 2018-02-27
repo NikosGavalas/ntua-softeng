@@ -16,6 +16,7 @@ OUTPUT_DIR=bin/$(CONFIGURATION)
 OUTPUT=$(PROJECT)/$(OUTPUT_DIR)
 FLAGS= /p:PostBuildEvent= /verbosity:minimal /p:OutputPath=$(OUTPUT_DIR) /p:Configuration=$(CONFIGURATION)
 
+REGISTRY=dashboard.alexandermooresa.com:3540
 
 targets:	nuget	build
 
@@ -23,6 +24,9 @@ targets:	nuget	build
 docker:		targets
 	-docker rmi pleisure
 	docker build -t pleisure .
+	docker tag pleisure $(REGISTRY)/pleisure
+	docker login $(REGISTRY)
+	docker push $(REGISTRY)/pleisure
 
 
 # Restore packages

@@ -47,3 +47,20 @@ git clone https://gmantaos@bitbucket.org/teamdroptabel/pleisure.git
 cd pleisure
 make
 ```
+
+## Docker
+
+Docker env parameters
+
+| Key | Default |
+| --- | ------- |
+| HTTP_HOST | * |
+| HTTP_PORT | 8080 |
+| SESSION_LIFETIME | 1800 |
+| MYSQL_HOST | gmantaos.com |
+| MYSQL_PORT | 3306 | 
+| MYSQL_USER | progtech | 
+| MYSQL_PASS | @ntua123 |
+| MYSQL_DB | pleisure |
+| RANDOMIZED | false |
+| STORAGE_PATH | app/ |
