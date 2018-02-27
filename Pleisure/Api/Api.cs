@@ -696,7 +696,7 @@ namespace Pleisure
 			List<Event> events = await Program.MySql().Execute(query);
 			foreach (Event evt in events)
 			{
-				arr.Add(await evt.SerializeWithScheduled());
+				arr.Add(await evt.SerializeWithScheduled(true));
 			}
 
 			await req.Write(arr.ToString());
