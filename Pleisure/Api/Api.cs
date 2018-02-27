@@ -50,6 +50,8 @@ namespace Pleisure
 
 			User user = await session.GetUser();
 
+			string redirectTo = "/profile";
+
 			if (user == null)
 			{
 				req.SetStatusCode(HttpStatusCode.Unauthorized);
@@ -75,14 +77,18 @@ namespace Pleisure
 					await req.SetStatusCode(HttpStatusCode.NotFound).Close();
 					return;
 				}
+
+				redirectTo = "/admin";
 			}
 
 			/*
 			 * First update the password
 			 */
-			if (await req.HasPOST("password", "password2"))
+			string password = await req.POST("password", "");
+			string password2 = await req.POST("password2", "");
+			if (!string.IsNullOrWhiteSpace(password) && !string.IsNullOrWhiteSpace(password2))
 			{
-				if (!await Auth.UpdatePassword(user, await req.POST("password"), await req.POST("password2")))
+				if (!await Auth.UpdatePassword(user, password, password2))
 				{
 					await req.SetStatusCode(HttpStatusCode.BadRequest).Close();
 					return;
@@ -95,7 +101,7 @@ namespace Pleisure
 			UpdateQuery<User> query = new UpdateQuery<User>();
 			query.Where("user_id", user.ID);
 
-			if (await req.HasPOST("email"))
+			if (await req.HasPOST("email") && !string.IsNullOrWhiteSpace(await req.POST("email")))
 			{
 				if (await Auth.EmailTaken(await req.POST("email")))
 				{
@@ -104,18 +110,18 @@ namespace Pleisure
 				}
 				query.Set("email", await req.POST("email"));
 			}
-			if (await req.HasPOST("full_name"))
+			if (await req.HasPOST("full_name") && !string.IsNullOrWhiteSpace(await req.POST("full_name")))
 			{
 				query.Set("full_name", await req.POST("full_name"));
 			}
-			if (await req.HasPOST("address"))
+			if (await req.HasPOST("address") && !string.IsNullOrWhiteSpace(await req.POST("address")))
 			{
 				query.Set("address", await req.POST("address"));
 			}
 
 			await Program.MySql().Execute(query);
 
-			await req.SetStatusCode(HttpStatusCode.OK).Close();
+			await req.Redirect(redirectTo);
 		}
 
 
@@ -330,6 +336,17 @@ namespace Pleisure
 			     .Value("genders", genders);
 
 			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+
+			int category;
+			if (await req.HasPOST("category") && int.TryParse(await req.POST("category"), out category))
+			{
+				InsertQuery categoryQuery = new InsertQuery("event_categories");
+				categoryQuery.Value("event_id", eventId)
+							 .Value("category_id", category);
+
+				await Program.MySql().ExecuteNonQuery(categoryQuery);
+			}
 
 			await req.Redirect("/event/" + eventId);
 		}
@@ -774,7 +791,7 @@ namespace Pleisure
 
 			if (evt.Organizer.Role != UserRole.Organizer
 				|| kid.Age > evt.AgeMax || kid.Age < evt.AgeMin
-			    || !evt.Genders.HasFlag(kid.Gender))
+			    || !(evt.Genders == kid.Gender || (int)evt.Genders > 1))
 			{
 				await req.SetStatusCode(HttpStatusCode.ExpectationFailed).Close();
 				return;
