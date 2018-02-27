@@ -790,7 +790,7 @@ namespace Pleisure
 
 			if (evt.Organizer.Role != UserRole.Organizer
 				|| kid.Age > evt.AgeMax || kid.Age < evt.AgeMin
-			    || !evt.Genders.HasFlag(kid.Gender))
+			    || !(evt.Genders.HasFlag(kid.Gender) || (int)evt.Genders > 1))
 			{
 				await req.SetStatusCode(HttpStatusCode.ExpectationFailed).Close();
 				return;
