@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-body">
 
-				<form id="bookForm" method="post" action="/api/book_event" enctype="multipart/form-data">
+				<form id="bookForm" method="post" action="/api/book_event">
 					<fieldset>
 						
 						<p>Select your kid and the date you prefer</p>
@@ -21,7 +21,7 @@
 						<div class="form-group">
 							<label for="kidSelectField" class="control-label">Kid</label>
 							<div>
-								<select class="form-control" id="kidSelectField" name="kid">
+								<select class="form-control" id="kidSelectField" name="kid_id">
 									<!-- This part is generated, see bottom of event.html -->
 								</select>
 							</div>
@@ -30,7 +30,7 @@
 						<div class="form-group">
 							<label for="dateTimeBookField" class="control-label">Date</label>
 							<div>
-								<select class="form-control" id="dateTimeBookField" name="datetime">
+								<select class="form-control" id="dateTimeBookField" name="scheduled_id">
 									<!-- This part is generated, see bottom of event.html -->
 								</select>
 							</div>

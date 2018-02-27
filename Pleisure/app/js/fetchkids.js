@@ -22,6 +22,7 @@ $(document).ready(function () {
 		$('.loading').remove();
 			
 		data.forEach(kid => {
+			console.log(kid);
 			$('#kids-events').append(createKid(kid));
 		});
 	});

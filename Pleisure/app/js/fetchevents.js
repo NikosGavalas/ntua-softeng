@@ -45,12 +45,45 @@ function createEvent(event) {
 	)
 }
 
+function createCompletedEvent(event) {
+	return $('<tr>').append(
+		$('<td>').append(
+			$('<a>').attr({ 'href': '/event/' + event.id }).text(event.title)
+		)
+	).append(
+		$('<td>').text(event.scheduled[0].next_time)
+	)
+}
+
 $(document).ready(function () {
 	$.get('/api/own_events', function (data) {
 		$('.loading').remove();
 		
 		data.forEach(event => {
-			$('#kids-events').append(createEvent(event));
+
+			// I AM SERIOUSLY NOT PROUD OF THIS
+
+			event.scheduled = event.scheduled.sort((a, b) => {
+				var date1 = a.next_time;
+				var date2 = b.next_time;
+
+				date1 = swapDate(date1);				
+				date2 = swapDate(date2);		
+
+				return date1 > date2;
+			});
+
+			var d = new Date();
+
+			var event_date = swapDate(event.scheduled[0].next_time);
+			var this_month = d.getMonth() + 1;
+			var now = [d.getFullYear(), this_month < 10 ? '0' + this_month : this_month, d.getDate()].join('/');
+
+			if (event_date > now)
+				$('#kids-events').append(createEvent(event));
+			else {
+				$('#completedEventsList').append(createCompletedEvent(event));
+			}
 		});
 	});
 });
@@ -59,3 +92,14 @@ $('#scheduleModal').on('show.bs.modal', function (e) {
 	var eventId = $(e.relatedTarget).data('id');
 	$(e.currentTarget).find('input[name="id"]').val(eventId);
 });
+
+function swapDate(date) {
+	var ret = date.split(' ');
+	ret = ret[0].split('/');
+
+	var temp = ret[0];
+	ret[0] = ret[2];
+	ret[2] = temp;
+
+	return ret.join('/');
+}

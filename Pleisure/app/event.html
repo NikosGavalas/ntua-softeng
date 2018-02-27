@@ -114,7 +114,7 @@
 			$.get('/api/kids', function (data) {
 				data.forEach(kid => {
 					$('#kidSelectField').append(
-						$('<option>').attr('value', kid.name).text(kid.name)
+						$('<option>').attr('value', kid.kid_id).text(kid.name)
 					);
 				});
 			});
@@ -126,13 +126,12 @@
 					address: '@{user.address}'
 				},
 				success: function(resp) {
-					console.log(resp);
 					// the following line is very kek, only temp
 					event = resp.results[0];
 					
 					event.scheduled.forEach(function(date) {
 						$('#dateTimeBookField').append(
-							$('<option>').attr('value', /* date.id */ date.next_time).text(date.next_time)
+							$('<option>').attr('value', date.id).text(date.next_time)
 						)
 					});
 				}
