@@ -38,27 +38,32 @@ namespace Pleisure
 			await request.Close();
 		}
 
-		public async Task Events(HttpRequest request)
+		public async Task Events(HttpRequest req)
 		{
-			UserSession session = request.Session as UserSession;
+			UserSession session = req.Session as UserSession;
 			User user = await session.GetUser();
 			
 			string html = await GetHtml("events");
 			if (html == null)
 			{
-				await request.SetStatusCode(HttpStatusCode.NotFound).Close();
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
 				return;
 			}
 
-			request.SetStatusCode(HttpStatusCode.OK);
-			request.SetContentType(ContentType.Html);
+			req.SetStatusCode(HttpStatusCode.OK);
+			req.SetContentType(ContentType.Html);
 
 			HtmlPage page = new HtmlPage(html, user);
 
-			string rendered = await page.Render();
-			await request.Write(rendered);
+			if (req.HasGET("address"))
+			{
+				page.Address = req.GET("address", "");
+			}
 
-			await request.Close();
+			string rendered = await page.Render();
+			await req.Write(rendered);
+
+			await req.Close();
 		}
 
 		public async Task Event(HttpRequest request)
@@ -130,6 +135,36 @@ namespace Pleisure
 			await request.Write(rendered);
 
 			await request.Close();
+		}
+
+		public async Task Admin(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+			User user = await session.GetUser();
+
+			// Redirect non-admins to the index
+			if (!session.LoggedIn || user == null || user.Role != UserRole.Admin)
+			{
+				await req.Redirect("/");
+				return;
+			}
+
+			string html = await GetHtml("admin");
+			if (html == null)
+			{
+				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
+			}
+
+			req.SetStatusCode(HttpStatusCode.OK);
+			req.SetContentType(ContentType.Html);
+
+			HtmlPage page = new HtmlPage(html, user);
+
+			string rendered = await page.Render();
+			await req.Write(rendered);
+
+			await req.Close();
 		}
 
 		int GetEventId(string requestUrl)

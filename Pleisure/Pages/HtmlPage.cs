@@ -56,10 +56,17 @@ namespace Pleisure
 			get { return user != null ? user.Credits : 0; }
 		}
 
+		public string Address = null;
 		[HtmlVariable("user.address")]
 		public string UserAddress
 		{
-			get { return user != null ? user.Address : ""; }
+			get { return Address ?? (user?.Address ?? ""); }
+		}
+
+		[HtmlVariable("user.avatar")]
+		public string UserAvatar
+		{
+			get { return user?.Avatar; }
 		}
 
 		[HtmlVariable("html.navbar")]
@@ -85,6 +92,10 @@ namespace Pleisure
 
 		[HtmlVariable("modal.add_event")]
 		public Task<string> ModalAddEvent { get { return GetHtml("modal/add_event"); } }
+
+		[HtmlVariable("modal.add_credits")]
+		public Task<string> ModalAddCredits { get { return GetHtml("modal/add_credits"); } }
+
 
 		public HtmlPage(string html, User user)
 		{

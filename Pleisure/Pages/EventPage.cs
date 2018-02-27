@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using HttpNet;
 
@@ -32,7 +33,7 @@ namespace Pleisure
 			get { return evt?.Address; }
 		}
 
-		[HtmlVariable("event.lat ")]
+		[HtmlVariable("event.lat")]
 		public double EventLatitude
 		{
 			get { return evt.Latitude; }
@@ -50,6 +51,12 @@ namespace Pleisure
 			get { return evt.Price; }
 		}
 
+		[HtmlVariable("event.serialized")]
+		public Task<string> Serialized
+		{
+			get { return evt.SerializeWithScheduled().ContinueWith(s => s.ToString()); }
+		}
+
 		[HtmlVariable("event.organizer_name")]
 		public string EventOrganizer
 		{
@@ -59,7 +66,7 @@ namespace Pleisure
 		[HtmlVariable("event.organizer_avatar")]
 		public string EventOrganizerAvatar
 		{
-			get { return "ttp://via.placeholder.com/128x128"; }
+			get { return evt?.Organizer.Avatar; }
 		}
 
 		[HtmlVariable("event.organizer_id")]
@@ -84,6 +91,18 @@ namespace Pleisure
 		public string EventImage
 		{
 			get { return "/eventimg/" + evt.ID; }
+		}
+
+		[HtmlVariable("event.duration")]
+		public int EventDuration
+		{
+			get { return evt.Duration; }
+		}
+
+		[HtmlVariable("event.genders")]
+		public string EventGenders
+		{
+			get { return evt.Genders.ToString(); }
 		}
 
 		public EventPage(string html, User user, Event evt) : base(html, user)

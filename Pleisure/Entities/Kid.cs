@@ -34,16 +34,15 @@ namespace Pleisure
 			get
 			{
 				int age = DateTime.Now.Year - Birthday.Year;
-				if (DateTime.Now.DayOfYear < Birthday.DayOfYear)
+				if (DateTime.Now.DayOfYear < Birthday.DayOfYear && age > 0)
 					age--;
 				return age;
 			}
 		}
 
-		public JToken Serialize()
+		public async Task<JToken> Serialize()
 		{
-			Chance c = new Chance(ID);
-			return JToken.FromObject(new
+			JToken token = JToken.FromObject(new
 			{
 				kid_id = ID,
 				name = Name,
@@ -52,16 +51,52 @@ namespace Pleisure
 				parent = new
 				{
 					id = Parent.ID,
-					name = Parent.FullName
+					name = Parent.FullName,
+					avatar = Parent.Avatar
 				},
-				avatar = c.Avatar(GravatarDefaults.Identicon)
+				avatar = Options.Gravatar(ID.ToString()),
+				attending = new JArray()
 			});
+			foreach (ScheduledEvent e in await AttendingEvents())
+			{
+				JToken evt = e.Serialize(false).Result;
+				evt["event"] = await e.Event.Serialize();
+
+				(token["attending"] as JArray).Add(evt);
+			}
+			return token;
+		}
+
+		public async Task<List<ScheduledEvent>> AttendingEvents()
+		{
+			SelectQuery<EventAttendance> query = new SelectQuery<EventAttendance>();
+			query.Where("kid_id", ID);
+
+			List<EventAttendance> attendances = await Program.MySql().Execute(query);
+
+			if (attendances.Count == 0)
+				return new List<ScheduledEvent>();
+
+			SelectQuery<ScheduledEvent> eventsQuery = new SelectQuery<ScheduledEvent>();
+			WhereClause clause = null;
+
+			attendances.ForEach(a => 
+			{
+				clause |= new WhereClause("scheduled_event_id", a.ScheduledID);
+			});
+
+			eventsQuery.Where(clause);
+
+			List<ScheduledEvent> events = await Program.MySql().Execute(eventsQuery);
+
+			return events;
 		}
 	}
 
 	public enum Gender
 	{
 		Male = 0,
-		Female = 1
+		Female = 1,
+		Any = 2
 	}
 }

@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -33,14 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChanceNET, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Chance.NET.1.1.3\lib\ChanceNET.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="HaathDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Haath.HaathDB.1.0.8\lib\HaathDB.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MySql.Data, Version=6.10.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.10.4\lib\net452\MySql.Data.dll</HintPath>
       <Private>True</Private>
@@ -61,13 +52,18 @@
       <HintPath>..\packages\UnixSignalWaiter.0.0.1\lib\UnixSignalWaiter.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Watermark, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ProgTech.Watermak.1.0.0\lib\Watermark.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="XXHash, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\XXHash.1.0.0\lib\net46\x86\XXHash.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Watermark">
+      <HintPath>..\packages\ProgTech.Watermak.1.1.1\lib\Watermark.dll</HintPath>
+    </Reference>
+    <Reference Include="ChanceNET">
+      <HintPath>..\packages\Chance.NET.1.2.0\lib\ChanceNET.dll</HintPath>
+    </Reference>
+    <Reference Include="HaathDB">
+      <HintPath>..\packages\Haath.HaathDB.1.0.10\lib\HaathDB.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +77,7 @@
     <Compile Include="Entities\ScheduledEvent.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Options.cs" />
+    <None Include="packages.config" />
     <Compile Include="Pages\HtmlProvider.cs" />
     <Compile Include="Pages\HtmlPage.cs" />
     <Compile Include="Program.cs" />
@@ -88,10 +85,19 @@
     <Compile Include="Content\StaticResourceProvider.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Pages\EventPage.cs" />
+    <Compile Include="Content\ResizedResourceProvider.cs" />
+    <Compile Include="Entities\EventAttendance.cs" />
+    <Compile Include="Entities\Category.cs" />
+    <Compile Include="Api\BookingEmail.cs" />
+    <None Include="app\db.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="app\booking_confirmation.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\eventimg\" />
@@ -157,4 +163,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\NETStandard.Library.targets')" />
 </Project>

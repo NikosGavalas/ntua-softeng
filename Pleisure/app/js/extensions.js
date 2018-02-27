@@ -4,7 +4,7 @@
 		onSubmit: function(form) 
 		{
 			Called when the form is submitted
-			If this returns falls, the form will not be submitted
+			If this returns false, the form will not be submitted
 		},
 		onResponse: function(response, status, xhr)
 		{
