@@ -100,7 +100,11 @@
 				<div class="col-md-12">
 					<div class="panel panel-default">
 						<div class="panel panel-heading">
-							Completed Events
+							@if{is_parent}
+								Events
+							@else{}
+								Completed Events
+							@endif{}
 						</div>
 						<div class="panel panel-body">
 
@@ -109,7 +113,8 @@
 									<tr>
 										<th scope="col">Event</th>
 										@if{is_parent}
-											<th scope="col">Attended On</th>
+											<th scope="col">Date</th>
+											<th scope="col">Kid</th>
 										@else{}
 											<th scope="col">Completed On</th>											
 										@endif{}
@@ -141,7 +146,6 @@
 		<script>
 			function rescheduleEvent(id) {
 				$('#reschedule-id').val(id);
-				console.log('a' + id);
 				$("#scheduleModal").modal();
 			}
 

@@ -79,9 +79,9 @@ $(document).ready(function () {
 			var this_month = d.getMonth() + 1;
 			var now = [d.getFullYear(), this_month < 10 ? '0' + this_month : this_month, d.getDate()].join('/');
 
-			if (event_date > now)
-				$('#kids-events').append(createEvent(event));
-			else {
+			$('#kids-events').append(createEvent(event));
+			
+			if (event_date < now) {
 				$('#completedEventsList').append(createCompletedEvent(event));
 			}
 		});
