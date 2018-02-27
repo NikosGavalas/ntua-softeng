@@ -1,6 +1,64 @@
-﻿<!-- Js Includes -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+﻿
+<footer class="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4">
+
+				<h3 class="title">Social</h3>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin suscipit, libero a molestie consectetur, sapien elit lacinia
+					mi.</p>
+				<ul class="social-icon">
+					<a href="#" class="social customIcon">
+						<i class="fa fa-facebook" aria-hidden="true"></i>
+					</a>
+					<a href="#" class="social customIcon">
+						<i class="fa fa-twitter" aria-hidden="true"></i>
+					</a>
+					<a href="#" class="social customIcon">
+						<i class="fa fa-youtube-play" aria-hidden="true"></i>
+					</a>
+					<a href="#" class="social customIcon">
+						<i class="fa fa-google" aria-hidden="true"></i>
+					</a>
+				</ul>
+			</div>
+
+			<div class="col-sm-4">
+				<h3 class="title">Contact</h3>
+				<p><span class="fa fa-map-marker"></span> Odos lorem 12, Athina</p>
+				<p><span class="fa fa-phone"></span> +30 1234512345</p>
+				<p><span class="fa fa-envelope"></span> info@pleisure.gr</p>
+				<button class="btn btn-default" href="#">
+					Contact form
+				</button>
+			</div>
+
+			<div class="col-sm-4">
+				<h3 class="title">Payment</h3>
+				<p>We accept paypal and bitcoin as methods of payment.</p>
+				@if{is_loggedin}
+				<a class="btn btn-default" data-toggle="modal" data-target="#paymentModal" href="#">
+					Buy <i class="fa fa-money" aria-hidden="true"></i>
+				</a>
+				@else{}
+				<a class="btn btn-default" data-toggle="modal" data-target="#signupModal" href="#" onclick="infoRequireLogin();">
+					Buy <i class="fa fa-money" aria-hidden="true"></i>
+				</a>
+				@endif{}	
+			</div>
+		</div>
+	</div>
+</footer>
+
+
+<!-- Js Includes -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> <!-- older version of jquery for the datetime picker.. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script> <!-- for the datetime picker -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="js/filters.js"></script>
-<script src="js/main.js"></script>
-<script src="js/extensions.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
+<script src="/js/extensions.js"></script>
+<script src="/js/loading_modal.js"></script>
+<script src="/js/filters.js"></script>
+<script src="/js/main.js"></script>

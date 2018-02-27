@@ -38,8 +38,9 @@ namespace Pleisure
 
 			if (data == null)
 			{
-				request.SetStatusCode(HttpStatusCode.NotFound);
-				return;
+				// request.SetStatusCode(HttpStatusCode.NotFound);
+				// return;
+				data = await ReadFile(request, "default.png");
 			}
 			
 			MemoryStream imageStream = new MemoryStream(data);

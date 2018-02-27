@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+
+		<title>Profile</title>
+
+		@{html.header}
+
+	</head>
+
+	<body>
+
+		<!-- Navbar -->
+		@{html.navbar}
+		<!-- /Navbar -->
+
+		@if{is_parent}
+			@{modal.add_kid}
+		@else{}
+			@{modal.add_event}
+			@{modal.schedule}
+		@endif{}
+
+		<div class="container space-with-navbar">
+			<div class="row">
+				<div class="col-md-4">	
+					<div class="panel panel-default">
+						<div class="panel-heading">@{user.name}</div>
+						<div class="panel-body">
+							<!-- http://via.placeholder.com/256x256 -->
+							<img src="@{user.avatar}&s=256" class="img-rounded center-block img-responsive">
+						</div>
+
+						<div class="panel-body">
+							<table class="table">
+								<tr>
+									<td>Email:&nbsp;</td>
+									<td>
+										@{user.email}
+									</td>
+								</tr>
+								<tr>
+									<td>Address:&nbsp;</td>
+									<td>
+										@{user.address}
+									</td>
+								</tr>
+								<tr>
+									<td>Account Balance:&nbsp;</td>
+									<td>
+										@{user.credits} <i class="fa fa-money" aria-hidden="true"></i>
+									</td>
+								</tr>
+							</table>
+						</div>
+
+
+					</div>
+					<!-- <a href="#TODOeditProfileModal" style="width:100%;" class="btn btn-success btn-lg">Edit Profile</a> -->
+				</div>
+				<div class="col-md-8">
+					<div id="kids-events" class="panel panel-default">
+						<div class="panel-heading clearfix">
+							<div class="row">
+
+								<div class="col-md-6">
+									@if{is_parent} 
+										<h4>My children</h4>
+									@else{}
+										<h4>My Events</h4>
+									@endif{}
+								</div>
+
+								<div class="col-md-6">
+									<div class="btn-group pull-right inline">
+										@if{is_parent}
+											<a data-toggle="modal" data-target="#addKidModal" href="#" class="btn btn-primary pull-right">
+											<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add Kid</a>
+										@else{}
+											<a data-toggle="modal" data-target="#addEventModal" href="#" class="btn btn-primary pull-right">											
+											<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;New Event</a>												
+										@endif{}
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="panel-body loading" style="text-align: center;">
+							<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+							<span class="sr-only">Loading...</span>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div id="completed_events" class="row space-with-above">
+				<div class="col-md-12">
+					<div class="panel panel-default">
+						<div class="panel panel-heading">
+							Completed Events
+						</div>
+						<div class="panel panel-body">
+
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th scope="col">Event</th>
+										@if{is_parent}
+											<th scope="col">Attended On</th>
+										@else{}
+											<th scope="col">Completed On</th>											
+										@endif{}
+									</tr>
+								</thead>
+
+								<!-- TODO: make this functional -->
+								<tbody id="completedEventsList">
+									<tr>
+										<td>
+											<a href="/event/141183230">Marko's Playground</a>
+										</td>
+										<td>
+											13/4/2017
+										</td>
+									</tr>
+								</tbody>
+							</table>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			
+		<!-- Footer -->
+		@{html.footer}
+		<!-- /Footer -->
+
+		@if{is_parent}
+			<script src="js/fetchkids.js"></script>
+		@else{}
+			<script src="js/fetchevents.js"></script>
+		@endif{}
+
+		<script>
+			function rescheduleEvent(id) {
+				$('#reschedule-id').val(id);
+				console.log('a' + id);
+				$("#scheduleModal").modal();
+			}
+		</script>
+	</body>
+</html>

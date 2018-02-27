@@ -10,6 +10,15 @@ body {
 	font-size: 30px;
 }
 
+.space-with-navbar {
+	margin-top: 70px;
+}
+
+.space-with-above {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
 /*
 	Slider
 */
@@ -59,6 +68,78 @@ a.panel-heading {
 }
 
 /*
+	Footer
+*/
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	margin-bottom: 200px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 200px;;
+}
+
+.footer .title{
+	text-align: left;
+	color:#000;
+	font-size:25px;
+}
+.footer .social-icon{
+	padding:0px;
+	margin:0px;
+}
+.footer .social-icon a{
+	display:inline-block;
+	color:#000;
+	font-size:25px;
+	padding:5px;
+}
+.footer .acount-icon a{
+	display:block;
+	color:#000;
+	font-size:18px;
+	padding:5px;
+	text-decoration:none;
+}
+.footer .acount-icon .fa{
+	margin-right:25px;
+}
+.footer .category a {
+    text-decoration: none;
+    color: #000;
+    display: inline-block;
+    padding: 5px 20px;
+    margin: 1px;
+    border-radius:4px;
+    margin-top: 6px;
+    background-color: black;
+    border: solid 1px #000;
+}
+.footer .payment{
+	margin:0px;
+	padding:0px;
+	list-style-type:none
+}
+.footer .payment li{
+	list-style-type:none
+}
+.footer .payment li a {
+    text-decoration: none;
+    display: inline-block;
+    color: #000;
+    float: left;
+    font-size: 25px;
+    padding: 10px 10px;
+}
+
+/*
 	Filters Button
 */
 #filters-button {
@@ -73,6 +154,22 @@ a.panel-heading {
 }
 
 /*
+	Logo
+*/
+
+#mainLogo {
+	font-size: 500%; 
+	font-family: 'Nunito', sans-serif;
+	font-weight: bold;
+	padding-top: 100px;
+}
+
+.jumbotron { 
+    background-color: white; /* Orange */
+    color: #2fa4e7;
+}
+
+/*
 	Bug Fixing
 */
 #takis {
@@ -80,5 +177,27 @@ a.panel-heading {
 }
 
 #main_content {
-	margin-top: 50px; 
+	margin-top: 50px;
 }
+
+@media screen and (max-width: 767px) {
+	.modal-dialog {
+		overflow-y: initial !important
+	}
+	.modal-body {
+		height: 325px;
+		overflow-y: auto;
+	}
+}
+
+.blabla {
+	padding-bottom: 180px;
+}
+
+/* #mainSearch {
+	margin-bottom: 300px;
+}
+
+#completed_events {
+	margin-bottom: 150px;
+} */

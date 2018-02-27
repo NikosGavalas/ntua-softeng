@@ -1,1 +1,57 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<title>Pleisure</title>
+
+	@{html.header}
+
+</head>
+
+<body>
+	
+	<!-- Navbar -->
+	@{html.navbar}
+	<!-- /Navbar -->
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="jumbotron text-center">
+					<h1 id="mainLogo">Pleisure</h1>
+					<br>
+					<form id="mainSearch" class="form-inline">
+						<div id="mainSearch" class="input-group">
+							<input id="searchInput" type="text" size="70" class="form-control" placeholder="Αναζητείστε εκδηλώσεις κοντά σας...">						
+							<div class="input-group-btn">
+								<button type="submit" form="mainSearch" class="btn btn-primary">
+									<span class="fa fa-search" aria-hidden="true"></span>
+									<b>&nbsp;Search</b>
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	@{html.footer}
+	<!-- /Footer -->
+
+	<script>
+		$(document).ready(function () {
+			$('#mainSearch').ajaxForm({ 
+				onSubmit: function (params) {	
+					window.location = '/events?address=' + encodeURI($('#searchInput').val());
+					return false;
+				} 
+			});
+		});
+	</script>
+	
+</body>
+
+</html>

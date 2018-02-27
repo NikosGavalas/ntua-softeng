@@ -1,0 +1,76 @@
+<div id="bookModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Attend to the event!</h4>
+			</div>
+			<div class="modal-body">
+
+				<form id="bookForm" method="post" action="/api/book_event" enctype="multipart/form-data">
+					<fieldset>
+						
+						<p>Select your kid and the date you prefer</p>
+
+						<div class="form-group">
+							<input type="hidden" name="id" value="">
+						</div>
+
+						<div class="form-group">
+							<label for="kidSelectField" class="control-label">Kid</label>
+							<div>
+								<select class="form-control" id="kidSelectField" name="kid">
+									<!-- This part is generated, see bottom of event.html -->
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="dateTimeBookField" class="control-label">Date</label>
+							<div>
+								<select class="form-control" id="dateTimeBookField" name="datetime">
+									<!-- This part is generated, see bottom of event.html -->
+								</select>
+							</div>
+						</div>
+
+						<table class="table">
+							<tr>
+								<td>Your credits currently:</td>
+								<td>@{user.credits} <i class="fa fa-money" aria-hidden="true"></i></td>
+							</tr>
+							<tr>
+								<td>Event cost:</td>
+								<td>@{user.credits} <i class="fa fa-money" aria-hidden="true"></i></td>
+							</tr>
+						</table>
+
+						<p id="creditsCalculation"></p>
+
+						<div class="form-group">
+							<button type="submit"  id="bookSubmit" class="btn btn-primary btn-lg">Book!&nbsp;
+								<span class="submitAwait fa "></span>
+							</button>
+						</div>
+
+					</fieldset>
+				</form>
+
+			</div>
+
+			<div class="modal-footer">
+				<p class="pull-left">
+					You need to have sufficient credits to book a ticket.
+				</p>
+				<p class="pull-left">
+					After booking, the credits are removed from your account.
+				</p>
+			</div>
+
+		</div>
+		<!-- /Modal content-->
+
+	</div>
+</div>

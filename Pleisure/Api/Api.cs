@@ -49,6 +49,7 @@ namespace Pleisure
 			if (!req.HasGET("event_id") || !int.TryParse(req.GET("event_id"), out eventId))
 			{
 				await req.SetStatusCode(HttpStatusCode.BadRequest).Close();
+				return;
 			}
 
 			SelectQuery<Event> query = new SelectQuery<Pleisure.Event>();
@@ -59,10 +60,41 @@ namespace Pleisure
 			if (evt == null)
 			{
 				await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+				return;
 			}
 
 			req.SetContentType(ContentType.Json).SetStatusCode(HttpStatusCode.OK);
 			await req.Write((await evt.SerializeWithScheduled()).ToString());
+
+			await req.Close();
+		}
+
+		public async Task User(HttpRequest req)
+		{
+			req.SetContentType(ContentType.Json);
+
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
+			if (user.Role == UserRole.Admin && req.HasGET("user_id"))
+			{
+				SelectQuery<User> query = new SelectQuery<User>();
+				query.Where("user_id", req.GET("user_id"));
+
+				user = (await Program.MySql().Execute(query)).First();
+			}
+
+			req.SetStatusCode(HttpStatusCode.OK);
+			await req.Write((await user.Serialize()).ToString());
+
 			await req.Close();
 		}
 
@@ -445,7 +477,7 @@ namespace Pleisure
 				location = await Google.Geocode(req.GET("address"));
 			}
 
-			if (location == null || distance > 50000)
+			if (location == null || distance > 50)
 			{
 				req.SetStatusCode(HttpStatusCode.BadRequest);
 				await req.Close();
@@ -458,7 +490,7 @@ namespace Pleisure
 			query.Where("DISTANCE(lat, lng, @loc_lat, @loc_lng) < @distance")
 				.AddParameter("@loc_lat", location.Latitude)
 				.AddParameter("@loc_lng", location.Longitude)
-				.AddParameter("@distance", distance);
+				.AddParameter("@distance", distance * 1000);
 
 			// Filter by price
 			if (req.HasGET("price"))
@@ -496,17 +528,27 @@ namespace Pleisure
 			// Perform query and build the response object
 			JArray arr = new JArray();
 			List<Event> events = await Program.MySql().Execute(query);
+
 			foreach (Event evt in events)
 			{
 				DateTime minDate = DateTime.Now;
 				DateTime maxDate = DateTime.MaxValue;
 
-				DateTime.TryParse(req.GET("min_date"), out minDate);
-				DateTime.TryParse(req.GET("max_date"), out maxDate);
+				if (req.HasGET("min_date") && !string.IsNullOrWhiteSpace(req.GET("min_date")))
+					DateTime.TryParse(req.GET("min_date"), out minDate);
+
+				if (req.HasGET("max_date") && !string.IsNullOrWhiteSpace(req.GET("max_date")))
+					DateTime.TryParse(req.GET("max_date"), out maxDate);
 
 				int categoryId = -1;
 
-				int.TryParse(req.GET("category"), out categoryId);
+				if (req.HasGET("category") && !string.IsNullOrWhiteSpace(req.GET("category")))
+					int.TryParse(req.GET("category"), out categoryId);
+				
+				// DateTime.TryParse(req.GET("max_date"), out maxDate);
+
+
+				// int.TryParse(req.GET("category"), out categoryId);
 
 				if (await evt.HappensBetween(minDate, maxDate)
 				    && (categoryId < 0 || await evt.HasCategories(categoryId)))
@@ -766,13 +808,15 @@ namespace Pleisure
 			}
 
 			int amount;
-			if (!await req.HasPOST("cc_num", "cc_name", "cc_exp", "cvv", "amount")
+			if (!await req.HasPOST("cc_num", "cc_name", "cc_exp_month", "cc_exp_year", "cvv", "amount")
 			   || !int.TryParse(await req.POST("amount"), out amount))
 			{
 				await req.SetStatusCode(HttpStatusCode.BadRequest)
 				         .Close();
 				return;
 			}
+
+			Console.WriteLine("Processing payment of ${0} for user {1}", amount, user.FullName);
 
 			if (!await Auth.VerifyPayment(await req.POST("cc_num"),
 										  await req.POST("cc_name"),
@@ -788,7 +832,11 @@ namespace Pleisure
 			/*
 			 * Payment verified, give the user his credits
 			 */
+			Console.WriteLine("Credits before: " + user.Credits);
 			await Auth.AddCredits(user, amount);
+			Console.WriteLine("Credits after: " + user.Credits);
+			User after = Program.MySql().Select<User>().Result.Where(u => u.ID == user.ID).First();
+			Console.WriteLine("Credits after: " + after.Credits);
 
 			await req.SetStatusCode(HttpStatusCode.OK)
 			         .Close();

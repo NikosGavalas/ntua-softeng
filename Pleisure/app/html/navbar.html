@@ -7,13 +7,13 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a id="logo" class="navbar-brand" href="#"><b>Pleisure</b></a>
+			<a id="logo" class="navbar-brand" href="/"><b>Pleisure</b></a>
 		</div>
 
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li>
-					<a href="#">About</a>
+					<a href="/events">Events</a>
 				</li>
 			</ul>
 
@@ -21,25 +21,37 @@
 				@if{is_loggedin}
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-						@{user_name} (@{user_credits} Credits)
+						@{user.name} (@{user.credits} <i class="fa fa-money" aria-hidden="true"></i> )
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" role="menu">
 						<li>
-							<a href="#">My Profile</a>
+							<a href="/profile">My Profile</a>
 						</li>
 						<li>
-							<a href="#">Settings</a>
+							<a href="#" data-toggle="modal" data-target="#paymentModal">Add  <i class="fa fa-money" aria-hidden="true"></i></a>
 						</li>
+						<li>
+							<a href="#" onclick="editProfileModal(@{user.id})">Edit Profile</a>
+						</li>
+				@endif{}
+				@if{is_admin}
 						<li class="divider"></li>
 						<li>
-							<a href="#">Log Out</a>
+							<a href="/admin">Admin Panel
+							</a>
+						</li>
+				@endif{}
+				@if{is_loggedin}
+						<li class="divider"></li>
+						<li>
+							<a href="/signout">Log Out</a>
 						</li>
 					</ul>
 				</li>
 				@else{}
 				<li>
-					<a href="#"><b>Log In</b> or <b>Sign Up</b></a>
+					<a href="#" data-toggle="modal" data-target="#loginModal"><b>Log In</b> or <b>Sign Up</b></a>
 				</li>
 				@endif{}
 			</ul>
@@ -47,3 +59,10 @@
 		</div>
 	</div>
 </nav>
+
+@{modal.login}
+@{modal.register}
+@{modal.edit_profile}
+@{modal.payment}
+
+

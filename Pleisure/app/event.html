@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<title>Pleisure</title>
+
+	@{html.header}
+
+	<style>
+		#event_header {
+			padding-top: 50px;
+		}
+
+		#map {
+			height: 200px;
+			width: 100%;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	@{html.navbar}
+	<!-- /Navbar -->
+
+	@{modal.book}
+	
+	<div id="event_header" class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>
+					@{event.title}
+				</h1>
+				<p>
+					@{event.description}
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div style="background-image:url('@{event.image}');" class="parallax">
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<h3>
+					Details
+				</h3>
+				<p>
+					Age Range: @{event.age_min} - @{event.age_max}
+				</p>
+				<p>
+					Organizer: @{event.organizer_name}
+				</p>
+				<p>
+					Address: @{event.address}
+				</p>
+				<p>
+					Price: @{event.price} <i class="fa fa-money" aria-hidden="true"></i>
+				</p>
+				<p id='event-category'>
+					
+				</p>
+				<p>
+					Duration: @{event.duration}
+				</p>
+				<p>
+					Genders: @{event.genders}
+				</p>
+				<a class="btn btn-lg btn-primary" data-id="@{event.id}" data-toggle="modal" data-target="#bookModal" href="#">
+					Attend!
+				</a>
+			</div>
+			<div class="col-md-9">
+				<h3>Location on map</h3>
+				<div id="map" ></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	@{html.footer}
+	<!-- /Footer -->
+
+	<!-- Google maps -->
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyWLrMenGVpUiC44SbWedRvsO4cinN4FU&callback=initMap"></script>
+	
+	<script>
+		function initMap() {
+			/* @{event.lat} and @{event.lng} don't work here.. */
+			var pos = { lat: @{event.lat}, lng: @{event.lng} };
+			var map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 15,
+				center: pos
+			});
+			var marker = new google.maps.Marker({
+				position: pos,
+				map: map
+			});
+		}
+
+	/* 	$(window).resize(function () {
+			google.maps.event.trigger(map, 'resize');
+		}); */
+	</script>
+
+	<script>
+		// Book Modal: adding user's kids
+		$(document).ready(function () {
+			$.get('/api/kids', function (data) {
+				data.forEach(kid => {
+					$('#kidSelectField').append(
+						$('<option>').attr('value', kid.name).text(kid.name)
+					);
+				});
+			});
+
+			$.ajax({
+				url: '/api/events', 
+				data: {
+					id: '@{event.id}',
+					address: '@{user.address}'
+				},
+				success: function(resp) {
+					console.log(resp);
+					// the following line is very kek, only temp
+					event = resp.results[0];
+					
+					event.scheduled.forEach(function(date) {
+						$('#dateTimeBookField').append(
+							$('<option>').attr('value', /* date.id */ date.next_time).text(date.next_time)
+						)
+					});
+				}
+			});
+
+			var creds = @{user.credits};
+			var cost = @{event.price};
+			var diff = creds - cost;
+			var msg;
+
+			if (diff < 0) {
+				msg = $('<span>').html('You need <span style="color: red;">' + Math.abs(diff) + '</span> <i class="fa fa-money" aria-hidden="true"></i> more.');
+				$('#bookSubmit').addClass('disabled');
+			} else {
+				msg = 'Your credits after booking: ' + diff + ` <i class="fa fa-money" aria-hidden="true"></i>`;
+			}
+
+			$('#creditsCalculation').append(msg); 
+
+		});
+
+		$('#bookModal').on('show.bs.modal', function (e) {
+			var eventId = $(e.relatedTarget).data('id');
+			$(e.currentTarget).find('input[name="id"]').val(eventId);
+		});
+
+		/* $(document).ready(function() {
+			$.get("/api/event?event_id=@{event.id}", function(dta) {
+				$(".result").html(data);
+			});
+		}) */
+
+		var event = @{event.serialized};
+
+		var categs = event.categories.toString().replace('"', '');
+	
+		if (categs != '')
+			$('#event-category').text('Categories: ' + categs);
+
+	</script>
+
+</body>
+
+</html>

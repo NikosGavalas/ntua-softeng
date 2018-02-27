@@ -1,0 +1,75 @@
+<div id="loginModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Welcome!</h4>
+			</div>
+			<div class="modal-body">
+				<form id="loginForm" class="form-horizontal" method="post" action="/login">
+					<fieldset>
+						<legend>Log in to your account</legend>
+						
+						<div class="form-group">
+							<label for="loginEmail" class="col-lg-2 control-label">Email</label>
+							<div class="col-lg-10">
+								<div class="input-group">
+									<i class="input-group-addon fa fa-envelope fa-fw" aria-hidden="true"></i>
+									<input type="email" class="form-control" name="email" id="loginEmail"  autocomplete="off">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="loginPassword" class="col-lg-2 control-label">Password</label>
+							<div class="col-lg-10">
+								<div class="input-group">
+									<i class="input-group-addon fa fa-key fa-fw" aria-hidden="true"></i>
+									<input type="password" class="form-control " name="password" id="loginPassword"  autocomplete="off">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-lg-10 col-lg-offset-2">
+								<div class="checkbox">
+									<label>
+										<input name="remember_me" id="rememberMe" type="checkbox"> Remember me
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-lg-10 col-lg-offset-2">							
+								<button type="submit" class="btn btn-primary btn-lg">Log In&nbsp;
+									<span class="submitAwait fa fa-sign-in"></span>
+								</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+
+			</div>
+			<div class="modal-footer">
+				<div class="pull-left">
+					<p>Not a member?
+						<a href="#" onclick="spawnModal('signup');">
+							Sign Up!
+						</a>
+					</p>
+					<div class="pull-left">
+						<p>
+							<a href="#">
+								Forgot Password?
+							</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div> <!-- /Modal content-->
+
+	</div>
+</div>

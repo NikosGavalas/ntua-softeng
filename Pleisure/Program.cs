@@ -68,7 +68,6 @@ namespace Pleisure
 			server.Start();
 			Console.WriteLine("Press CTRL-C to shut down.");
 
-
 			/*
              * Main thread now awaits SIGTERM
              */

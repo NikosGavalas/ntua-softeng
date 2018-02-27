@@ -19,47 +19,6 @@
 }
 
 @media screen and (max-width: 767px) {
-	.table-responsive thead, .table-responsive tbody, .table-responsive tfoot, .table-responsive tr, .table-responsive th, .table-responsive td {
-		display: block;
-	}
-
-	.table-responsive thead {
-		display: none;
-	}
-
-	.table-responsive .align-center, .table-responsive .align-right {
-		text-align: inherit;
-	}
-
-	.table-responsive tr {
-		border-top: 1px solid #ddd;
-	}
-
-	.table-responsive tr:first-child {
-		border: 0;
-	}
-
-	.table-responsive > tbody > tr > td {
-		padding-left: 50%;
-		border-top-color: rgba(221, 221, 221, 0.5);
-	}
-
-	.table-responsive > tbody > tr > td:first-child {
-		border: 0;
-	}
-
-	.table-responsive [data-label] {
-		position: relative;
-	}
-
-	.table-responsive [data-label]:before {
-		position: absolute;
-		top: 0;
-		left: 0;
-		padding: 8px;
-		content: attr(data-label);
-		font-weight: bold;
-	}
 
 	.navbar-fixed-top.visible-xs + .row {
 		padding-top: 60px;
@@ -69,8 +28,10 @@
 		display: inline-block !important;
 	}
 
-	/* changed position to fixed */
+	/* changed position to fixed from absolute and added scrolling on overflow*/
 	.sliding-sidebar {
+		overflow-y: scroll;
+		/*overflow-y: initial !important;*/
 		position: fixed;
 		z-index: 1;
 		background: #fff;
@@ -81,9 +42,9 @@
 	.sliding-sidebar.collapse, .sliding-sidebar.collapsing {
 		display: block !important;
 		transform: translate3D(-100%, 0, 0);
-		transition: all 200ms;
+		transition: all 100ms;
 	}
-
+	
 	.sliding-sidebar.collapse.in {
 		transform: translate3D(0, 0, 0);
 		box-shadow: 1px 0 0 rgba(0, 0, 0, 0.05), 2px 0 0 rgba(0, 0, 0, 0.05), 3px 0 0 rgba(0, 0, 0, 0.05);
@@ -100,4 +61,8 @@
 
 .collapsed .parent-collapsed {
 	display: inline-block;
+}
+
+#filterSubmit {
+	margin-bottom: 200px;
 }

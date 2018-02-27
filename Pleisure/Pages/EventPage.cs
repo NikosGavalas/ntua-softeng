@@ -52,9 +52,9 @@ namespace Pleisure
 		}
 
 		[HtmlVariable("event.serialized")]
-		public Task<string> Serialized
+		public string Serialized
 		{
-			get { return evt.SerializeWithScheduled().ContinueWith(s => s.ToString()); }
+			get { return evt.SerializeWithScheduled().Result.ToString(); }
 		}
 
 		[HtmlVariable("event.organizer_name")]
