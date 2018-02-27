@@ -53,6 +53,29 @@ namespace Pleisure
 			return Hash(soup.ToString());
 		}
 
+		public static async Task<bool> UpdatePassword(User user, string password, string password2)
+		{
+			if (password != password2)
+			{
+				return false;
+			}
+
+			Monitor.Enter(coherenceLock);
+
+			string salt = GenerateSalt();
+			string passwordHash = GetPasswordHash(password, salt);
+
+			UpdateQuery<User> query = new UpdateQuery<User>();
+			query.Where("user_id", user.ID);
+			query.Set("password", passwordHash)
+				 .Set("salt", salt);
+
+			NonQueryResult res = await Program.MySql().ExecuteNonQuery(query);
+
+			Monitor.Exit(coherenceLock);
+			return res.RowsAffected == 1;
+		}
+
 		/// <summary>
 		/// Checks if an email is already taken by another user.
 		/// </summary>
@@ -215,8 +238,8 @@ namespace Pleisure
 				compensateQuery.Where("user_id", organizer.ID);
 				compensateQuery.Set("credits", organizer.Credits + evt.Price);
 
-				await Program.MySql().Execute(chargeQuery);
-				await Program.MySql().Execute(compensateQuery);
+				await Program.MySql().ExecuteNonQuery(chargeQuery);
+				await Program.MySql().ExecuteNonQuery(compensateQuery);
 
 				/*
 				 * Add attendance
@@ -239,7 +262,7 @@ namespace Pleisure
 			UpdateQuery<User> query = new UpdateQuery<User>();
 			query.Where("user_id", user.ID);
 			query.Set("role", UserRole.Banned);
-			await Program.MySql().Execute(query);
+			await Program.MySql().ExecuteNonQuery(query);
 
 			Monitor.Exit(coherenceLock);
 		}
@@ -256,7 +279,7 @@ namespace Pleisure
 			UpdateQuery<User> query = new UpdateQuery<User>();
 			query.Where("user_id", user.ID);
 			query.Set("credits", user.Credits + amount);
-			await Program.MySql().Execute(query);
+			await Program.MySql().ExecuteNonQuery(query);
 
 			Monitor.Exit(coherenceLock);
 		}
