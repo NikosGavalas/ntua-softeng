@@ -207,14 +207,16 @@ namespace Pleisure
 				/*
 				 * Transfer funds
 				 */
-				await Program.MySql().Update(user, u =>
-				{
-					u.Credits -= evt.Price;
-				});
-				await Program.MySql().Update(organizer, u =>
-				{
-					u.Credits += evt.Price;
-				});
+				UpdateQuery<User> chargeQuery = new UpdateQuery<User>();
+				chargeQuery.Where("user_id", user.ID);
+				chargeQuery.Set("credits", user.Credits - evt.Price);
+
+				UpdateQuery<User> compensateQuery = new UpdateQuery<User>();
+				compensateQuery.Where("user_id", organizer.ID);
+				compensateQuery.Set("credits", organizer.Credits + evt.Price);
+
+				await Program.MySql().Execute(chargeQuery);
+				await Program.MySql().Execute(compensateQuery);
 
 				/*
 				 * Add attendance
@@ -233,10 +235,12 @@ namespace Pleisure
 		public static async Task BanUser(User user)
 		{
 			Monitor.Enter(coherenceLock);
-			await Program.MySql().Update(user, u =>
-			{
-				u.Role = UserRole.Banned;
-			});
+			
+			UpdateQuery<User> query = new UpdateQuery<User>();
+			query.Where("user_id", user.ID);
+			query.Set("role", UserRole.Banned);
+			await Program.MySql().Execute(query);
+
 			Monitor.Exit(coherenceLock);
 		}
 
@@ -248,10 +252,12 @@ namespace Pleisure
 		public static async Task AddCredits(User user, int amount)
 		{
 			Monitor.Enter(coherenceLock);
-			await Program.MySql().Update(user, u =>
-			{
-				u.Credits += amount;
-			});
+
+			UpdateQuery<User> query = new UpdateQuery<User>();
+			query.Where("user_id", user.ID);
+			query.Set("credits", user.Credits + amount);
+			await Program.MySql().Execute(query);
+
 			Monitor.Exit(coherenceLock);
 		}
 	}
