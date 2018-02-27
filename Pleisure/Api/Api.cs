@@ -85,8 +85,7 @@ namespace Pleisure
 			 */
 			string password = await req.POST("password", "");
 			string password2 = await req.POST("password2", "");
-			if (!string.IsNullOrWhiteSpace(password) && ! string.IsNullOrWhiteSpace(password2))
-			)
+			if (!string.IsNullOrWhiteSpace(password) && !string.IsNullOrWhiteSpace(password2))
 			{
 				if (!await Auth.UpdatePassword(user, password, password2))
 				{
@@ -121,7 +120,7 @@ namespace Pleisure
 
 			await Program.MySql().Execute(query);
 
-			await req.redirect(redirectTo);
+			await req.Redirect(redirectTo);
 		}
 
 
@@ -336,6 +335,17 @@ namespace Pleisure
 			     .Value("genders", genders);
 
 			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+
+			int category;
+			if (await req.HasPOST("category") && int.TryParse(await req.POST("category"), out category))
+			{
+				InsertQuery categoryQuery = new InsertQuery("event_categories");
+				categoryQuery.Value("event_id", eventId)
+							 .Value("category_id", category);
+
+				await Program.MySql().ExecuteNonQuery(categoryQuery);
+			}
 
 			await req.Redirect("/event/" + eventId);
 		}
