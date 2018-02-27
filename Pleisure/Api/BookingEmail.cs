@@ -32,6 +32,7 @@ namespace Pleisure
 									 evt.Event.ID,
 									 evt.Event.Title,
 									 kid.Name,
+									 evt.NextTime,
 									 paid);
 			return this;
 		}

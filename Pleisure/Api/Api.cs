@@ -46,7 +46,7 @@ namespace Pleisure
 		public async Task UserUpdate(HttpRequest req)
 		{
 			UserSession session = req.Session as UserSession;
-
+	
 			User user = await session.GetUser();
 
 			string redirectTo = "/profile";
@@ -804,8 +804,7 @@ namespace Pleisure
 
 			bool success = await Auth.BookEvent(user, kid, scheduled);
 
-			await req.SetStatusCode(success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError)
-			         .Close();
+			await req.Redirect("/profile");
 
 			BookingEmail email = new BookingEmail(user);
 			await email.Body(scheduled, kid, evt.Price);
