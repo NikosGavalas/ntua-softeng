@@ -33,6 +33,7 @@ namespace Pleisure
 					 .Add("/own_event", OwnEvent)
 			         .Add("/book_event", BookEvent)
 			         .Add("/categories", Categories)
+					 .Add("/user_update", UserUpdate)
 			         .Add("/pay", Pay);
 
 			/*
@@ -41,6 +42,81 @@ namespace Pleisure
 			apiRouter.Add("/users", Users)
 			         .Add("/ban_user", BanUser);
 		}
+
+		public async Task UserUpdate(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
+			if (await req.HasPOST("id"))
+			{
+				if (user.Role != UserRole.Admin)
+				{
+					await req.SetStatusCode(HttpStatusCode.Forbidden).Close();
+					return;
+				}
+
+				SelectQuery<User> sel = new SelectQuery<User>();
+				sel.Where("user_id", await req.POST("id"));
+
+				user = (await Program.MySql().Execute(sel)).FirstOrDefault();
+
+				if (user == null)
+				{
+					await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+					return;
+				}
+			}
+
+			/*
+			 * First update the password
+			 */
+			if (await req.HasPOST("password", "password2"))
+			{
+				if (!await Auth.UpdatePassword(user, await req.POST("password"), await req.POST("password2")))
+				{
+					await req.SetStatusCode(HttpStatusCode.BadRequest).Close();
+					return;
+				}
+			}
+
+			/*
+			 * Then update the rest of the data
+			 */
+			UpdateQuery<User> query = new UpdateQuery<User>();
+			query.Where("user_id", user.ID);
+
+			if (await req.HasPOST("email"))
+			{
+				if (await Auth.EmailTaken(await req.POST("email")))
+				{
+					await req.SetStatusCode(HttpStatusCode.Found).Close();
+					return;
+				}
+				query.Set("email", await req.POST("email"));
+			}
+			if (await req.HasPOST("full_name"))
+			{
+				query.Set("full_name", await req.POST("full_name"));
+			}
+			if (await req.HasPOST("address"))
+			{
+				query.Set("address", await req.POST("address"));
+			}
+
+			await Program.MySql().Execute(query);
+
+			await req.SetStatusCode(HttpStatusCode.OK).Close();
+		}
+
 
 		public async Task Event(HttpRequest req)
 		{
