@@ -108,6 +108,9 @@ namespace Pleisure
         [HtmlVariable("modal.book")]
         public Task<string> ModalBook { get { return GetHtml("modal/book"); } }
 
+		[HtmlVariable("modal.attendees")]
+		public Task<string> ModalAttendees { get { return GetHtml("modal/attendees"); } }
+
 		public HtmlPage(string html, User user)
 		{
 			this.html = html;

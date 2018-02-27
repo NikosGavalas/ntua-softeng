@@ -23,7 +23,7 @@ function createEvent(event) {
 							$('<a>').addClass('btn btn-success btn-sm')
 								.append(
 									' Attendees'
-								)
+								).attr("onclick", "openAttendees(" + event.id + ")")
 						)
 					)
 				)
@@ -55,7 +55,48 @@ function createCompletedEvent(event) {
 	)
 }
 
+function openAttendees(eventId) {
+
+	$.get({
+		url: '/api/own_event',
+		data: {
+			event_id: eventId
+		},
+		success: function (event) {
+
+			$('#attendees').empty();
+
+			for (var i = 0; i < event.scheduled.length; i++) {
+				var sched = event.scheduled[i];
+				$('#attendees').append(
+					$("<tr>").append(
+						$("<td colspan='3'>").append("<h4>").append(sched.next_time)
+						)
+				);
+
+				for (var j = 0; j < sched.attendees.length; j++) {
+					var kid = sched.attendees[j];
+
+					$('#attendees').append(
+						$("<tr>").append(
+							$("<td>").append($("<img class='img-responsive'>").attr("src", kid.avatar))
+						).append(
+							$("<td>").append(kid.name)
+						).append(
+							$("<td>").append(kid.age)
+							)
+					);
+				}
+			}
+
+			$('#attendeesModal').modal();
+		}
+	});
+}
+
+
 $(document).ready(function () {
+	openAttendees(3);
 	$.get('/api/own_events', function (data) {
 		$('.loading').remove();
 		

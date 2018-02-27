@@ -53,7 +53,7 @@ namespace Pleisure
 
 				foreach (Kid attendee in await GetAttendees())
 				{
-					(obj["attendees"] as JArray).Add(attendee.Serialize());
+					(obj["attendees"] as JArray).Add(await attendee.Serialize());
 				}
 			}
 

@@ -40,7 +40,7 @@ namespace Pleisure
 			{
 				// request.SetStatusCode(HttpStatusCode.NotFound);
 				// return;
-				data = await ReadFile(request, "default.png");
+				data = File.ReadAllBytes("app/eventimg/default.png");
 			}
 			
 			MemoryStream imageStream = new MemoryStream(data);
