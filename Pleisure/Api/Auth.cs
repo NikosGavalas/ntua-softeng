@@ -248,10 +248,11 @@ namespace Pleisure
 		public static async Task AddCredits(User user, int amount)
 		{
 			Monitor.Enter(coherenceLock);
-			await Program.MySql().Update(user, u =>
-			{
-				u.Credits += amount;
-			});
+
+			UpdateQuery<User> query = new UpdateQuery<User>();
+			query.Where("user_id", user.ID);
+			query.Set("credits", user.Credits + amount);
+			await Program.MySql().Execute(query);
 			Monitor.Exit(coherenceLock);
 		}
 	}
