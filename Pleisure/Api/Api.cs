@@ -101,7 +101,9 @@ namespace Pleisure
 			UpdateQuery<User> query = new UpdateQuery<User>();
 			query.Where("user_id", user.ID);
 
-			if (await req.HasPOST("email") && !string.IsNullOrWhiteSpace(await req.POST("email")))
+			if (await req.HasPOST("email") 
+				&& !string.IsNullOrWhiteSpace(await req.POST("email")) 
+				&& user.Email != await req.POST("email"))
 			{
 				if (await Auth.EmailTaken(await req.POST("email")))
 				{
