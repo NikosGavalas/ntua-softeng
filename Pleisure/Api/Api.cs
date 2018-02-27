@@ -23,6 +23,7 @@ namespace Pleisure
 
 			Router apiRouter = server.AddRouter("/api");
 			apiRouter.Add("/kids", Kids)
+			         .Add("/user", User)
 					 .Add("/events", Events)
 					 .Add("/event", Event)
 			         .Add("/email_available", EmailAvailable)
