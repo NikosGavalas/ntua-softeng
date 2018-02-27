@@ -144,6 +144,17 @@
 				console.log('a' + id);
 				$("#scheduleModal").modal();
 			}
+
+			$(document).ready(function() {
+				$.get('/api/categories', function(categories) {
+					categories.forEach(category => {
+						$('#categoryField').append(
+							$('<option>').attr({ 'value': category.id }).text(category.name)
+						);
+					});
+				});
+			});
+
 		</script>
 	</body>
 </html>
