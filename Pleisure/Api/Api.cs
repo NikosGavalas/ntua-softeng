@@ -583,7 +583,7 @@ namespace Pleisure
 			SelectQuery<Event> query = new SelectQuery<Event>();
 
 			// Filter by distance
-			query.Where("DISTANCE(lat, lng, @loc_lat, @loc_lng) < @distance")
+			query.Where("HAVERSINE(lat, lng, @loc_lat, @loc_lng) < @distance")
 				.AddParameter("@loc_lat", location.Latitude)
 				.AddParameter("@loc_lng", location.Longitude)
 				.AddParameter("@distance", distance * 1000);

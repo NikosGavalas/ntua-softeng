@@ -120,14 +120,13 @@
 			});
 
 			$.ajax({
-				url: '/api/events', 
+				url: '/api/event', 
 				data: {
-					id: '@{event.id}',
-					address: '@{user.address}'
+					event_id: '@{event.id}'
 				},
-				success: function(resp) {
+				success: function(event) {
 					// the following line is very kek, only temp
-					event = resp.results[0];
+					//event = resp.results[0];
 					
 					event.scheduled.forEach(function(date) {
 						$('#dateTimeBookField').append(
