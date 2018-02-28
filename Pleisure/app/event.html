@@ -169,8 +169,8 @@
 
 		var event = @{event.serialized};
 
-		var categ = event.categories.length == 0 ?  'NaN' : event.categories[0];
-
+		var categ = event.categories.length == 0 ?  'NaN' : event.categories[0].name;
+		console.log(event.categories);
 		$('#event-category').text('Category: ' + categ);
 
 	</script>
