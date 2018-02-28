@@ -34,15 +34,16 @@
 						<li>
 							<a href="#" onclick="editProfileModal(@{user.id})">Edit Profile</a>
 						</li>
-				@endif{}
-				@if{is_admin}
+						@endif{}
+						@if{is_admin}
 						<li class="divider"></li>
 						<li>
-							<a href="/admin">Admin Panel
+							<a href="/admin">
+								Admin Panel
 							</a>
 						</li>
-				@endif{}
-				@if{is_loggedin}
+						@endif{}
+						@if{is_loggedin}
 						<li class="divider"></li>
 						<li>
 							<a href="/signout">Log Out</a>
@@ -64,5 +65,6 @@
 @{modal.register}
 @{modal.edit_profile}
 @{modal.payment}
+@{modal.attendees}
 
 

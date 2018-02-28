@@ -59,6 +59,7 @@ namespace HttpNet
 			_session = session;
 
 			Path = AbsolutePath;
+			Response.ContentEncoding = Encoding.UTF8;
 		}
 
 		public async Task<byte[]> RequestBody()

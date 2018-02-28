@@ -299,6 +299,8 @@ namespace Pleisure
 			if (location == null
 			    || !await ScheduleEvent(eventId, scheduledTime, recurrence))
 			{
+				if (location == null)
+					Console.WriteLine("Bad event location");
 				req.SetStatusCode(HttpStatusCode.NotAcceptable);
 				await req.Close();
 				return;
