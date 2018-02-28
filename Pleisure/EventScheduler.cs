@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using HaathDB;
@@ -12,7 +13,12 @@ namespace Pleisure
 	{
 		volatile bool running;
 
-		public async Task Start()
+		public void Start()
+		{
+			new Thread(() => _Start()).Start();
+		}
+
+		async Task _Start()
 		{
 			running = true;
 
