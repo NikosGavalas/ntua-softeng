@@ -77,6 +77,7 @@
     <Compile Include="Entities\Kid.cs" />
     <Compile Include="Entities\ScheduledEvent.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="EventScheduler.cs" />
     <Compile Include="Options.cs" />
     <None Include="packages.config" />
     <Compile Include="Pages\HtmlProvider.cs" />
@@ -107,7 +108,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\eventimg\" />
     <Folder Include="app\img\" />
   </ItemGroup>
   <ItemGroup>

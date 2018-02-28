@@ -21,6 +21,7 @@ namespace Pleisure
 	{
 		static WebServer server;
 		static ConcurrentChance chance;
+		static EventScheduler scheduler;
 
 		static void Main(string[] args)
 		{
@@ -48,6 +49,13 @@ namespace Pleisure
 			ResizedResourceProvider evtThumb = new ResizedResourceProvider(Options.StoragePath("eventimg"), "/eventthumb",
 			                                                               Options.EventThumbnailWidth, Options.EventThumbnailHeight);
 			server.Add("/eventthumb/*", evtThumb.OnRequest);
+
+			/*
+			 * Start event scheduler
+			 */
+			scheduler = new EventScheduler();
+			scheduler.Start();
+
 
 
 			/*
@@ -96,6 +104,7 @@ namespace Pleisure
 		{
 			Console.WriteLine("Shutting down...");
 			server.Stop();
+			scheduler.Stop();
 			Environment.Exit(0);
 		}
 

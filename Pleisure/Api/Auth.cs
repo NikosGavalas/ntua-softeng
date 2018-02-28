@@ -234,9 +234,11 @@ namespace Pleisure
 				chargeQuery.Where("user_id", user.ID);
 				chargeQuery.Set("credits", user.Credits - evt.Price);
 
+				int compensation = (int)(evt.Price * (1 - Options.Fee));
+
 				UpdateQuery<User> compensateQuery = new UpdateQuery<User>();
 				compensateQuery.Where("user_id", organizer.ID);
-				compensateQuery.Set("credits", organizer.Credits + evt.Price);
+				compensateQuery.Set("credits", organizer.Credits + compensation);
 
 				await Program.MySql().ExecuteNonQuery(chargeQuery);
 				await Program.MySql().ExecuteNonQuery(compensateQuery);

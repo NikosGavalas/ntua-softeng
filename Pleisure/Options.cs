@@ -9,6 +9,11 @@ namespace Pleisure
 {
 	public static class Options
 	{
+		public static float Fee
+		{
+			get { return 0.05f; }
+		}
+
 		public static string Host
 		{
 			get
