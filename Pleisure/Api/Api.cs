@@ -23,6 +23,7 @@ namespace Pleisure
 
 			Router apiRouter = server.AddRouter("/api");
 			apiRouter.Add("/kids", Kids)
+			         .Add("/user", User)
 					 .Add("/events", Events)
 					 .Add("/event", Event)
 			         .Add("/email_available", EmailAvailable)
@@ -33,6 +34,7 @@ namespace Pleisure
 					 .Add("/own_event", OwnEvent)
 			         .Add("/book_event", BookEvent)
 			         .Add("/categories", Categories)
+					 .Add("/user_update", UserUpdate)
 			         .Add("/pay", Pay);
 
 			/*
@@ -41,6 +43,89 @@ namespace Pleisure
 			apiRouter.Add("/users", Users)
 			         .Add("/ban_user", BanUser);
 		}
+
+		public async Task UserUpdate(HttpRequest req)
+		{
+			UserSession session = req.Session as UserSession;
+
+			User user = await session.GetUser();
+
+			string redirectTo = "/profile";
+
+			if (user == null)
+			{
+				req.SetStatusCode(HttpStatusCode.Unauthorized);
+				await req.Close();
+				return;
+			}
+
+			if (await req.HasPOST("id"))
+			{
+				if (user.Role != UserRole.Admin)
+				{
+					await req.SetStatusCode(HttpStatusCode.Forbidden).Close();
+					return;
+				}
+
+				SelectQuery<User> sel = new SelectQuery<User>();
+				sel.Where("user_id", await req.POST("id"));
+
+				user = (await Program.MySql().Execute(sel)).FirstOrDefault();
+
+				if (user == null)
+				{
+					await req.SetStatusCode(HttpStatusCode.NotFound).Close();
+					return;
+				}
+
+				redirectTo = "/admin";
+			}
+
+			/*
+			 * First update the password
+			 */
+			string password = await req.POST("password", "");
+			string password2 = await req.POST("password2", "");
+			if (!string.IsNullOrWhiteSpace(password) && !string.IsNullOrWhiteSpace(password2))
+			{
+				if (!await Auth.UpdatePassword(user, password, password2))
+				{
+					await req.SetStatusCode(HttpStatusCode.BadRequest).Close();
+					return;
+				}
+			}
+
+			/*
+			 * Then update the rest of the data
+			 */
+			UpdateQuery<User> query = new UpdateQuery<User>();
+			query.Where("user_id", user.ID);
+
+			if (await req.HasPOST("email") 
+				&& !string.IsNullOrWhiteSpace(await req.POST("email")) 
+				&& user.Email != await req.POST("email"))
+			{
+				if (await Auth.EmailTaken(await req.POST("email")))
+				{
+					await req.SetStatusCode(HttpStatusCode.Found).Close();
+					return;
+				}
+				query.Set("email", await req.POST("email"));
+			}
+			if (await req.HasPOST("full_name") && !string.IsNullOrWhiteSpace(await req.POST("full_name")))
+			{
+				query.Set("full_name", await req.POST("full_name"));
+			}
+			if (await req.HasPOST("address") && !string.IsNullOrWhiteSpace(await req.POST("address")))
+			{
+				query.Set("address", await req.POST("address"));
+			}
+
+			await Program.MySql().Execute(query);
+
+			await req.Redirect(redirectTo);
+		}
+
 
 		public async Task Event(HttpRequest req)
 		{
@@ -253,6 +338,17 @@ namespace Pleisure
 			     .Value("genders", genders);
 
 			NonQueryResult result = await Program.MySql().ExecuteNonQuery(query);
+
+
+			int category;
+			if (await req.HasPOST("category") && int.TryParse(await req.POST("category"), out category))
+			{
+				InsertQuery categoryQuery = new InsertQuery("event_categories");
+				categoryQuery.Value("event_id", eventId)
+							 .Value("category_id", category);
+
+				await Program.MySql().ExecuteNonQuery(categoryQuery);
+			}
 
 			await req.Redirect("/event/" + eventId);
 		}
@@ -601,7 +697,7 @@ namespace Pleisure
 			List<Event> events = await Program.MySql().Execute(query);
 			foreach (Event evt in events)
 			{
-				arr.Add(await evt.SerializeWithScheduled());
+				arr.Add(await evt.SerializeWithScheduled(true));
 			}
 
 			await req.Write(arr.ToString());
@@ -697,7 +793,7 @@ namespace Pleisure
 
 			if (evt.Organizer.Role != UserRole.Organizer
 				|| kid.Age > evt.AgeMax || kid.Age < evt.AgeMin
-			    || !evt.Genders.HasFlag(kid.Gender))
+			    || !(evt.Genders == kid.Gender || (int)evt.Genders > 1))
 			{
 				await req.SetStatusCode(HttpStatusCode.ExpectationFailed).Close();
 				return;

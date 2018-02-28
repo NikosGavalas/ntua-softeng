@@ -42,6 +42,7 @@ namespace Pleisure
 		{
 			JToken obj = JToken.FromObject(new
 			{
+				id = ID,
 				next_time = NextTime.ToString("dd/MM/yyyy HH:mm"),
 				recurrence = SetReccurence
 			});

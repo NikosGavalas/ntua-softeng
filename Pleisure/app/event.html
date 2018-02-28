@@ -114,7 +114,7 @@
 			$.get('/api/kids', function (data) {
 				data.forEach(kid => {
 					$('#kidSelectField').append(
-						$('<option>').attr('value', kid.name).text(kid.name)
+						$('<option>').attr('value', kid.kid_id).text(kid.name)
 					);
 				});
 			});
@@ -126,13 +126,12 @@
 					address: '@{user.address}'
 				},
 				success: function(resp) {
-					console.log(resp);
 					// the following line is very kek, only temp
 					event = resp.results[0];
 					
 					event.scheduled.forEach(function(date) {
 						$('#dateTimeBookField').append(
-							$('<option>').attr('value', /* date.id */ date.next_time).text(date.next_time)
+							$('<option>').attr('value', date.id).text(date.next_time)
 						)
 					});
 				}
@@ -159,11 +158,15 @@
 			$(e.currentTarget).find('input[name="id"]').val(eventId);
 		});
 
-		/* $(document).ready(function() {
-			$.get("/api/event?event_id=@{event.id}", function(dta) {
-				$(".result").html(data);
-			});
-		}) */
+		$(document).ready(function() {
+			var ev = @{event.serialized};
+			
+			ev.scheduled.forEach(function(sched) {
+				$('#dateTimeBookField').append(
+					$('<option>').val(sched.id).append(sched.next_time)
+				)
+			})
+		})
 
 		var event = @{event.serialized};
 

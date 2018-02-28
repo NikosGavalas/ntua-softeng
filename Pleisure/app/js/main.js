@@ -65,6 +65,8 @@ function editProfileModal(userId)
 			$('#editProfileFullNameField').val(user.fullname);
 			$('#editProfileAddressField').val(user.address);
 
+			$('#editProfileIdField').val(user.id);
+
 			$('#editProfileModal').modal();
 		}
 	});
@@ -73,9 +75,6 @@ function editProfileModal(userId)
 
 $(document).ready(function () {
 	$('.datetimepicker').datetimepicker();
-
-
-
 
 	$('#paymentForm').ajaxForm({
 		url: '/api/pay',
