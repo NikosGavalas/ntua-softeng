@@ -4,7 +4,7 @@ Course Assignment.
 It's a Web App, stack used: C#-MySQL (backend), HTML/CSS-Bootstrap/JS-JQuery (frontend), Mono-Xbuild-Docker (deployment).
 
 I worked on the frontend.
-Colaborator: [G. Mantaos](gmantaos.com) (backend)
+Colaborator: [G. Mantaos](http://gmantaos.com) (backend)
 
 
 ********
