@@ -1,3 +1,14 @@
+# Software Engineering NTUA, 9th Semester
+Course Assignment.
+
+It's a Web App, stack used: C#-MySQL (backend), HTML/CSS-Bootstrap/JS-JQuery (frontend), Mono-Xbuild-Docker (deployment).
+
+I worked on the frontend.
+Colaborator: (G. Mantaos)[gmantaos.com] (backend)
+
+
+********
+
 # Pleisure
 
 [Final Analysis Document](https://bitbucket.org/teamdroptabel/pleisure/src/67c38047709748d5768812dca3df75a3dd32523c/docs/Merged-Full.md?at=master&fileviewer=file-view-default)
