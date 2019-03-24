@@ -1,68 +1,68 @@
 .container-fluid {
-	max-width: 960px;
+    max-width: 960px;
 }
 
 [data-toggle="collapse"] {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .align-center {
-	text-align: center;
+    text-align: center;
 }
 
 .align-right {
-	text-align: right;
+    text-align: right;
 }
 
 .valign-middle {
-	vertical-align: middle !important;
+    vertical-align: middle !important;
 }
 
 @media screen and (max-width: 767px) {
 
-	.navbar-fixed-top.visible-xs + .row {
-		padding-top: 60px;
-	}
+    .navbar-fixed-top.visible-xs + .row {
+        padding-top: 60px;
+    }
 
-	.btn .visible-xs {
-		display: inline-block !important;
-	}
+    .btn .visible-xs {
+        display: inline-block !important;
+    }
 
-	/* changed position to fixed from absolute and added scrolling on overflow*/
-	.sliding-sidebar {
-		overflow-y: scroll;
-		/*overflow-y: initial !important;*/
-		position: fixed;
-		z-index: 1;
-		background: #fff;
-		min-height: 100%;
-		border-right: 1px solid #ccc;
-	}
+    /* changed position to fixed from absolute and added scrolling on overflow*/
+    .sliding-sidebar {
+        overflow-y: scroll;
+        /*overflow-y: initial !important;*/
+        position: fixed;
+        z-index: 1;
+        background: #fff;
+        min-height: 100%;
+        border-right: 1px solid #ccc;
+    }
 
-	.sliding-sidebar.collapse, .sliding-sidebar.collapsing {
-		display: block !important;
-		transform: translate3D(-100%, 0, 0);
-		transition: all 100ms;
-	}
-	
-	.sliding-sidebar.collapse.in {
-		transform: translate3D(0, 0, 0);
-		box-shadow: 1px 0 0 rgba(0, 0, 0, 0.05), 2px 0 0 rgba(0, 0, 0, 0.05), 3px 0 0 rgba(0, 0, 0, 0.05);
-	}
+    .sliding-sidebar.collapse, .sliding-sidebar.collapsing {
+        display: block !important;
+        transform: translate3D(-100%, 0, 0);
+        transition: all 100ms;
+    }
+    
+    .sliding-sidebar.collapse.in {
+        transform: translate3D(0, 0, 0);
+        box-shadow: 1px 0 0 rgba(0, 0, 0, 0.05), 2px 0 0 rgba(0, 0, 0, 0.05), 3px 0 0 rgba(0, 0, 0, 0.05);
+    }
 }
 
 .parent-collapsed {
-	display: none;
+    display: none;
 }
 
 .collapsed .parent-expanded {
-	display: none;
+    display: none;
 }
 
 .collapsed .parent-collapsed {
-	display: inline-block;
+    display: inline-block;
 }
 
 #filterSubmit {
-	margin-bottom: 200px;
+    margin-bottom: 200px;
 }

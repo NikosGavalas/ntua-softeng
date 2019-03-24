@@ -1,63 +1,63 @@
 <div id="scheduleModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
+  <div class="modal-dialog">
 
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Reschedule Event</h4>
-			</div>
-			<div class="modal-body">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Reschedule Event</h4>
+      </div>
+      <div class="modal-body">
 
-				<form id="scheduleForm" method="post" action="/api/schedule_event" enctype="multipart/form-data">
-					<fieldset>
-						<p>Update the scheduling settings of your event</p>
+        <form id="scheduleForm" method="post" action="/api/schedule_event" enctype="multipart/form-data">
+          <fieldset>
+            <p>Update the scheduling settings of your event</p>
 
-						<div class="form-group">
-							<input id="reschedule-id" type="hidden" name="event_id" value="">
-						</div>
+            <div class="form-group">
+              <input id="reschedule-id" type="hidden" name="event_id" value="">
+            </div>
 
-						<div class="form-group">
-							<label for="dateTimeRescheduleField" class="control-label">DateTime</label>
-							<div class='input-group date datetimepicker'>
-								<input type="text" class="form-control datetimepicker" id="dateTimeRescheduleField" name="datetime">
-								<span class="input-group-addon">
-									<i class="fa fa-calendar" aria-hidden="true"></i>
-								</span>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="recurrenceRescheduleField" class="control-label">Recurrence</label>
-							<div>
-								<select class="form-control" id="recurrenceRescheduleField" name="recurrence">
-									<option value="once">Once</option>
-									<option value="daily">Daily</option>
-									<option value="weekly">Weekly</option>
-									<option value="biweekly">Bi-Weekly</option>
-									<option value="monthly">Monthly</option>
-								</select>
-							</div>
-						</div>
+            <div class="form-group">
+              <label for="dateTimeRescheduleField" class="control-label">DateTime</label>
+              <div class='input-group date datetimepicker'>
+                <input type="text" class="form-control datetimepicker" id="dateTimeRescheduleField" name="datetime">
+                <span class="input-group-addon">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </span>
+              </div>
+            </div>
 
-						<div class="form-group">
-							<button type="submit" class="btn btn-primary btn-lg">Edit&nbsp;
-								<span class="submitAwait fa fa-pencil-square-o"></span>
-							</button>
-						</div>
+            <div class="form-group">
+              <label for="recurrenceRescheduleField" class="control-label">Recurrence</label>
+              <div>
+                <select class="form-control" id="recurrenceRescheduleField" name="recurrence">
+                  <option value="once">Once</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="biweekly">Bi-Weekly</option>
+                  <option value="monthly">Monthly</option>
+                </select>
+              </div>
+            </div>
 
-					</fieldset>
-				</form>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-lg">Edit&nbsp;
+                <span class="submitAwait fa fa-pencil-square-o"></span>
+              </button>
+            </div>
 
-			</div>
+          </fieldset>
+        </form>
 
-			<!-- <div class="modal-footer">
-				<div class="pull-left">
-				</div>
-			</div> -->
+      </div>
 
-		</div>
-		<!-- /Modal content-->
+      <!-- <div class="modal-footer">
+        <div class="pull-left">
+        </div>
+      </div> -->
 
-	</div>
+    </div>
+    <!-- /Modal content-->
+
+  </div>
 </div>

@@ -1,126 +1,127 @@
 <div id="signupModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
+  <div class="modal-dialog">
 
-		<div id="requireLoginAlertBox" style="display: none" class="alert alert-dismissible alert-info">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<strong>You need to be logged in to perform this action.</strong>
-			You can create a free account by signing up.
-		</div>
+    <div id="requireLoginAlertBox" style="display: none" class="alert alert-dismissible alert-info">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>You need to be logged in to perform this action.</strong>
+      You can create a free account by signing up.
+    </div>
 
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Welcome!</h4>
-			</div>
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Welcome!</h4>
+      </div>
 
-			<!-- Modal Body -->
-			<div class="modal-body">
-				<ul class="nav nav-pills nav-justified">
-					<li id="signupParentPill" class="active">
-						<a href="#parentSignup" data-toggle="tab">Parent Sign Up</a>
-					</li>
-					<li id="signupOrganizerPill">
-						<a href="#organizerSignup" data-toggle="tab">Organizer Sign Up</a>
-					</li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane active" id="parentSignup">
-						<br>
-						<p>Create a free account to fully exprience what the platform can offer, for you and your children.</p>
-						<br>
-					</div>
-					<div class="tab-pane" id="organizerSignup">
-						<br>
-						<p>Want to become a become a partner? Sign up as an Organizer!</p>
-						<br>
-					</div>
-				</div>
-				<!-- Sign Up Form-->
-				<form id="signupForm" class="form-horizontal" method="post" action="/register">
-					<div class="form-group">
-						<label for="signupEmail" class="col-md-3 control-label">Email</label>
-						<div class="col-md-9">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-envelope fa-fw" aria-hidden="true"></i>
-								</span>
-								<input type="email" class="form-control" name="email" id="signupEmail" autocomplete="off">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="signupName" class="col-md-3 control-label">Full Name</label>
-						<div class="col-md-9">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-user fa-fw" aria-hidden="true"></i>
-								</span>
-								<input type="text" class="form-control" name="full_name" id="signupName" autocomplete="off">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="signupPassword" class="col-md-3 control-label">Password</label>
-						<div class="col-md-9">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-key fa-fw" aria-hidden="true"></i>
-								</span>
-								<input type="password" class="form-control " name="password" id="signupPassword" autocomplete="off">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="signupPasswordRetype" class="col-md-3 control-label">Retype Password</label>
-						<div class="col-md-9">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-key fa-fw" aria-hidden="true"></i>
-								</span>
-								<input type="password" class="form-control" name="password2" id="signupPasswordRetype" autocomplete="off">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-lg-9 col-lg-offset-3">
-							<div class="checkbox">
-								<label>
-									<input id="organizerAgree" name="agree" type="checkbox"> I have read and agree to the
-									<a href="#">Terms of Usage.</a>
-								</label>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<input id="signupRole" name="role" class="hidden">
-					</div>
-					<div class="form-group">
-						<div class="col-md-9 col-md-offset-3">
-							<button type="submit" class="btn btn-primary btn-lg" onclick="submitSignUpForm();">Sign Up&nbsp;
-								<span class="submitAwait fa fa-sign-in"></span>
-							</button>
-						</div>
-					</div>
-				</form> <!-- /Sign Up Form -->
-			</div>
-			<!-- /Modal Body -->
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <ul class="nav nav-pills nav-justified">
+          <li id="signupParentPill" class="active">
+            <a href="#parentSignup" data-toggle="tab">Parent Sign Up</a>
+          </li>
+          <li id="signupOrganizerPill">
+            <a href="#organizerSignup" data-toggle="tab">Organizer Sign Up</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="parentSignup">
+            <br>
+            <p>Create a free account to fully exprience what the platform can offer, for you and your children.</p>
+            <br>
+          </div>
+          <div class="tab-pane" id="organizerSignup">
+            <br>
+            <p>Want to become a become a partner? Sign up as an Organizer!</p>
+            <br>
+          </div>
+        </div>
+        <!-- Sign Up Form-->
+        <form id="signupForm" class="form-horizontal" method="post" action="/register">
+          <div class="form-group">
+            <label for="signupEmail" class="col-md-3 control-label">Email</label>
+            <div class="col-md-9">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-envelope fa-fw" aria-hidden="true"></i>
+                </span>
+                <input type="email" class="form-control" name="email" id="signupEmail" autocomplete="off">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signupName" class="col-md-3 control-label">Full Name</label>
+            <div class="col-md-9">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-user fa-fw" aria-hidden="true"></i>
+                </span>
+                <input type="text" class="form-control" name="full_name" id="signupName" autocomplete="off">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signupPassword" class="col-md-3 control-label">Password</label>
+            <div class="col-md-9">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-key fa-fw" aria-hidden="true"></i>
+                </span>
+                <input type="password" class="form-control " name="password" id="signupPassword" autocomplete="off">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signupPasswordRetype" class="col-md-3 control-label">Retype Password</label>
+            <div class="col-md-9">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-key fa-fw" aria-hidden="true"></i>
+                </span>
+                <input type="password" class="form-control" name="password2" id="signupPasswordRetype"
+                  autocomplete="off">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-lg-9 col-lg-offset-3">
+              <div class="checkbox">
+                <label>
+                  <input id="organizerAgree" name="agree" type="checkbox"> I have read and agree to the
+                  <a href="#">Terms of Usage.</a>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <input id="signupRole" name="role" class="hidden">
+          </div>
+          <div class="form-group">
+            <div class="col-md-9 col-md-offset-3">
+              <button type="submit" class="btn btn-primary btn-lg" onclick="submitSignUpForm();">Sign Up&nbsp;
+                <span class="submitAwait fa fa-sign-in"></span>
+              </button>
+            </div>
+          </div>
+        </form> <!-- /Sign Up Form -->
+      </div>
+      <!-- /Modal Body -->
 
-			<!-- Modal Footer -->
-			<div class="modal-footer">
-				<div class="pull-left">
-					<p>Already have an account?
-						<a href="#" onclick="spawnModal('login');">
-							Log In!
-						</a>
-					</p>
-				</div>
-				
-			</div>
-			<!-- /Modal Footer -->
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <div class="pull-left">
+          <p>Already have an account?
+            <a href="#" onclick="spawnModal('login');">
+              Log In!
+            </a>
+          </p>
+        </div>
 
-		</div>
-		<!-- /Modal content-->
+      </div>
+      <!-- /Modal Footer -->
 
-	</div>
+    </div>
+    <!-- /Modal content-->
+
+  </div>
 </div>

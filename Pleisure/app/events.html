@@ -1,374 +1,371 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-	<head>
 
-		<title>Events</title>
+<head>
 
-		@{html.header}
+  <title>Events</title>
 
-	</head>
+  @{html.header}
 
-	<body>
+</head>
 
-		<!-- Navbar -->
-		@{html.navbar}
-		<!-- /Navbar -->
+<body>
 
-		<!-- Main Content -->
-		<div id="main_content" class="container">
-			<div class="row">
-				<!-- Filter Sidebar -->
-				<div class="visible-xs">
-					<div class="container">
-						<button id="filters-button" class="btn btn-primary navbar-btn" data-toggle="collapse" data-target="#filter-sidebar">
-							<i class="fa fa-sliders"></i>							
-						</button>
-					</div>
-				</div>
+  <!-- Navbar -->
+  @{html.navbar}
+  <!-- /Navbar -->
 
-				<form id="filtersForm" action="/api/events" method="GET">
-					<div id="filter-sidebar" class="col-xs-12 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar" >
-						<h3>Filters</h3>
+  <!-- Main Content -->
+  <div id="main_content" class="container">
+    <div class="row">
+      <!-- Filter Sidebar -->
+      <div class="visible-xs">
+        <div class="container">
+          <button id="filters-button" class="btn btn-primary navbar-btn" data-toggle="collapse"
+            data-target="#filter-sidebar">
+            <i class="fa fa-sliders"></i>
+          </button>
+        </div>
+      </div>
 
-						<div>
-							<h4>
-								Address
-							</h4>
-							<div id="group-1" class="list-group collapse in">
-								<div class="input-group">
-									<span class="input-group-addon fa fa-map-marker"></span>
-									<input name="address" type="text" id="address" class="form-control" placeholder="Enter your location" value="@{user.address}">
-								</div>
-							</div>
-						</div>
+      <form id="filtersForm" action="/api/events" method="GET">
+        <div id="filter-sidebar" class="col-xs-12 col-sm-3 visible-sm visible-md visible-lg collapse sliding-sidebar">
+          <h3>Filters</h3>
 
-						<hr>
-						
-						<div>
-							<h4>
-								Distance
-							</h4>
-							<div id="distance_slider" data-role="rangeslider">
-								<span>
-									<label class="slider-value"></label>
-									&nbsp;km
-								</span>
-								<input class="my-slider" type="range" name="distance" id="distance" value="100" min="0" max="50">
-							</div>
-						</div>
-			
-						<div>
-							<h4>
-								Maximum Price
-							</h4>
-							<div id="group-2" data-role="rangeslider">
-								<span>
-									<label class="slider-value"></label>
-									&nbsp;
-									<span class="fa fa-money"></span>
-								</span>
-								<input class="my-slider" type="range" name="price" id="max-price" value="1000" min="0" max="1000">
-							</div>
-						</div>
-			
-						<div>
-							<h4>
-								Age
-							</h4>
-							<select class="form-control" id="age" name="age">
-								<option value="any">Any</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-								<option value="10">10</option>
-								<option value="11">11</option>
-								<option value="12">12</option>
-								<option value="13">13</option>
-								<option value="14">14</option>
-								<option value="15">15</option>
-								<option value="16">16</option>
-								<option value="17">17</option>
-							</select>
-						</div>
+          <div>
+            <h4>
+              Address
+            </h4>
+            <div id="group-1" class="list-group collapse in">
+              <div class="input-group">
+                <span class="input-group-addon fa fa-map-marker"></span>
+                <input name="address" type="text" id="address" class="form-control" placeholder="Enter your location"
+                  value="@{user.address}">
+              </div>
+            </div>
+          </div>
 
-						<div>
-							<h4>
-								Gender
-							</h4>
-							<select class="form-control" id="gender" name="gender">
-								<option value="any">Any</option>
-								<option value="male">Male</option>
-								<option value="female">Female</option>
-							</select>
-						</div>
-			
-						<div>
-							<h4>
-								Categories
-							</h4>
-							<div id="group-4">
-								<select name="category" id="category-selector" class="form-control">
-									<option value=""></option>
-									<!-- <option value="all">All</option>								
-									<option value="sports">Sports</option>
-									<option value="playground">Playground</option>
-									<option value="party">Party</option>
-									<option value="excursion">Excursion</option>
-									<option value="outdoor">Outdoor</option>
-									<option value="inquisition">Spanish Inquisition</option> -->
-								</select>
-							</div>
-						</div>
+          <hr>
 
-						<hr>
+          <div>
+            <h4>
+              Distance
+            </h4>
+            <div id="distance_slider" data-role="rangeslider">
+              <span>
+                <label class="slider-value"></label>
+                &nbsp;km
+              </span>
+              <input class="my-slider" type="range" name="distance" id="distance" value="100" min="0" max="50">
+            </div>
+          </div>
 
-						<div>
-							<h4>
-								Min Date
-							</h4>
-							<div class="form-group">
-								<div class='input-group date datetimepicker'>
-									<input name="min_date" type='text' class="form-control" />
-									<span class="input-group-addon">
-										<i class="fa fa-calendar" aria-hidden="true"></i>
-									</span>
-								</div>
-							</div>
-						</div>
+          <div>
+            <h4>
+              Maximum Price
+            </h4>
+            <div id="group-2" data-role="rangeslider">
+              <span>
+                <label class="slider-value"></label>
+                &nbsp;
+                <span class="fa fa-money"></span>
+              </span>
+              <input class="my-slider" type="range" name="price" id="max-price" value="1000" min="0" max="1000">
+            </div>
+          </div>
 
-						<div>
-							<h4>
-								Max Date
-							</h4>
-							<div class="form-group">
-								<div class='input-group date datetimepicker'>
-									<input name="max_date" type='text' class="form-control" />
-									<span class="input-group-addon">
-										<i class="fa fa-calendar" aria-hidden="true"></i>
-									</span>
-								</div>
-							</div>
-						</div>
+          <div>
+            <h4>
+              Age
+            </h4>
+            <select class="form-control" id="age" name="age">
+              <option value="any">Any</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+            </select>
+          </div>
 
-						<!-- <div>
-							<h4>
-								Recurring
-							</h4>
-							<form id="group-5">
-								<div class="radio">
-									<label><input id="optionsRadios1" name="optradio" type="radio" checked="">Yes</label>
-								</div>
-								<div class="radio">
-									<label><input id="optionsRadios2" name="optradio" type="radio" checked="">No</label>
-								</div>
-								<div class="radio">
-									<label><input id="optionsRadios3" name="optradio" type="radio" checked="">Display All</label>
-								</div>
-							</form>
-						</div> -->
+          <div>
+            <h4>
+              Gender
+            </h4>
+            <select class="form-control" id="gender" name="gender">
+              <option value="any">Any</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
 
-						<div>
-							<input form="filtersForm" id="filterSubmit" type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;" value="Search"/>
-						</div>
-					</div> 
-				</form>	
-				<!-- Filter Sidebar -->
-		
-				<!-- EventsView -->
-				<div class="col-sm-9">
-					<h3 class="icon-large icon-dog">Nearby Events for your Children!</h3>
+          <div>
+            <h4>
+              Categories
+            </h4>
+            <div id="group-4">
+              <select name="category" id="category-selector" class="form-control">
+                <option value=""></option>
+                <!-- <option value="all">All</option>								
+                  <option value="sports">Sports</option>
+                  <option value="playground">Playground</option>
+                  <option value="party">Party</option>
+                  <option value="excursion">Excursion</option>
+                  <option value="outdoor">Outdoor</option>
+                  <option value="inquisition">Spanish Inquisition</option> -->
+              </select>
+            </div>
+          </div>
 
-					<!-- Tabs -->
-					<ul class="nav nav-tabs">
-						<li class="active">
-							<a href="#listview" data-toggle="tab" aria-expanded="false">List View</a>
-						</li>
-						<li>
-							<a href="#mapview" data-toggle="tab" aria-expanded="true">Map View</a>
-						</li>
-					</ul>
-					<div id="myTabContent" class="tab-content">
+          <hr>
 
-						<!-- Items ListView -->
-						<div class="tab-pane fade active in" id="listview">
-							
-						</div><!-- /Items ListView -->
-						
-						<!-- MapView -->
-						<div class="tab-pane fade" id="mapview">
-							<div id="map"></div>
-						</div><!-- MapView -->
+          <div>
+            <h4>
+              Min Date
+            </h4>
+            <div class="form-group">
+              <div class='input-group date datetimepicker'>
+                <input name="min_date" type='text' class="form-control" />
+                <span class="input-group-addon">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </span>
+              </div>
+            </div>
+          </div>
 
-					</div><!-- /Tabs -->
-		
-				</div><!-- /EventsView -->
-		
-			</div>
-		</div><!-- /Main Content -->
+          <div>
+            <h4>
+              Max Date
+            </h4>
+            <div class="form-group">
+              <div class='input-group date datetimepicker'>
+                <input name="max_date" type='text' class="form-control" />
+                <span class="input-group-addon">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </span>
+              </div>
+            </div>
+          </div>
 
-		<!-- Footer -->
-		@{html.footer}
-		<!-- /Footer -->
+          <!-- <div>
+              <h4>
+                Recurring
+              </h4>
+              <form id="group-5">
+                <div class="radio">
+                  <label><input id="optionsRadios1" name="optradio" type="radio" checked="">Yes</label>
+                </div>
+                <div class="radio">
+                  <label><input id="optionsRadios2" name="optradio" type="radio" checked="">No</label>
+                </div>
+                <div class="radio">
+                  <label><input id="optionsRadios3" name="optradio" type="radio" checked="">Display All</label>
+                </div>
+              </form>
+            </div> -->
 
-		<!-- Google Maps -->
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key= AIzaSyCyWLrMenGVpUiC44SbWedRvsO4cinN4FU&callback=initMap"></script>
+          <div>
+            <input form="filtersForm" id="filterSubmit" type="submit" class="btn btn-primary btn-block"
+              style="margin-top: 20px;" value="Search" />
+          </div>
+        </div>
+      </form>
+      <!-- Filter Sidebar -->
 
-		<script>
+      <!-- EventsView -->
+      <div class="col-sm-9">
+        <h3 class="icon-large icon-dog">Nearby Events for your Children!</h3>
 
-			var currentEvents = [];
+        <!-- Tabs -->
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#listview" data-toggle="tab" aria-expanded="false">List View</a>
+          </li>
+          <li>
+            <a href="#mapview" data-toggle="tab" aria-expanded="true">Map View</a>
+          </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
 
-			function eventListItem(event)
-			{
-				return $("<div class='panel panel-primary event-item'>")
-					.append(
-						$("<a class='panel-heading'>").append(
-								$("<h3 class='panel-title'>").append(
-									$("<strong>").html(event.title)
-								)
-						).attr('href', "/event/" + event.id)
-					).append(
-						$("<div class='panel-body'>").append(
-							$("<div class='media'>").append(
-								$("<div class='media-left'>").append(
-									$("<a>").append(
-										$("<img class='media-object event-thumbnail'>").attr('src', event.thumbnail)
-									).attr('href', "/event/" + event.id)
-								)
-							).append(
-								$("<div class='media-body'>").append(
-									$("<p>").html(event.description.length > 210 ? event.description.slice(0, 200) + '...' : event.description)
-								).append(
-									$("<p>").append("<b>Address:</b>&nbsp;").append(event.address)
-								).append(
-									$("<p>").append("<b>Price:</b>&nbsp;").append(event.price).append("&nbsp;").append("<i class='fa fa-money'>")
-								).append(
-									$("<p>").append("<b>Next Time:</b>&nbsp;").append(event.scheduled[0].next_time).append("&nbsp;")
-								)
-							)
-						)
-					);
-			}
+          <!-- Items ListView -->
+          <div class="tab-pane fade active in" id="listview">
 
-			function refreshEventList(events)
-			{
-				// Update the list view
-				$('#listview').empty();
+          </div><!-- /Items ListView -->
 
-				for (var i = 0; i < events.length; i++) {
-					$('#listview').append(
-						eventListItem(events[i])
-					);
-				}
+          <!-- MapView -->
+          <div class="tab-pane fade" id="mapview">
+            <div id="map"></div>
+          </div><!-- MapView -->
 
-				// Update the map if it is currently visible
-				if ($('#mapview').hasClass('active'))
-				{
-					updateMap();
-				}
-			}
+        </div><!-- /Tabs -->
 
-			function filters()
-			{
-				return {
-					price:		$('#max-price').val(),
-					address:	$('#address').val(),
-					distance:	parseInt($('#distance').val()) * 1000,
-					age:		$('#age').val()
-				}
-			}
+      </div><!-- /EventsView -->
 
-			function updateMap()
-			{
-				// Update the map view
-				var map = new google.maps.Map(document.getElementById('map'), {
-					zoom: 12,	// TODO: set the zoom to match the searching range somehow
-					center: currentEvents[0].coordinates
-				});
+    </div>
+  </div><!-- /Main Content -->
 
-				for (var i = 0; i < currentEvents.length; i++) {
-					createMarker(map, currentEvents[i]);					
-				}
-			}
+  <!-- Footer -->
+  @{html.footer}
+  <!-- /Footer -->
 
-			function createMarker(map, currentEvent) {
-				var marker = new google.maps.Marker({
-					position: currentEvent.coordinates,
-					map: map
-				});
+  <!-- Google Maps -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key= AIzaSyCyWLrMenGVpUiC44SbWedRvsO4cinN4FU&callback=initMap"></script>
 
-				var infowindow = new google.maps.InfoWindow({
-					content: eventListItem(currentEvent)[0]
-				});
+  <script>
 
-				marker.addListener('click', function () {
-					// window.location = "/event/" + currentEvent.id;
-					infowindow.open(map, this);					
-				});
+    var currentEvents = [];
 
-				/* not needed */
-				/* marker.addListener('mouseover', function () {
-					infowindow.open(map, this);
-				});
+    function eventListItem(event) {
+      return $("<div class='panel panel-primary event-item'>")
+        .append(
+          $("<a class='panel-heading'>").append(
+            $("<h3 class='panel-title'>").append(
+              $("<strong>").html(event.title)
+            )
+          ).attr('href', "/event/" + event.id)
+        ).append(
+          $("<div class='panel-body'>").append(
+            $("<div class='media'>").append(
+              $("<div class='media-left'>").append(
+                $("<a>").append(
+                  $("<img class='media-object event-thumbnail'>").attr('src', event.thumbnail)
+                ).attr('href', "/event/" + event.id)
+              )
+            ).append(
+              $("<div class='media-body'>").append(
+                $("<p>").html(event.description.length > 210 ? event.description.slice(0, 200) + '...' : event.description)
+              ).append(
+                $("<p>").append("<b>Address:</b>&nbsp;").append(event.address)
+              ).append(
+                $("<p>").append("<b>Price:</b>&nbsp;").append(event.price).append("&nbsp;").append("<i class='fa fa-money'>")
+              ).append(
+                $("<p>").append("<b>Next Time:</b>&nbsp;").append(event.scheduled[0].next_time).append("&nbsp;")
+              )
+            )
+          )
+        );
+    }
 
-				marker.addListener('mouseout', function () {
-					infowindow.close();
-				}); */
-			}
+    function refreshEventList(events) {
+      // Update the list view
+      $('#listview').empty();
 
-			function initMap()
-			{
-				$(window).resize(function ()
-				{
-					google.maps.event.trigger(map, 'resize');
-				});
-			}
+      for (var i = 0; i < events.length; i++) {
+        $('#listview').append(
+          eventListItem(events[i])
+        );
+      }
 
-			$(document).ready(function()
-			{
-				$("#filtersForm").ajaxForm({
-					onResponse: function (resp, satus, xhr) {
-						currentEvents = resp.results;
-						refreshEventList(currentEvents);
+      // Update the map if it is currently visible
+      if ($('#mapview').hasClass('active')) {
+        updateMap();
+      }
+    }
 
-						waitingDialog.hide();
-					},
-					onError: function (xhr, status, error) {
-						waitingDialog.hide();
-						refreshEventList([]);
-						console.log(xhr);
-					},
-					method: 'GET',
-					onSubmit: function () {
-						waitingDialog.show("Loading...");
-						return true;
-					}
-				});
+    function filters() {
+      return {
+        price: $('#max-price').val(),
+        address: $('#address').val(),
+        distance: parseInt($('#distance').val()) * 1000,
+        age: $('#age').val()
+      }
+    }
 
-				if ($('#address').val()) {
-					// Address has been set yet.
-					$("#filtersForm").submit();
-				}
+    function updateMap() {
+      // Update the map view
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 12,	// TODO: set the zoom to match the searching range somehow
+        center: currentEvents[0].coordinates
+      });
 
-				$('a[href="#mapview"]').on('shown.bs.tab', function (e)
-				{
-					// Update the map if it just came into view
-					updateMap();
-					google.maps.event.trigger(map, 'resize');
-				});
+      for (var i = 0; i < currentEvents.length; i++) {
+        createMarker(map, currentEvents[i]);
+      }
+    }
 
-				// fetch available categories
-				$.get("api/categories", function (categories) {
-					categories.forEach(cat => {
-						$('#category-selector').append(
-							$('<option>').attr({'value': cat.id}).text(cat.name)
-						)
-					});
-				});
-			});
-		</script>
+    function createMarker(map, currentEvent) {
+      var marker = new google.maps.Marker({
+        position: currentEvent.coordinates,
+        map: map
+      });
 
-	</body>
+      var infowindow = new google.maps.InfoWindow({
+        content: eventListItem(currentEvent)[0]
+      });
+
+      marker.addListener('click', function () {
+        // window.location = "/event/" + currentEvent.id;
+        infowindow.open(map, this);
+      });
+
+      /* not needed */
+      /* marker.addListener('mouseover', function () {
+        infowindow.open(map, this);
+      });
+
+      marker.addListener('mouseout', function () {
+        infowindow.close();
+      }); */
+    }
+
+    function initMap() {
+      $(window).resize(function () {
+        google.maps.event.trigger(map, 'resize');
+      });
+    }
+
+    $(document).ready(function () {
+      $("#filtersForm").ajaxForm({
+        onResponse: function (resp, satus, xhr) {
+          currentEvents = resp.results;
+          refreshEventList(currentEvents);
+
+          waitingDialog.hide();
+        },
+        onError: function (xhr, status, error) {
+          waitingDialog.hide();
+          refreshEventList([]);
+          console.log(xhr);
+        },
+        method: 'GET',
+        onSubmit: function () {
+          waitingDialog.show("Loading...");
+          return true;
+        }
+      });
+
+      if ($('#address').val()) {
+        // Address has been set yet.
+        $("#filtersForm").submit();
+      }
+
+      $('a[href="#mapview"]').on('shown.bs.tab', function (e) {
+        // Update the map if it just came into view
+        updateMap();
+        google.maps.event.trigger(map, 'resize');
+      });
+
+      // fetch available categories
+      $.get("api/categories", function (categories) {
+        categories.forEach(cat => {
+          $('#category-selector').append(
+            $('<option>').attr({ 'value': cat.id }).text(cat.name)
+          )
+        });
+      });
+    });
+  </script>
+
+</body>
+
 </html>

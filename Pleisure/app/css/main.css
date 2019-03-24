@@ -1,37 +1,37 @@
 /*
-	Global
+    Global
 */
 body {
-	font-family: 'Nunito', sans-serif;
-	font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
 }
 
 #logo {
-	font-size: 30px;
+    font-size: 30px;
 }
 
 .space-with-navbar {
-	margin-top: 70px;
+    margin-top: 70px;
 }
 
 .space-with-above {
-	margin-top: 20px;
-	margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /*
-	Slider
+    Slider
 */
 .my-slider {
-	-webkit-appearance: none;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	height: 10px;
+    -webkit-appearance: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 10px;
     background: #d3d3d3;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
-	transition: opacity .2s;
+    transition: opacity .2s;
 }
 .my-slider:hover {
     opacity: 1;
@@ -41,75 +41,75 @@ body {
     width: 20px;
     height: 20px;
     background: #2fa4e7;
-	cursor: pointer;
-	border-radius: 20px;
+    cursor: pointer;
+    border-radius: 20px;
 }
 
 /*
-	Event items
+    Event items
 */
 .event-item {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 .clickable:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 .event-thumbnail {
-	width: 130px;
+    width: 130px;
 }
 a.panel-heading {
-	display: block;
-	text-decoration: none;
+    display: block;
+    text-decoration: none;
 }
 
 #map {
-	width: 100%;
-	height: 600px;
+    width: 100%;
+    height: 600px;
 }
 
 /*
-	Footer
+    Footer
 */
 html {
-	position: relative;
-	min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-	margin-bottom: 200px;
+    margin-bottom: 200px;
 }
 
 .footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 200px;;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 200px;;
 }
 
 .footer .title{
-	text-align: left;
-	color:#000;
-	font-size:25px;
+    text-align: left;
+    color:#000;
+    font-size:25px;
 }
 .footer .social-icon{
-	padding:0px;
-	margin:0px;
+    padding:0px;
+    margin:0px;
 }
 .footer .social-icon a{
-	display:inline-block;
-	color:#000;
-	font-size:25px;
-	padding:5px;
+    display:inline-block;
+    color:#000;
+    font-size:25px;
+    padding:5px;
 }
 .footer .acount-icon a{
-	display:block;
-	color:#000;
-	font-size:18px;
-	padding:5px;
-	text-decoration:none;
+    display:block;
+    color:#000;
+    font-size:18px;
+    padding:5px;
+    text-decoration:none;
 }
 .footer .acount-icon .fa{
-	margin-right:25px;
+    margin-right:25px;
 }
 .footer .category a {
     text-decoration: none;
@@ -123,12 +123,12 @@ body {
     border: solid 1px #000;
 }
 .footer .payment{
-	margin:0px;
-	padding:0px;
-	list-style-type:none
+    margin:0px;
+    padding:0px;
+    list-style-type:none
 }
 .footer .payment li{
-	list-style-type:none
+    list-style-type:none
 }
 .footer .payment li a {
     text-decoration: none;
@@ -140,28 +140,28 @@ body {
 }
 
 /*
-	Filters Button
+    Filters Button
 */
 #filters-button {
-	border-radius: 50px;
-	z-index: 5;
-	position: fixed;
-	width:70px;
-	height:70px;
-	bottom:40px;
-	right:40px;
-	box-shadow: 5px 5px 6px #999;
+    border-radius: 50px;
+    z-index: 5;
+    position: fixed;
+    width:70px;
+    height:70px;
+    bottom:40px;
+    right:40px;
+    box-shadow: 5px 5px 6px #999;
 }
 
 /*
-	Logo
+    Logo
 */
 
 #mainLogo {
-	font-size: 500%; 
-	font-family: 'Nunito', sans-serif;
-	font-weight: bold;
-	padding-top: 100px;
+    font-size: 500%; 
+    font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+    padding-top: 100px;
 }
 
 .jumbotron { 
@@ -170,34 +170,34 @@ body {
 }
 
 /*
-	Bug Fixing
+    Bug Fixing
 */
 #takis {
-	z-index: 0;
+    z-index: 0;
 }
 
 #main_content {
-	margin-top: 50px;
+    margin-top: 50px;
 }
 
 @media screen and (max-width: 767px) {
-	.modal-dialog {
-		overflow-y: initial !important
-	}
-	.modal-body {
-		height: 325px;
-		overflow-y: auto;
-	}
+    .modal-dialog {
+        overflow-y: initial !important
+    }
+    .modal-body {
+        height: 325px;
+        overflow-y: auto;
+    }
 }
 
 .blabla {
-	padding-bottom: 180px;
+    padding-bottom: 180px;
 }
 
 /* #mainSearch {
-	margin-bottom: 300px;
+    margin-bottom: 300px;
 }
 
 #completed_events {
-	margin-bottom: 150px;
+    margin-bottom: 150px;
 } */
